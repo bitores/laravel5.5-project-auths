@@ -44,7 +44,7 @@ return [
          */
         'YunPian' => [
             //用户唯一标识，必须
-            'apikey' => 'your_api_key',
+            'apikey' => 'e73f531385d9a50e79d127b467667c57',
         ],
 
         /*

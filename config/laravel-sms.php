@@ -65,9 +65,9 @@ return [
     |
     */
     'code' => [
-        'length'        => 5,
-        'validMinutes'  => 5,
-        'repeatIfValid' => false,
+        'length'        => 6,
+        'validMinutes'  => 30,
+        'repeatIfValid' => true,
         'maxAttempts'   => 0,
     ],
 
@@ -80,7 +80,9 @@ return [
     |
     */
     'content' => function ($code, $minutes, $input) {
-        return '【signature】您的验证码是' . $code . '，有效期为' . $minutes . '分钟，请尽快验证。';
+
+        return '【本地网】您的验证码是' . $code . '。有效期为' . $minutes . '分钟，请尽快验证';
+        // return '【signature】您的验证码是' . $code . '，有效期为' . $minutes . '分钟，请尽快验证。';
     },
 
     /*
@@ -105,6 +107,7 @@ return [
     |
     */
     'templates' => [
+        'YunPian' => '2008912'
     ],
 
     /*
@@ -171,7 +174,7 @@ return [
     | 运行'php artisan migrate'命令可以自动生成
     |
     */
-    'dbLogs' => false,
+    'dbLogs' => true,
 
     /*
     |--------------------------------------------------------------------------

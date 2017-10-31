@@ -40,10 +40,14 @@
 
                                     <div class="form-group">
                                         {{ Form::label('verifyCode', '验证码', ['class' => 'col-md-4 control-label']) }}
-                                        <div class="col-md-3">
-                                            {{ Form::tel('verifyCode', null, ['class' => 'form-control', 'maxlength' => '6', 'required' => 'required', 'placeholder' => '验证码']) }}
-                                        </div><!--col-md-3-->
-                                        <div class="col-md-3"><div id="sendVerifySmsButton" class="btn btn-block btn-default">验证码</div></div>
+                                        <div class="col-md-6">
+                                            <div style="display: inline-block; width: 50%;">
+                                                {{ Form::tel('verifyCode', null, ['class' => 'form-control', 'maxlength' => '6', 'required' => 'required', 'placeholder' => '验证码']) }}
+                                            </div><div style="display: inline-block; width: 40%;margin-left: 10%;">
+                                                <div id="sendVerifySmsButton" class="btn btn-block btn-default">验证码</div>
+                                            </div><!--col-md-3-->
+                                        </div>
+                                        
                                     </div><!--form-group-->
 
                                     <div class="form-group">
