@@ -81,7 +81,7 @@ return [
     */
     'content' => function ($code, $minutes, $input) {
 
-        return '【本地网】您的验证码是' . $code . '。有效期为' . $minutes . '分钟，请尽快验证';
+        return '【杭州惟真科技】您的验证码是' . $code . '。有效期为' . $minutes . '分钟，请尽快验证';
         // return '【signature】您的验证码是' . $code . '，有效期为' . $minutes . '分钟，请尽快验证。';
     },
 
