@@ -9,7 +9,7 @@
                     <img class="layui-upload-img" src="{{ $logged_in_user->picture }}" id="avatar" style="width:150px;height:150px;">
                   </div>
 
-                  <button class="layui-btn" id="upload" style="display: none;">点击上传图片</button>
+                  <button class="layui-btn" id="upload" style="display: none;">涓婁紶澶村儚</button>
                 </div> 
             </div>
             <script src="{{ asset('/js/layui/layui.js') }}"></script>
@@ -23,32 +23,32 @@
                   elem: '#avatar'
                   ,url: '/uploadAvatar'
                   ,method:'post'
-                  ,auto: false //选择文件后不自动上传
-                  ,bindAction: '#upload' //指向一个按钮触发上传
+                  ,auto: false //脩隆脭帽脦脛录镁潞贸虏禄脳脭露炉脡脧麓芦
+                  ,bindAction: '#upload' //脰赂脧貌脪禄赂枚掳麓脜楼麓楼路垄脡脧麓芦
                   ,accept:'images'
                   ,exts:'jpg|png|gif|jpeg'
                   ,size:500
                   ,choose: function(obj){
-                    //将每次选择的文件追加到文件队列
+                    //陆芦脙驴麓脦脩隆脭帽碌脛脦脛录镁脳路录脫碌陆脦脛录镁露脫脕脨
                     var files = obj.pushFile();
                     
-                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                    //脭陇露脕卤戮碌脴脦脛录镁拢卢脠莽鹿没脢脟露脿脦脛录镁拢卢脭貌禄谩卤茅脌煤隆拢(虏禄脰搂鲁脰ie8/9)
                     obj.preview(function(index, file, result){
-                      // console.log(index); //得到文件索引
-                      // console.log(file); //得到文件对象
-                      // console.log(result); //得到文件base64编码，比如图片
+                      // console.log(index); //碌脙碌陆脦脛录镁脣梅脪媒
+                      // console.log(file); //碌脙碌陆脦脛录镁露脭脧贸
+                      // console.log(result); //碌脙碌陆脦脛录镁base64卤脿脗毛拢卢卤脠脠莽脥录脝卢
                       $('.layui-upload-img').attr('src', result);
 
                       $("#upload").show();
-                      //这里还可以做一些 append 文件列表 DOM 的操作
+                      //脮芒脌茂禄鹿驴脡脪脭脳枚脪禄脨漏 append 脦脛录镁脕脨卤铆 DOM 碌脛虏脵脳梅
                       
-                      //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
-                      // delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+                      //obj.upload(index, file); //露脭脡脧麓芦脢搂掳脺碌脛碌楼赂枚脦脛录镁脰脴脨脗脡脧麓芦拢卢脪禄掳茫脭脷脛鲁赂枚脢脗录镁脰脨脢鹿脫脙
+                      // delete files[index]; //脡戮鲁媒脕脨卤铆脰脨露脭脫娄碌脛脦脛录镁拢卢脪禄掳茫脭脷脛鲁赂枚脢脗录镁脰脨脢鹿脫脙
                     });
                   }
                 ,done: function(response){
                     layer.msg(response.msg);
-                    //上传成功
+                    //脡脧麓芦鲁脡鹿娄
                     $("#upload").hide();
                 }
                 ,error: function(response){

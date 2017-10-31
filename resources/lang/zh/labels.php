@@ -74,19 +74,22 @@ return [
                 'permissions'         => '权限',
 
                 'table' => [
+                    'account'        =>  '帐号',
                     'confirmed'      => '确认',
                     'created'        => '创建',
                     'email'          => '电子邮件',
                     'first_name'     => 'FirstName',
                     'id'             => 'ID',
-                    'last_name'      => 'LastName',   
+                    'last_name'      => 'LastName',
                     'last_updated'   => '最后更新',
+                    'mobile'         => '手机号',
                     'name'           => '名称',
                     'no_deactivated' => '没有停用的用户',
                     'no_deleted'     => '没有删除的用户',
                     'roles'          => '角色',
                     'social' => 'Social',
                     'total'          => '用户总计',
+                    'user_name'      => '用户名'
                 ],
 
                 'tabs' => [

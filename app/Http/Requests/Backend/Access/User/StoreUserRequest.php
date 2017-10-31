@@ -5,6 +5,8 @@ namespace App\Http\Requests\Backend\Access\User;
 use App\Http\Requests\Request;
 use Illuminate\Validation\Rule;
 
+use App\Rules\ValidatePhoneRule;
+
 /**
  * Class StoreUserRequest.
  */
@@ -30,7 +32,8 @@ class StoreUserRequest extends Request
         return [
             'first_name'     => 'required|max:191',
             'last_name'  => 'required|max:191',
-            'email'    => ['required', 'email', 'max:191', Rule::unique('users')],
+            'mobile'    => [new ValidatePhoneRule,'max:11',Rule::unique('users')],
+            'email'    => ['email', 'max:191', Rule::unique('users')],
             'password' => 'required|min:6|confirmed',
         ];
     }

@@ -30,6 +30,7 @@
                     <tr>
                         <th>{{ trans('labels.backend.access.users.table.last_name') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.first_name') }}</th>
+                        <th>手机号</th>
                         <th>{{ trans('labels.backend.access.users.table.email') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.confirmed') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.roles') }}</th>
@@ -80,6 +81,7 @@
                 columns: [
                     {data: 'last_name', name: '{{config("access.users_table")}}.last_name'},
                     {data: 'first_name', name: '{{config("access.users_table")}}.first_name'},
+                    {data: 'mobile', name: '{{config("access.users_table")}}.mobile'},
                     {data: 'email', name: '{{config("access.users_table")}}.email'},
                     {data: 'confirmed', name: '{{config("access.users_table")}}.confirmed'},
                     {data: 'roles', name: '{{config("access.roles_table")}}.name', sortable: false},

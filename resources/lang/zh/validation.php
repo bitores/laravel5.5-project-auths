@@ -146,10 +146,12 @@ return [
                 ],
 
                 'users' => [
+                    'account'                 => '帐号',
                     'active'                  => '激活',
                     'associated_roles'        => '关联的角色',
                     'confirmed'               => '已确认',
                     'email'                   => '电子邮件地址',
+                    'mobile'                  => '手机号',
                     'name'                    => '名称',
                     'other_permissions'       => '其他权限',
                     'password'                => '密码',
@@ -157,22 +159,26 @@ return [
                     'send_confirmation_email' => '发送确认电子邮件',
                     'first_name'     => 'FirstName',
                     'last_name'      => 'LastName',
+                    'user_name'      => '用户名'
                 ],
             ],
         ],
 
         'frontend' => [
+            'account'                 => '帐号',
             'email'                     => '电子邮件',
             'name'                      => '用户名',
             'password'                  => '密码',
             'password_confirmation'     => '确认密码',
             'phone' => 'Phone',
             'message' => 'Message',
+            'mobile'                  => '手机号',
             'old_password'              => '旧密码',
             'new_password'              => '新密码',
             'new_password_confirmation' => '确认新密码',
             'first_name'     => 'FirstName',
             'last_name'      => 'LastName',
+            'user_name'      => '用户名'
         ],
     ],
 

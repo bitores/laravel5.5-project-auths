@@ -96,6 +96,7 @@ class UserRepository extends BaseRepository
                 config('access.users_table').'.id',
                 config('access.users_table').'.first_name',
                 config('access.users_table').'.last_name',
+                config('access.users_table').'.mobile',
                 config('access.users_table').'.email',
                 config('access.users_table').'.status',
                 config('access.users_table').'.confirmed',

@@ -33,7 +33,7 @@ class UserTableController extends Controller
     public function __invoke(ManageUserRequest $request)
     {
         return DataTables::of($this->users->getForDataTable($request->get('status'), $request->get('trashed')))
-        ->escapeColumns(['first_name', 'last_name', 'email'])
+        ->escapeColumns(['first_name', 'last_name', 'mobile', 'email'])
         ->editColumn('confirmed', function ($user) {
             return $user->confirmed_label;
         })

@@ -63,11 +63,13 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+
         $this->users->create(
             [
                 'data' => $request->only(
                     'first_name',
                     'last_name',
+                    'mobile',
                     'email',
                     'password',
                     'status',
@@ -119,6 +121,7 @@ class UserController extends Controller
                 'data' => $request->only(
                     'first_name',
                     'last_name',
+                    'mobile',
                     'email',
                     'status',
                     'confirmed'

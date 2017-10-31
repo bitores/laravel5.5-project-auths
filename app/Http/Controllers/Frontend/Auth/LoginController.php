@@ -34,7 +34,7 @@ class LoginController extends Controller
 
         // 验证用户名登录方式
         $usernameLogin = $this->guard()->attempt(
-            ['username' => $username, 'password' => $password], $request->filled('remember')
+            ['user_name' => $username, 'password' => $password], $request->filled('remember')
         );
 
         if ($usernameLogin) {

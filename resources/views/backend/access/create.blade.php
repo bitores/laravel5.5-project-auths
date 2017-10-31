@@ -40,6 +40,15 @@
                 </div><!--form control-->
 
                 <div class="form-group">
+                    {{ Form::label('mobile', trans('validation.attributes.backend.access.users.mobile'),
+                     ['class' => 'col-lg-2 control-label']) }}
+
+                    <div class="col-lg-10">
+                        {{ Form::tel('mobile', null, ['class' => 'form-control', 'maxlength' => '11', 'required' => 'required', 'placeholder' => trans('validation.attributes.backend.access.users.mobile')]) }}
+                    </div><!--col-lg-10-->
+                </div><!--form control-->
+
+                <div class="form-group">
                     {{ Form::label('email', trans('validation.attributes.backend.access.users.email'), ['class' => 'col-lg-2 control-label']) }}
 
                     <div class="col-lg-10">

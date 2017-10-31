@@ -20,7 +20,7 @@
                         {{ Form::label('account', '帐号', ['class' => 'col-md-4 control-label']) }}
                         <div class="col-md-6">
                             <!-- {{ Form::email('email', null, ['class' => 'form-control', 'maxlength' => '191', 'required' => 'required', 'autofocus' => 'autofocus', 'placeholder' => trans('validation.attributes.frontend.email')]) }} -->
-                            {{ Form::text('account', null, ['class' => 'form-control', 'maxlength' => '191', 'required' => 'required', 'autofocus' => 'autofocus', 'placeholder' => '帐号']) }}
+                            {{ Form::text('account', null, ['class' => 'form-control', 'maxlength' => '191', 'required' => 'required', 'autofocus' => 'autofocus', 'placeholder' => '手机号或邮箱']) }}
                         </div><!--col-md-6-->
                     </div><!--form-group-->
 

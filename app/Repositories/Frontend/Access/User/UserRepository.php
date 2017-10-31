@@ -103,8 +103,10 @@ class UserRepository extends BaseRepository
     {
         $user = self::MODEL;
         $user = new $user;
-        $user->first_name = $data['first_name'];
-        $user->last_name = $data['last_name'];
+        // $user->first_name = $data['first_name'];
+        // $user->last_name = $data['last_name'];
+
+
         $user->email = $data['email'];
         $user->confirmation_code = md5(uniqid(mt_rand(), true));
         $user->status = 1;
@@ -123,6 +125,61 @@ class UserRepository extends BaseRepository
                 $user->confirmed = 0;
                 $confirm = true;
             }
+        } else {
+            // Otherwise both are off and confirmed is default
+            $user->confirmed = 1;
+        }
+
+        DB::transaction(function () use ($user) {
+            if ($user->save()) {
+                /*
+                 * Add the default site role to the new user
+                 */
+                $user->attachRole($this->role->getDefaultUserRole());
+            }
+        });
+
+        /*
+         * If users have to confirm their email and this is not a social account,
+         * and the account does not require admin approval
+         * send the confirmation email
+         *
+         * If this is a social account they are confirmed through the social provider by default
+         */
+        if ($confirm) {
+            // Pretty much only if account approval is off, confirm email is on, and this isn't a social account.
+            $user->notify(new UserNeedsConfirmation($user->confirmation_code));
+        }
+
+        /*
+         * Return the user object
+         */
+        return $user;
+    }
+
+    /**
+     * @param array $data
+     * @param bool  $provider
+     *
+     * @return static
+     */
+    public function createByMobile(array $data, $provider = false)
+    {
+        $user = self::MODEL;
+        $user = new $user;
+        // $user->first_name = $data['first_name'];
+        // $user->last_name = $data['last_name'];
+
+
+        $user->mobile = $data['mobile'];
+        $user->confirmation_code = md5(uniqid(mt_rand(), true));
+        $user->status = 1;
+        $user->password = $provider ? null : bcrypt($data['password']);
+        $confirm = false; // Whether or not they get an e-mail to confirm their account
+
+        // If users require approval, confirmed is false regardless of account type
+        if (config('access.users.requires_approval')) {
+            $user->confirmed = 0; // No confirm e-mail sent, that defeats the purpose of manual approval
         } else {
             // Otherwise both are off and confirmed is default
             $user->confirmed = 1;

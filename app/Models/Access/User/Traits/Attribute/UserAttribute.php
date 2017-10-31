@@ -70,11 +70,13 @@ trait UserAttribute
         if($this->avatar){
             return $this->avatar;
         }
-        if (! $size) {
-            $size = config('gravatar.default.size');
-        }
 
-        return gravatar()->get($this->email, ['size' => $size]);
+        return "";
+        // if (! $size) {
+        //     $size = config('gravatar.default.size');
+        // }
+
+        // return gravatar()->get($this->email, ['size' => $size]);
     }
 
     /**

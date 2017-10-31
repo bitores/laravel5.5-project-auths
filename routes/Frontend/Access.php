@@ -34,6 +34,9 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         if (config('access.users.registration')) {
             Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
             Route::post('register', 'RegisterController@register')->name('register.post');
+            Route::post('register_mobile', 'RegisterMobileController@register')->name('register_mobile.post');
+
+            
         }
 
         // Confirm Account Routes
@@ -46,5 +49,15 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
 
         Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset.form');
         Route::post('password/reset', 'ResetPasswordController@reset')->name('password.reset');
+
+
+        // add by huangzj 2017-10-31
+        #Route::post('password2/email', 'Auth\PasswordController@sendResetLinkEmail');  
+        //通过邮件重置密码
+        #Route::post('password2/reset-mail', 'Auth\PasswordController@resetBymail');  
+        //发送手机短信验证码
+        #Route::post('password2/phone', 'Auth\PasswordController@sendResetCodePhone');  
+        //通过手机验证码找回密码
+        #Route::post('password2/reset-phone', 'Auth\PasswordController@resetByPhone');
     });
 });

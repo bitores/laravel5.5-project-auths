@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Frontend\Auth;
 use App\Http\Controllers\Controller;
 use App\Events\Frontend\Auth\UserRegistered;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Http\Requests\Frontend\Auth\RegisterRequest;
+use App\Http\Requests\Frontend\Auth\RegisterMobileRequest;
 use App\Repositories\Frontend\Access\User\UserRepository;
 
 /**
  * Class RegisterController.
  */
-class RegisterController extends Controller
+class RegisterMobileController extends Controller
 {
     use RegistersUsers;
 
@@ -44,15 +44,16 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param RegisterRequest $request
+     * @param RegisterMobileRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterMobileRequest $request)
     {
-        if (config('access.users.confirm_email') || config('access.users.requires_approval')) {
+        
+        if ( config('access.users.requires_approval')) {
             // $user = $this->user->create($request->only('first_name', 'last_name', 'email', 'password'));
-            $user = $this->user->create($request->only( 'email', 'password'));
+            $user = $this->user->createByMobile($request->only( 'mobile', 'password'));
             event(new UserRegistered($user));
 
             return redirect($this->redirectPath())->withFlashSuccess(
@@ -62,7 +63,7 @@ class RegisterController extends Controller
             );
         } else {
             // access()->login($this->user->create($request->only('first_name', 'last_name', 'email', 'password')));
-            access()->login($this->user->create($request->only( 'email', 'password')));
+            access()->login($this->user->createByMobile($request->only( 'mobile', 'password')));
             event(new UserRegistered(access()->user()));
 
             return redirect($this->redirectPath());
