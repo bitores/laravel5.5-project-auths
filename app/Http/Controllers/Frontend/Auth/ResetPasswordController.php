@@ -153,7 +153,7 @@ class ResetPasswordController extends Controller
      * @param PhoneResetPasswordRequest $request
      * @return array
      */
-    public function resetByPhone(PhoneResetPasswordRequest $request)
+    public function resetByPhone(Request $request)
     {
         $credentials = $request->only('telephone', 'password', 'password_confirmation', 'verify_code');
 
