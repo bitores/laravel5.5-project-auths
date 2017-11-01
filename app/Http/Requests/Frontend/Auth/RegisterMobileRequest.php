@@ -34,8 +34,8 @@ class RegisterMobileRequest extends Request
             // 'first_name'           => 'required|string|max:191',
             // 'last_name'            => 'required|string|max:191',
             // 'mobile'                => ['required', 'string', new ValidatePhoneRule, 'max:10', Rule::unique('users')],
-            // 
-            'mobile'     => 'required|unique:users|confirm_rule:mobile,mobile_required|confirm_mobile_not_change',
+            // |confirm_rule:mobile,mobile_required|confirm_mobile_not_change
+            'mobile'     => 'required|zh_mobile|unique:users',
             'verifyCode' => 'required|verify_code',
 
             'password'             => 'required|string|min:6|confirmed',
