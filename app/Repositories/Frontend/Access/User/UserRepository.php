@@ -45,6 +45,11 @@ class UserRepository extends BaseRepository
         return $this->query()->where('email', $email)->first();
     }
 
+    public function findByPhone($mobile)
+    {
+        return $this->query()->where('mobile', $mobile)->first();
+    }
+
     /**
      * @param $token
      *
