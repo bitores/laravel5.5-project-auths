@@ -8,7 +8,7 @@
         <div class="col-md-8 col-md-offset-2">
 
             <div class="panel panel-default">
-                <div class="panel-heading">{{ trans('labels.frontend.auth.register_box_title') }}</div>
+                <!-- <div class="panel-heading">{{ trans('labels.frontend.auth.register_box_title') }}</div> -->
 
                 <div class="panel-body">
 
@@ -159,6 +159,11 @@
             },
             //手机号的检测规则
             mobile_rule : 'mobile_required'
+        },
+
+        // 消息展示方式（默认为 alert）
+        notify: function(msg, type){
+            alert(msg);
         }
     });
     </script>

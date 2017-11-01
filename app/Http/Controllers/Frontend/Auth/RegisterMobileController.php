@@ -53,7 +53,7 @@ class RegisterMobileController extends Controller
         
         if ( config('access.users.requires_approval')) {
             // $user = $this->user->create($request->only('first_name', 'last_name', 'email', 'password'));
-            $user = $this->user->createByMobile($request->only( 'mobile', 'password'));
+            $user = $this->user->createByMobile($request->only( 'mobile',  'password'));
             event(new UserRegistered($user));
 
             return redirect($this->redirectPath())->withFlashSuccess(
