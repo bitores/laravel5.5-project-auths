@@ -33,8 +33,8 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         // Registration Routes
         if (config('access.users.registration')) {
             Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
-            Route::post('register', 'RegisterController@register')->name('register.post');
-            Route::post('register_mobile', 'RegisterMobileController@register')->name('register_mobile.post');
+            Route::post('register/email', 'RegisterController@register')->name('register.email.post');
+            Route::post('register/mobile', 'RegisterMobileController@register')->name('register.mobile.post');
 
             
         }

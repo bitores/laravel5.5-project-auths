@@ -31,5 +31,14 @@ Route::group(['middleware' => 'auth'], function () {
          * User Profile Specific
          */
         Route::patch('profile/update', 'ProfileController@update')->name('profile.update');
+
+
+
+        /*
+         * 后面是普通业务功能页面 
+         */
+
+        Route::get('demandside', 'DemandsideController@index')->name('demandside.index');
+        Route::get('demandside/create', 'DemandsideController@create')->name('demandside.create');
     });
 });

@@ -205,6 +205,9 @@ return [
         App\Providers\MacroServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //--------reset by phone and email
+        App\Providers\RyanPasswordResetServiceProvider::class,
+
     ],
 
     /*
@@ -268,6 +271,8 @@ return [
         'PhpSms' => Toplan\PhpSms\Facades\Sms::class,
         'SmsManager' => Toplan\Sms\Facades\SmsManager::class,
 
+        // reset by email and phone
+        'RyanPassword' => App\Foundation\Auth\Passwords\Facade\RyanPassword::class,
     ],
 
 ];

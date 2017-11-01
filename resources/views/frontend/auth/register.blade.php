@@ -29,7 +29,7 @@
 
                             <div role="tabpanel" class="tab-pane mt-30 active" id="tab-mobile">
 
-                                {{ Form::open(['route' => 'frontend.auth.register_mobile.post', 'class' => 'form-horizontal']) }}
+                                {{ Form::open(['route' => 'frontend.auth.register.mobile.post', 'class' => 'form-horizontal']) }}
 
                                     <div class="form-group">
                                         {{ Form::label('mobile', trans('validation.attributes.frontend.mobile'), ['class' => 'col-md-4 control-label']) }}
@@ -85,7 +85,7 @@
 
                             <div role="tabpanel" class="tab-pane mt-30" id="tab-email">
 
-                                {{ Form::open(['route' => 'frontend.auth.register.post', 'class' => 'form-horizontal']) }}
+                                {{ Form::open(['route' => 'frontend.auth.register.email.post', 'class' => 'form-horizontal']) }}
 
                                     <div class="form-group">
                                         {{ Form::label('email', trans('validation.attributes.frontend.email'), ['class' => 'col-md-4 control-label']) }}
