@@ -6,13 +6,23 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Frontend\Contact\SendContact;
 use App\Http\Requests\Frontend\Contact\SendContactRequest;
-use App\Models\System\ContactUS;
+use App\Repositories\Frontend\ContactUSRepository;
 
 /**
  * Class ContactController.
  */
 class ContactController extends Controller
 {
+
+    protected $contactUs;
+
+    public function __construct(ContactUSRepository $contactUs)
+    {
+        $this->contactUs = $contactUs;
+    }
+
+    
+
     /**
      * @return \Illuminate\View\View
      */
@@ -30,15 +40,14 @@ class ContactController extends Controller
     {
         Mail::send(new SendContact($request));
 
-        $contactUs = new ContactUS;
-
-        $contactUs->user_name = $request->get('name');
-        $contactUs->email  = $request->get('email');
-        $contactUs->phone = $request->get('phone');
-        $contactUs->message = $request->get('message');
-
-
-        $contactUs->save();
+        $this->contactUs->create([
+            'data' => $request->only(
+                'name',
+                'email',
+                'phone',
+                'message'
+            )
+        ]);
         return redirect()->back()->withFlashSuccess(trans('alerts.frontend.contact.sent'));
     }
 }
