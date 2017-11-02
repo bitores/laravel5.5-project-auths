@@ -69,6 +69,7 @@ class UserController extends Controller
                 'data' => $request->only(
                     'first_name',
                     'last_name',
+                    'user_name',
                     'mobile',
                     'email',
                     'password',
@@ -121,6 +122,7 @@ class UserController extends Controller
                 'data' => $request->only(
                     'first_name',
                     'last_name',
+                    'user_name',
                     'mobile',
                     'email',
                     'status',

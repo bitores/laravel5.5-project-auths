@@ -32,6 +32,7 @@ class StoreUserRequest extends Request
         return [
             'first_name'     => 'required|max:191',
             'last_name'  => 'required|max:191',
+            'user_name' => 'required|max:191',
             'mobile'    => [new ValidatePhoneRule,'max:11',Rule::unique('users')],
             'email'    => ['email', 'max:191', Rule::unique('users')],
             'password' => 'required|min:6|confirmed',

@@ -26,6 +26,18 @@
                                 <a href="#edit" aria-controls="edit" role="tab" data-toggle="tab">{{ trans('labels.frontend.user.profile.update_information') }}</a>
                             </li>
 
+                            @if(empty($logged_in_user->email))
+                            <li role="presentation">
+                                <a href="#email" aria-controls="email" role="tab" data-toggle="tab">绑定邮箱</a>
+                            </li>
+                            @endif
+
+                            @if(empty($logged_in_user->mobile))
+                            <li role="presentation">
+                                <a href="#phone" aria-controls="phone" role="tab" data-toggle="tab">绑定手机号</a>
+                            </li>
+                            @endif
+
                             @if ($logged_in_user->canChangePassword())
                                 <li role="presentation">
                                     <a href="#password" aria-controls="password" role="tab" data-toggle="tab">{{ trans('navs.frontend.user.change_password') }}</a>
@@ -43,6 +55,18 @@
                             <div role="tabpanel" class="tab-pane mt-30" id="edit">
                                 @include('frontend.user.account.tabs.edit')
                             </div><!--tab panel profile-->
+
+                            @if(empty($logged_in_user->email))
+                            <div role="tabpanel" class="tab-pane mt-30" id="email">
+                                @include('frontend.user.account.tabs.email')
+                            </div><!--tab panel profile-->
+                            @endif
+
+                            @if(empty($logged_in_user->mobile))
+                            <div role="tabpanel" class="tab-pane mt-30" id="phone">
+                                @include('frontend.user.account.tabs.phone')
+                            </div><!--tab panel profile-->
+                            @endif
 
                             @if ($logged_in_user->canChangePassword())
                                 <div role="tabpanel" class="tab-pane mt-30" id="password">

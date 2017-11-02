@@ -29,6 +29,7 @@ class UpdateProfileRequest extends Request
         return [
             'first_name'  => 'required|max:191',
             'last_name'  => 'required|max:191',
+            'user_name' => 'required|max:191',
             'email' => 'sometimes|required|email|max:191',
         ];
     }

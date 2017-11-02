@@ -96,6 +96,7 @@ class UserRepository extends BaseRepository
                 config('access.users_table').'.id',
                 config('access.users_table').'.first_name',
                 config('access.users_table').'.last_name',
+                config('access.users_table').'.user_name',
                 config('access.users_table').'.mobile',
                 config('access.users_table').'.email',
                 config('access.users_table').'.status',
@@ -171,6 +172,7 @@ class UserRepository extends BaseRepository
 
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
+        $user->user_name = $data['user_name'];
         $user->email = $data['email'];
         $user->status = isset($data['status']) ? 1 : 0;
 
@@ -428,6 +430,7 @@ class UserRepository extends BaseRepository
         $user = new $user;
         $user->first_name = $input['first_name'];
         $user->last_name = $input['last_name'];
+        $user->user_name = $input['user_name'];
         $user->mobile = $input['mobile'];
         $user->email = $input['email'];
         $user->password = bcrypt($input['password']);
