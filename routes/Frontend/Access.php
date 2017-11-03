@@ -51,7 +51,6 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         Route::post('password/reset', 'ResetPasswordController@reset')->name('password.reset');
 
         //通过手机验证码找回密码
-        // Route::get('password/reset-phone/{mobile}', 'ResetPasswordController@showPhoneResetForm')->name('password.phone');
         Route::post('password/reset-phone', 'ResetPasswordController@resetByPhone')->name('password.reset.phone');
     });
 });

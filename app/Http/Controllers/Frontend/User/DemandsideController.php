@@ -17,8 +17,30 @@ class DemandsideController extends Controller
         return view('frontend.user.demandside.index');
     }
 
+    public function readme()
+    {
+        return view('frontend.user.demandside.readme');
+    }
+
     public function create()
     {
-        return view('frontend.user.demandside.create');
+        return view('frontend.user.demandside.product.create');
+    }
+
+    public function edit()
+    {
+        return view('frontend.user.demandside.product.edit');
+    }
+
+    public function show()
+    {
+        return view('frontend.user.demandside.product.show',[
+            'status' => 1
+        ]);
+    }
+
+    public function assessment()
+    {
+        return view('frontend.user.demandside.product.assessment');
     }
 }

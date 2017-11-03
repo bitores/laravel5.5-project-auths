@@ -39,6 +39,23 @@ Route::group(['middleware' => 'auth'], function () {
          */
 
         Route::get('demandside', 'DemandsideController@index')->name('demandside.index');
-        Route::get('demandside/create', 'DemandsideController@create')->name('demandside.create');
+        Route::get('demandside/readme', 'DemandsideController@readme')->name('demandside.readme');
+
+        Route::get('demandside/product/create', 'DemandsideController@create')->name('demandside.product.create');
+        Route::get('demandside/product/edit', 'DemandsideController@edit')->name('demandside.product.edit');
+        Route::get('demandside/product/show', 'DemandsideController@show')->name('demandside.product.show');
+        Route::get('demandside/product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
+
+        Route::get('producer', 'ProducerController@index')->name('producer.index');
+        Route::get('producer/tutorial/modeling', 'ProducerController@modelingTutorial')->name('producer.tutorial.modeling');
+        Route::get('producer/tutorial/review', 'ProducerController@reviewTutorial')->name('producer.tutorial.review');
+
+        Route::get('producer/product/show', 'ProducerController@show')->name('producer.product.show');
+        Route::get('producer/product/assessment', 'ProducerController@assessment')->name('producer.product.assessment');
+
+
+        Route::get('auditor', 'AuditorController@index')->name('auditor.index');
+        Route::get('auditor/demandlist', 'AuditorController@demands')->name('auditor.demandlist');
+        Route::get('auditor/modellist', 'AuditorController@models')->name('auditor.modellist');
     });
 });
