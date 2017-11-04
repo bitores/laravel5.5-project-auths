@@ -33,6 +33,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('profile/update', 'ProfileController@update')->name('profile.update');
 
         Route::post('mobile/bind', 'MobileBindController@bind')->name('mobile.bind');
+        Route::post('email/bind', 'EmailBindController@bind')->name('email.bind');
+        Route::get('email/confirm/{token}', 'EmailBindController@confirm')->name('email.confirm');
 
         /*
          * 后面是普通业务功能页面 
