@@ -179,6 +179,7 @@ return [
                 'name'               => '名称',
                 'nickname'         => '昵称',
                 'user_name'          => '用户名',
+                'mobile'          => '手机号',
                 'update_information' => '更新信息',
             ],
         ],

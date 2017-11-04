@@ -167,6 +167,7 @@ return [
                 'name'               => 'Name',
                 'nickname'         => 'Nick Name',
                 'user_name'          => 'User Name',
+                'mobile'          => 'Mobile',
                 'update_information' => 'Update Information',
             ],
         ],

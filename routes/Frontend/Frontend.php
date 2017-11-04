@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth'], function () {
          */
         Route::patch('profile/update', 'ProfileController@update')->name('profile.update');
 
-
+        Route::post('mobile/bind', 'MobileBindController@bind')->name('mobile.bind');
 
         /*
          * 后面是普通业务功能页面 

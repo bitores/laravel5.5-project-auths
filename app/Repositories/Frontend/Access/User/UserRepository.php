@@ -366,6 +366,15 @@ class UserRepository extends BaseRepository
         throw new GeneralException(trans('exceptions.frontend.auth.password.change_mismatch'));
     }
 
+    public function bindMobile($input)
+    {
+        $user = $this->find(access()->id());
+
+        $user->mobile = $input['mobile'];
+
+        return $user->save();
+    }
+
 
     public function changeAvatar($avatar)
     {

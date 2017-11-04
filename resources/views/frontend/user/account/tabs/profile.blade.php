@@ -23,32 +23,26 @@
                   elem: '#avatar'
                   ,url: '/uploadAvatar'
                   ,method:'post'
-                  ,auto: false //Ñ¡ÔñÎÄ¼þºó²»×Ô¶¯ÉÏ´«
-                  ,bindAction: '#upload' //Ö¸ÏòÒ»¸ö°´Å¥´¥·¢ÉÏ´«
+                  ,auto: false //
+                  ,bindAction: '#upload' //
                   ,accept:'images'
                   ,exts:'jpg|png|gif|jpeg'
                   ,size:500
                   ,choose: function(obj){
-                    //½«Ã¿´ÎÑ¡ÔñµÄÎÄ¼þ×·¼Óµ½ÎÄ¼þ¶ÓÁÐ
                     var files = obj.pushFile();
                     
-                    //Ô¤¶Á±¾µØÎÄ¼þ£¬Èç¹ûÊÇ¶àÎÄ¼þ£¬Ôò»á±éÀú¡£(²»Ö§³Öie8/9)
                     obj.preview(function(index, file, result){
-                      // console.log(index); //µÃµ½ÎÄ¼þË÷Òý
-                      // console.log(file); //µÃµ½ÎÄ¼þ¶ÔÏó
-                      // console.log(result); //µÃµ½ÎÄ¼þbase64±àÂë£¬±ÈÈçÍ¼Æ¬
+
                       $('.layui-upload-img').attr('src', result);
 
                       $("#upload").show();
-                      //ÕâÀï»¹¿ÉÒÔ×öÒ»Ð© append ÎÄ¼þÁÐ±í DOM µÄ²Ù×÷
                       
-                      //obj.upload(index, file); //¶ÔÉÏ´«Ê§°ÜµÄµ¥¸öÎÄ¼þÖØÐÂÉÏ´«£¬Ò»°ãÔÚÄ³¸öÊÂ¼þÖÐÊ¹ÓÃ
-                      // delete files[index]; //É¾³ýÁÐ±íÖÐ¶ÔÓ¦µÄÎÄ¼þ£¬Ò»°ãÔÚÄ³¸öÊÂ¼þÖÐÊ¹ÓÃ
+                      //obj.upload(index, file); //
+                      // delete files[index]; //
                     });
                   }
                 ,done: function(response){
                     layer.msg(response.msg);
-                    //ÉÏ´«³É¹¦
                     $("#upload").hide();
                 }
                 ,error: function(response){
@@ -62,8 +56,16 @@
         </td>
     </tr>
     <tr>
-        <th>{{ trans('labels.frontend.user.profile.name') }}</th>
-        <td>{{ $logged_in_user->name }}</td>
+        <th>{{ trans('labels.frontend.user.profile.nickname') }}</th>
+        <td>{{ $logged_in_user->nickname }}</td>
+    </tr>
+    <tr>
+        <th>{{ trans('labels.frontend.user.profile.user_name') }}</th>
+        <td>{{ $logged_in_user->user_name }}</td>
+    </tr>
+    <tr>
+        <th>{{ trans('labels.frontend.user.profile.mobile') }}</th>
+        <td>{{ $logged_in_user->mobile }}</td>
     </tr>
     <tr>
         <th>{{ trans('labels.frontend.user.profile.email') }}</th>
