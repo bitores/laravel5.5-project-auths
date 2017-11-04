@@ -27,8 +27,7 @@ class UpdateProfileRequest extends Request
     public function rules()
     {
         return [
-            'first_name'  => 'required|max:191',
-            'last_name'  => 'required|max:191',
+            'nickname'  => 'required|max:191',
             'user_name' => 'required|max:191',
             'email' => 'sometimes|required|email|max:191',
         ];

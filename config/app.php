@@ -207,6 +207,8 @@ return [
 
         //--------reset by phone and email
         App\Providers\RyanPasswordResetServiceProvider::class,
+        // ueditor
+        Overtrue\LaravelUEditor\UEditorServiceProvider::class,
 
     ],
 

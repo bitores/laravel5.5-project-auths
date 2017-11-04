@@ -67,8 +67,7 @@ class UserController extends Controller
         $this->users->create(
             [
                 'data' => $request->only(
-                    'first_name',
-                    'last_name',
+                    'nickname',
                     'user_name',
                     'mobile',
                     'email',
@@ -120,8 +119,7 @@ class UserController extends Controller
         $this->users->update($user,
             [
                 'data' => $request->only(
-                    'first_name',
-                    'last_name',
+                    'nickname',
                     'user_name',
                     'mobile',
                     'email',

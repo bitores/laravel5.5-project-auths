@@ -157,8 +157,7 @@ return [
                     'password'                => '密码',
                     'password_confirmation'   => '确认密码',
                     'send_confirmation_email' => '发送确认电子邮件',
-                    'first_name'     => 'FirstName',
-                    'last_name'      => 'LastName',
+                    'nickname'      => '昵称',
                     'user_name'      => '用户名'
                 ],
             ],
@@ -176,8 +175,7 @@ return [
             'old_password'              => '旧密码',
             'new_password'              => '新密码',
             'new_password_confirmation' => '确认新密码',
-            'first_name'     => 'FirstName',
-            'last_name'      => 'LastName',
+            'nickname'     => '昵称',
             'user_name'      => '用户名'
         ],
     ],

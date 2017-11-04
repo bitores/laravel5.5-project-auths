@@ -28,8 +28,8 @@
                 <table id="users-table" class="table table-condensed table-hover">
                     <thead>
                     <tr>
-                        <th>{{ trans('labels.backend.access.users.table.last_name') }}</th>
-                        <th>{{ trans('labels.backend.access.users.table.first_name') }}</th>
+                        <th>{{ trans('labels.backend.access.users.table.nickname') }}</th>
+                        <th>{{ trans('labels.backend.access.users.table.user_name') }}</th>
                         <th>手机号</th>
                         <th>{{ trans('labels.backend.access.users.table.email') }}</th>
                         <th>{{ trans('labels.backend.access.users.table.confirmed') }}</th>
@@ -79,8 +79,8 @@
                     }
                 },
                 columns: [
-                    {data: 'last_name', name: '{{config("access.users_table")}}.last_name'},
-                    {data: 'first_name', name: '{{config("access.users_table")}}.first_name'},
+                    {data: 'nickname', name: '{{config("access.users_table")}}.nickname'},
+                    {data: 'user_name', name: '{{config("access.users_table")}}.user_name'},
                     {data: 'mobile', name: '{{config("access.users_table")}}.mobile'},
                     {data: 'email', name: '{{config("access.users_table")}}.email'},
                     {data: 'confirmed', name: '{{config("access.users_table")}}.confirmed'},

@@ -247,8 +247,8 @@ class UserRepository extends BaseRepository
             $nameParts = $this->getNameParts($data->getName());
 
             $user = $this->create([
-                'first_name'  => $nameParts['first_name'],
-                'last_name'  => $nameParts['last_name'],
+                'nickname'  => $nameParts['nickname'],
+                'user_name'  => $nameParts['user_name'],
                 'email' => $user_email,
             ], true);
         }
@@ -316,8 +316,8 @@ class UserRepository extends BaseRepository
     public function updateProfile($id, $input)
     {
         $user = $this->find($id);
-        $user->first_name = $input['first_name'];
-        $user->last_name = $input['last_name'];
+        $user->nickname = $input['nickname'];
+        $user->user_name = $input['user_name'];
 
         if ($user->canChangeEmail()) {
             //Address is not current address
@@ -394,18 +394,18 @@ class UserRepository extends BaseRepository
         $result = [];
 
         if (empty($parts)) {
-            $result['first_name'] = null;
-            $result['last_name'] = null;
+            $result['nickname'] = null;
+            $result['user_name'] = null;
         }
 
         if (! empty($parts) && $size == 1) {
-            $result['first_name'] = $parts[0];
-            $result['last_name'] = null;
+            $result['nickname'] = $parts[0];
+            $result['user_name'] = null;
         }
 
         if (! empty($parts) && $size >= 2) {
-            $result['first_name'] = $parts[0];
-            $result['last_name'] = $parts[1];
+            $result['nickname'] = $parts[0];
+            $result['user_name'] = $parts[1];
         }
 
         return $result;

@@ -38,13 +38,22 @@ Route::group(['middleware' => 'auth'], function () {
          * 后面是普通业务功能页面 
          */
 
-        Route::get('demandside', 'DemandsideController@index')->name('demandside.index');
-        Route::get('demandside/readme', 'DemandsideController@readme')->name('demandside.readme');
+        Route::group([
+            'middleware' => 'access.routeNeedsRole:demandside', // 
+        ], function () {
+        });
 
-        Route::get('demandside/product/create', 'DemandsideController@create')->name('demandside.product.create');
-        Route::get('demandside/product/edit', 'DemandsideController@edit')->name('demandside.product.edit');
-        Route::get('demandside/product/show', 'DemandsideController@show')->name('demandside.product.show');
-        Route::get('demandside/product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
+
+            Route::get('demandside', 'DemandsideController@index')->name('demandside.index');
+            Route::get('demandside/readme', 'DemandsideController@readme')->name('demandside.readme');
+
+            Route::get('demandside/product/create', 'DemandsideController@create')->name('demandside.product.create');
+            Route::get('demandside/product/edit', 'DemandsideController@edit')->name('demandside.product.edit');
+            Route::get('demandside/product/show', 'DemandsideController@show')->name('demandside.product.show');
+            Route::get('demandside/product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
+
+           
+        
 
         Route::get('producer', 'ProducerController@index')->name('producer.index');
         Route::get('producer/tutorial/modeling', 'ProducerController@modelingTutorial')->name('producer.tutorial.modeling');
@@ -57,5 +66,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('auditor', 'AuditorController@index')->name('auditor.index');
         Route::get('auditor/demandlist', 'AuditorController@demands')->name('auditor.demandlist');
         Route::get('auditor/modellist', 'AuditorController@models')->name('auditor.modellist');
+        
     });
 });

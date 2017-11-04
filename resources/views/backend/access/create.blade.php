@@ -23,19 +23,20 @@
 
             <div class="box-body">
                 <div class="form-group">
-                    {{ Form::label('first_name', trans('validation.attributes.backend.access.users.first_name'), ['class' => 'col-lg-2 control-label']) }}
+                    {{ Form::label('nickname', trans('validation.attributes.backend.access.users.nickname'), ['class' => 'col-lg-2 control-label']) }}
 
                     <div class="col-lg-10">
-                        {{ Form::text('first_name', null, ['class' => 'form-control', 'maxlength' => '191', 'required' => 'required', 'autofocus' => 'autofocus', 'placeholder' => trans('validation.attributes.backend.access.users.first_name')]) }}
+                        {{ Form::text('nickname', null, ['class' => 'form-control', 'maxlength' => '191', 'required' => 'required', 'autofocus' => 'autofocus', 'placeholder' => trans('validation.attributes.backend.access.users.nickname')]) }}
                     </div><!--col-lg-10-->
                 </div><!--form control-->
 
+
                 <div class="form-group">
-                    {{ Form::label('last_name', trans('validation.attributes.backend.access.users.last_name'),
+                    {{ Form::label('user_name', trans('validation.attributes.backend.access.users.user_name'),
                      ['class' => 'col-lg-2 control-label']) }}
 
                     <div class="col-lg-10">
-                        {{ Form::text('last_name', null, ['class' => 'form-control', 'maxlength' => '191', 'required' => 'required', 'placeholder' => trans('validation.attributes.backend.access.users.last_name')]) }}
+                        {{ Form::text('user_name', null, ['class' => 'form-control', 'maxlength' => '191', 'required' => 'required', 'placeholder' => trans('validation.attributes.backend.access.users.user_name')]) }}
                     </div><!--col-lg-10-->
                 </div><!--form control-->
 

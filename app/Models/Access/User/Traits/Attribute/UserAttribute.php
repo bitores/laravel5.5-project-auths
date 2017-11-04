@@ -124,9 +124,8 @@ trait UserAttribute
      */
     public function getFullNameAttribute()
     {
-        return $this->last_name
-            ? $this->first_name.' '.$this->last_name
-            : $this->first_name;
+        return $this->nickname
+            ? $this->nickname : ($this->user_name ? $this->user_name : ($this->mobile ? $this->mobile : $this->email));
     }
 
     /**

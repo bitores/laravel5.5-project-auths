@@ -70,6 +70,13 @@ return [
             'driver' => 'local',
             'root'   => public_path('img'),
             'path'   => '/img'
+        ],
+
+        'ueditor' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            'url' => env('APP_URL').'/uploads',
+            'visibility' => 'public',
         ]
 
     ],
