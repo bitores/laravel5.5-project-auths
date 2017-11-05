@@ -5,7 +5,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ access()->user()->picture }}" class="img-circle" alt="User Image" />
+                <img src="{{ access()->user()->picture }}"  onerror="this.src='/img/avatars/default.jpg'" class="img-circle" alt="User Image" />
             </div><!--pull-left-->
             <div class="pull-left info">
                 <p>{{ access()->user()->full_name }}</p>

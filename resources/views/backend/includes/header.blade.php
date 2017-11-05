@@ -73,13 +73,13 @@
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{ access()->user()->picture }}" class="user-image" alt="User Avatar"/>
+                        <img src="{{ access()->user()->picture }}"  onerror="this.src='/img/avatars/default.jpg'" class="user-image" alt="User Avatar"/>
                         <span class="hidden-xs">{{ access()->user()->full_name }}</span>
                     </a>
 
                     <ul class="dropdown-menu">
                         <li class="user-header">
-                            <img src="{{ access()->user()->picture }}" class="img-circle" alt="User Avatar" />
+                            <img src="{{ access()->user()->picture }}" class="img-circle"  onerror="this.src='/img/avatars/default.jpg'" alt="User Avatar" />
                             <p>
                                 {{ access()->user()->full_name }} - {{ implode(", ", access()->user()->roles->pluck('name')->toArray()) }}
                                 <small>{{ trans('strings.backend.general.member_since') }} {{ access()->user()->created_at->format("m/d/Y") }}</small>

@@ -6,7 +6,7 @@
             <div class="form">
                 <div class="layui-upload" style="width:80%;margin:0 auto;padding-bottom:20px;">
                   <div class="layui-upload-list">
-                    <img class="layui-upload-img" src="{{ $logged_in_user->picture }}" id="avatar" style="width:150px;height:150px;">
+                    <img class="layui-upload-img" src="{{ $logged_in_user->picture }}"  onerror="this.src='/img/avatars/default.jpg'" id="avatar" style="width:150px;height:150px;">
                   </div>
 
                   <button class="layui-btn" id="upload" style="display: none;">上传头像</button>

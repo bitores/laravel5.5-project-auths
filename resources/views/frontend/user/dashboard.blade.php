@@ -17,7 +17,7 @@
                             <ul class="media-list">
                                 <li class="media">
                                     <div class="media-left">
-                                        <img class="media-object profile-picture" src="{{ $logged_in_user->picture }}" alt="Profile picture">
+                                        <img class="media-object profile-picture" src="{{ $logged_in_user->picture }}"   onerror="this.src='/img/avatars/default.jpg'" alt="Profile picture">
                                     </div><!--media-left-->
 
                                     <div class="media-body">
