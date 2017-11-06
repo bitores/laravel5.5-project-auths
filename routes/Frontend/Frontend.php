@@ -40,23 +40,25 @@ Route::group(['middleware' => 'auth'], function () {
          * 后面是普通业务功能页面 
          */
 
+        // 权限设置
         Route::group([
             'middleware' => 'access.routeNeedsRole:demandside', // 
         ], function () {
         });
 
 
-            Route::get('demandside', 'DemandsideController@index')->name('demandside.index');
-            Route::get('demandside/readme', 'DemandsideController@readme')->name('demandside.readme');
+        // 需求方业务
+        Route::get('demandside', 'DemandsideController@index')->name('demandside.index');
+        Route::get('demandside/readme', 'DemandsideController@readme')->name('demandside.readme');
 
-            Route::get('demandside/product/create', 'DemandsideController@create')->name('demandside.product.create');
-            Route::get('demandside/product/edit', 'DemandsideController@edit')->name('demandside.product.edit');
-            Route::get('demandside/product/show', 'DemandsideController@show')->name('demandside.product.show');
-            Route::get('demandside/product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
+        Route::get('demandside/product/create', 'DemandsideController@create')->name('demandside.product.create');
+        Route::get('demandside/product/edit', 'DemandsideController@edit')->name('demandside.product.edit');
+        Route::get('demandside/product/show', 'DemandsideController@show')->name('demandside.product.show');
+        Route::get('demandside/product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
 
            
         
-
+        // 制作方业务
         Route::get('producer', 'ProducerController@index')->name('producer.index');
         Route::get('producer/tutorial/modeling', 'ProducerController@modelingTutorial')->name('producer.tutorial.modeling');
         Route::get('producer/tutorial/review', 'ProducerController@reviewTutorial')->name('producer.tutorial.review');
@@ -65,6 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('producer/product/assessment', 'ProducerController@assessment')->name('producer.product.assessment');
 
 
+        // 审核方业务
         Route::get('auditor', 'AuditorController@index')->name('auditor.index');
         Route::get('auditor/demandlist', 'AuditorController@demands')->name('auditor.demandlist');
         Route::get('auditor/modellist', 'AuditorController@models')->name('auditor.modellist');
