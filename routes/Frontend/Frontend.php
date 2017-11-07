@@ -71,6 +71,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('auditor', 'AuditorController@index')->name('auditor.index');
         Route::get('auditor/demandlist', 'AuditorController@demands')->name('auditor.demandlist');
         Route::get('auditor/modellist', 'AuditorController@models')->name('auditor.modellist');
-        
+
+
+
+
+
+
+        //---------api
+
+        Route::get('brands', 'BrandController@create')->name('brand.create');
+        Route::post('demandside/product/save', 'ProductController@save')->name('demandside.product.save');
+        Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload');
     });
 });

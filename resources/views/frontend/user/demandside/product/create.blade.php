@@ -2,6 +2,12 @@
 
 @section('title', app_name() . ' | 新建产品')
 
+@section('after-styles')
+
+    <link href="/css/libs/webuploader/webuploader.css" rel="stylesheet">
+
+@endsection
+
 @section('content')
 
 <div class="panel panel-default">
@@ -10,8 +16,23 @@
         <div class="row">
         	<div class="col-md-7">
         		<h3>产品图片 <small> # 简要说明为何需要设置主图片（要求全部展示，不要局部照片）</small></h3>
-        			左边
-        		<!-- </div> -->
+        		<div id="uploader">
+                    <div class="queueList">
+                        <div id="dndArea" class="placeholder">
+                            <div id="filePicker"></div>
+                            <p>最多上传10张</p>
+                        </div>
+                    </div>
+                    <div class="statusBar" style="display:none;">
+                        <div class="progress">
+                            <span class="text">0%</span>
+                            <span class="percentage"></span>
+                        </div><div class="info"></div>
+                        <div class="btns">
+                            <div id="filePicker2"></div><!-- <div class="uploadBtn">开始上传</div> -->
+                        </div>
+                    </div>
+                </div>
         	</div>
         	<div class="col-md-4">
     			 {{ Form::open(['route' => 'frontend.auth.register.mobile.post', 'class' => 'form-horizontal']) }}
@@ -22,20 +43,9 @@
                             <div class="col-md-12" style="padding-left: 0;padding-right: 0">
                                 <div class="col-xs-8" style="padding-left: 0;padding-right: 0">
                                     <select class="form-control select2 col-md-12">
-                                        <option selected="selected">极科主义</option>
-                                        <option>现时代简约</option>
-                                        <option>后现代</option>
-                                        <option>新中式</option>
-                                        <option>中式</option>
-                                        <option>美式</option>
-                                        <option>欧式</option>
-                                        <option>法式</option> 
-                                        <option>美式田园</option>
-                                        <option>意大利</option>
-                                        <option>美式古典</option>
-                                        <option>北欧</option>
-                                        <option>英式</option>
-                                        <option>地中海</option>
+                                        @foreach($brands as $brand)
+                                        <option>{{$brand->name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-xs-4">
@@ -48,7 +58,7 @@
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>产品型号/名字</label>
-                    		{{ Form::tel('mobile', null, ['class' => 'form-control', 'maxlength' => '11', 'required' => 'required', 'placeholder' => '产品型号/名字']) }}
+                    		{{ Form::tel('mobile', null, ['class' => 'form-control', 'maxlength' => '50', 'required' => 'required', 'placeholder' => '产品型号/名字']) }}
                     	</div>
                     </div><!--form-group-->
 
@@ -57,25 +67,20 @@
                             <label>品类</label>
                             <div class="col-md-12" style="padding-left: 0; padding-right: 0">
                                 <div class="col-xs-6" style="padding: 0">
-                                    <select class="form-control select2 col-md-6">
-                                        <option selected="selected">Alabama</option>
-                                        <option>Alaska</option>
-                                        <option>California</option>
-                                        <option>Delaware</option>
-                                        <option>Tennessee</option>
-                                        <option>Texas</option>
-                                        <option>Washington</option>
+                                    <select class="form-control select2 col-md-6" id="categoryA">
+                                        <option selected="selected" disabled="disable" value="-1">请选择</option>
+                                        @foreach($categories_a as $a)
+                                        <option value="{{$a->id}}">{{$a->name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-xs-6" style="padding: 0">
-                                    <select class="form-control select2 col-md-6">
-                                        <option selected="selected">Alabama</option>
-                                        <option>Alaska</option>
-                                        <option>California</option>
-                                        <option>Delaware</option>
-                                        <option>Tennessee</option>
-                                        <option>Texas</option>
-                                        <option>Washington</option>
+                                    <select class="form-control select2 col-md-6" id="categoryB">
+                                        <option selected="selected" disabled="disable" value="-1">请选择</option>
+                                        @foreach($categories_b as $b)
+                                        <option value="{{$b->id}}" class="categorya-{{$b->category_a_id}}" style="display: none;">{{$b->name}}</option>
+                                        @endforeach
+
                                     </select>
                                 </div> 
                             </div>
@@ -87,20 +92,11 @@
                         <div class="col-md-12">
                             <label>风格类别</label>
                             <select class="form-control select2 col-md-12" style="width: 100%;">
-                                <option selected="selected">极科主义</option>
-                                <option>现时代简约</option>
-                                <option>后现代</option>
-                                <option>新中式</option>
-                                <option>中式</option>
-                                <option>美式</option>
-                                <option>欧式</option>
-                                <option>法式</option>
-                                <option>美式田园</option>
-                                <option>意大利</option>
-                                <option>美式古典</option>
-                                <option>北欧</option>
-                                <option>英式</option>
-                                <option>地中海</option>
+                                <option selected="selected" disabled="disable" value="-1">请选择</option>
+                                @foreach($styles as $style)
+                                <option value="{{$style->id}}">{{$style->name}}</option>
+                                @endforeach
+
                             </select>
                         </div>
                     </div>
@@ -122,10 +118,10 @@
                     <div class="form-group">
                         <div class="col-md-12" style="padding: 0">
                             <div class="col-xs-6">
-                                <div class="btn btn-block btn-danger">取消</div>
+                                <a href="{{route('frontend.user.demandside.index')}}" class="btn btn-block btn-danger">取消</a>
                             </div><!--col-md-6-->
                             <div class="col-xs-6">
-                                <div class="btn btn-block btn-info">保存</div>
+                                <div class="btn btn-block btn-info" id="saveBtn">保存</div>
                             </div><!--col-md-6-->
                         </div>
                     </div><!--form-group-->
@@ -159,4 +155,57 @@
     	</div>
     </div>
 </div>
+@endsection
+
+
+@section('after-scripts')
+<script type="text/javascript">
+ var API_HOST = '',
+    API_HEADER = {}; 
+</script>
+
+<script src="/js/libs/webuploader/webuploader.nolog.js"></script>
+<script src="/js/libs/webuploader/webuploadRun.js"></script>
+<script src="/js/libs/webuploader/webuploadImageRun.js"></script>
+<script>
+// 创建文件上传按钮
+
+// uploader1.addButton({
+//     id: '.fileupload1',
+//     innerHTML: '选择文件',
+//     multiple:false
+// });
+// uploader2.addButton({
+//     id: '.fileupload2',
+//     innerHTML: '选择文件',
+//     multiple:false
+// });
+
+
+$("#categoryA").change(function(){
+    console.log(-1);
+    $("#categoryB").val(-1);
+    $("#categoryB option[value!=-1]").hide();
+    // $("#categoryB option:disabled").show();
+    var tag = 'categorya-' + $(this).val();
+    $("#categoryB option[class="+tag+"]").show();
+});
+
+$("#saveBtn").on('click', function(){
+    $.ajax({
+         type: "POST",
+         url: "{{route('frontend.user.demandside.product.save')}}",
+         data: {
+            // username:$("#username").val(), 
+            // content:$("#content").val()
+        },
+        dataType: "json",
+        success: function(data){
+            console.log(data);
+        }
+     });
+});
+
+</script>
+
 @endsection
