@@ -125,20 +125,29 @@
                         </div>
                     </div><!--form-group-->
 
-                    <div class="form-group">
+<!--                     <div class="form-group">
                         <div class="col-md-12">
                             <label>CAD资料</label>
-                            <div class="btn btn-block btn-default cadupload">
+                            <div class="btn btn-block btn-default fileupload1">
                             <span class="filelist1"></span>
                             </div>
                         </div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label>CAD资料</label>
+                            <div class="btn btn-block btn-default fileupload1" id="fileupload1">上传</div>
+                            <span class="filelist1" id="filelist1"></span>
+                        </div>
                     </div>
+
 
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>其它资料</label>
-                            <div class="btn btn-block btn-default fileupload">上传</div>
-                            <span class="filelist2"></span>
+                            <div class="btn btn-block btn-default fileupload2" id="fileupload2">上传</div>
+                            <span class="filelist2" id="filelist2"></span>
                         </div>
                     </div>
 
@@ -167,18 +176,6 @@ var CSRF_TOKEN = $('input[name="_token"]').val();
 <script src="/js/libs/webuploader/webuploadRun.js"></script>
 <script src="/js/libs/webuploader/webuploadImageRun.js"></script>
 <script>
-// 创建文件上传按钮
-
-uploader1.addButton({
-    id: '.cadupload',
-    innerHTML: '上传CAD压缩包',
-    multiple:false
-});
-uploader2.addButton({
-    id: '.fileupload',
-    innerHTML: '上传其它资料压缩包',
-    multiple:false
-});
 
 $("#categoryA").change(function(){
     $("#categoryB").val(-1);
