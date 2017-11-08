@@ -3,7 +3,6 @@
 @section('title', app_name() . ' | 新建产品')
 
 @section('after-styles')
-
     <link href="/css/libs/webuploader/webuploader.css" rel="stylesheet">
 
 @endsection
@@ -42,14 +41,14 @@
                             <label>品牌/厂家</label>
                             <div class="col-md-12" style="padding-left: 0;padding-right: 0">
                                 <div class="col-xs-8" style="padding-left: 0;padding-right: 0">
-                                    <select class="form-control select2 col-md-12">
+                                    <select class="form-control select2 col-md-12" id="brand">
                                         @foreach($brands as $brand)
-                                        <option>{{$brand->name}}</option>
+                                        <option value="{{$brand->id}}">{{$brand->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-xs-4">
-                                    <div class="btn btn-block btn-info">新建</div>
+                                    <div class="btn btn-block btn-info" id="createBrand">新建</div>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +57,7 @@
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>产品型号/名字</label>
-                    		{{ Form::tel('mobile', null, ['class' => 'form-control', 'maxlength' => '50', 'required' => 'required', 'placeholder' => '产品型号/名字']) }}
+                    		{{ Form::text('pType', null, ['class' => 'form-control', 'maxlength' => '50', 'id'=>'product_no', 'required' => 'required', 'placeholder' => '产品型号/名字']) }}
                     	</div>
                     </div><!--form-group-->
 
@@ -91,7 +90,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>风格类别</label>
-                            <select class="form-control select2 col-md-12" style="width: 100%;">
+                            <select class="form-control select2 col-md-12" style="width: 100%;" id="style">
                                 <option selected="selected" disabled="disable" value="-1">请选择</option>
                                 @foreach($styles as $style)
                                 <option value="{{$style->id}}">{{$style->name}}</option>
@@ -104,14 +103,14 @@
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>建模费用</label>
-                    		{{ Form::text('mobile', null, ['class' => 'form-control', 'maxlength' => '10', 'required' => 'required', 'placeholder' => '建模费用(单位：元)']) }}
+                    		{{ Form::text('mobile', null, ['class' => 'form-control', 'id'=>'fee', 'maxlength' => '10', 'required' => 'required', 'placeholder' => '建模费用(单位：元)']) }}
                     	</div>
                     </div><!--form-group-->
 
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>产品简介</label>
-                    		{{ Form::textarea('mobile', null, ['class' => 'form-control', 'maxlength' => '100', 'required' => 'required', 'placeholder' => '产品简介（不超过100字）', 'style'=>'height:100px;']) }}
+                    		{{ Form::textarea('mobile', null, ['class' => 'form-control',  'id'=>'introduction', 'maxlength' => '100', 'required' => 'required', 'placeholder' => '产品简介（不超过100字）', 'style'=>'height:100px;']) }}
                     	</div>
                     </div><!--form-group-->
 
@@ -129,8 +128,8 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>CAD资料</label>
-                            <div class="btn btn-block" style="height: 30px;text-align: left;padding: 0;overflow: hidden;">
-                            <div style="border-radius: 4px; background: red; display: inline-block;height: 30px; width: 10%;"></div>
+                            <div class="btn btn-block btn-default cadupload">
+                            <span class="filelist1"></span>
                             </div>
                         </div>
                     </div>
@@ -138,7 +137,8 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>其它资料</label>
-                            <div class="btn btn-block btn-default">上传</div>
+                            <div class="btn btn-block btn-default fileupload">上传</div>
+                            <span class="filelist2"></span>
                         </div>
                     </div>
 
@@ -160,8 +160,7 @@
 
 @section('after-scripts')
 <script type="text/javascript">
- var API_HOST = '',
-    API_HEADER = {}; 
+var CSRF_TOKEN = $('input[name="_token"]').val();
 </script>
 
 <script src="/js/libs/webuploader/webuploader.nolog.js"></script>
@@ -170,40 +169,95 @@
 <script>
 // 创建文件上传按钮
 
-// uploader1.addButton({
-//     id: '.fileupload1',
-//     innerHTML: '选择文件',
-//     multiple:false
-// });
-// uploader2.addButton({
-//     id: '.fileupload2',
-//     innerHTML: '选择文件',
-//     multiple:false
-// });
-
+uploader1.addButton({
+    id: '.cadupload',
+    innerHTML: '上传CAD压缩包',
+    multiple:false
+});
+uploader2.addButton({
+    id: '.fileupload',
+    innerHTML: '上传其它资料压缩包',
+    multiple:false
+});
 
 $("#categoryA").change(function(){
-    console.log(-1);
     $("#categoryB").val(-1);
     $("#categoryB option[value!=-1]").hide();
-    // $("#categoryB option:disabled").show();
     var tag = 'categorya-' + $(this).val();
     $("#categoryB option[class="+tag+"]").show();
 });
-
+var $_currentProduct=null, saveBtn_handling = false;
 $("#saveBtn").on('click', function(){
-    $.ajax({
-         type: "POST",
-         url: "{{route('frontend.user.demandside.product.save')}}",
-         data: {
-            // username:$("#username").val(), 
-            // content:$("#content").val()
-        },
-        dataType: "json",
-        success: function(data){
-            console.log(data);
-        }
-     });
+    if(saveBtn_handling==false){
+        saveBtn_handling = true;
+        $.ajax({
+             type: "POST",
+             url: "{{route('frontend.user.demandside.product.save')}}",
+             data: {
+                'current_pro': $_currentProduct,
+                'product_no':$("#product_no").val(),
+                'style_id':$("#style").val(),
+                'a_id':$("#categoryA").val(),
+                'b_id':$("#categoryB").val(),
+                'brand_id':$("#brand").val(),
+                'cad_id':$("#cad").val(),
+                'file_id':$("#ofile").val(),
+                'fee':$("#fee").val(),
+                'introduction':$("#introduction").val()
+            },
+            dataType: "json",
+            success: function(res){
+                saveBtn_handling = false;
+                $_currentProduct = res.data['product_id'];
+                console.log($_currentProduct);
+            }
+         });
+    }
+    
+});
+
+$('#createBrand').on('click', function(){
+    swal({   
+        title: "新建品牌", 
+        type: 'input',  
+        inputType: "text",   
+        showCancelButton: true,   
+        closeOnConfirm: false,   
+        animation: "slide-from-top",   
+        inputPlaceholder: "品牌/厂家",
+    },function(inputValue){   
+            return new Promise(function(resolve, reject) {
+                console.log(inputValue);
+                if (inputValue) {
+                    $.ajax({
+                        url: "/demandside/brand/create",
+                        type:'POST',
+                        data:{
+                            'brd_name':inputValue
+                        },
+                        success: function(res) {
+                            if(0 === res.code){
+                                $('#brand').append("<option value='"+res.data['id']+"' selected='selected'>"+res.data['brd_name']+"</option>")
+                            }
+                            resolve();
+                        },
+                        error: function() {
+                           reject('error!');
+                        }
+                    });
+                    
+                } else {
+                    reject();
+                }
+            }).then(function(result) {
+                if (result) {
+                    swal({
+                      type: 'success',
+                      html: 'You entered: ' + result
+                    });
+                }
+            });
+        });
 });
 
 </script>

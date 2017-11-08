@@ -8,32 +8,36 @@ use App\Http\Controllers\Controller;
 
 class UploadController extends Controller
 {
+
 	public function index() 
 	{
-		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        header("Cache-Control: no-store, no-cache, must-revalidate");
-        header("Cache-Control: post-check=0, pre-check=0", false);
-        header("Pragma: no-cache");
+		// header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+  //       header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+  //       header("Cache-Control: no-store, no-cache, must-revalidate");
+  //       header("Cache-Control: post-check=0, pre-check=0", false);
+  //       header("Pragma: no-cache");
  
-        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-            exit; // finish preflight CORS requests here
-        }
-        if ( !empty($_REQUEST[ 'debug' ]) ) {
-            $random = rand(0, intval($_REQUEST[ 'debug' ]) );
-            if ( $random === 0 ) {
-                header("HTTP/1.0 500 Internal Server Error");
-                exit;
-            }
-        }
+  //       if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+  //           exit; // finish preflight CORS requests here
+  //       }
+  //       if ( !empty($_REQUEST[ 'debug' ]) ) {
+  //           $random = rand(0, intval($_REQUEST[ 'debug' ]) );
+  //           if ( $random === 0 ) {
+  //               header("HTTP/1.0 500 Internal Server Error");
+  //               exit;
+  //           }
+  //       }
  
         // 5 minutes execution time
         @set_time_limit(5 * 60);
         // Uncomment this one to fake upload time
         usleep(5000);
         // Settings
-        $targetDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials_tmp';
-        $uploadDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials'.DIRECTORY_SEPARATOR.date('Ymd');
+        // $targetDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials_tmp';
+        // $uploadDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials'.DIRECTORY_SEPARATOR.date('Ymd');
+
+        $targetDir = "./uploads/materials_tmp";
+        $uploadDir = "./uploads/materials/".date("Ymd");
         $cleanupTargetDir = true; // Remove old files
         $maxFileAge = 5 * 3600; // Temp file age in seconds
  

@@ -1,12 +1,11 @@
 // 文件上传
 //  后期时间多了应该封装一下，不能这样子丑陋的留2个实例在这里
-    var $list1 = $('.filelist1'),
-        $list2 = $('.filelist2'),
-        $btn = $('#ctlBtn'),
-        state = 'pending',
-        uploader1,
-        uploader2;
-
+var $list1 = $('.filelist1'),
+    $list2 = $('.filelist2'),
+    $btn = $('#ctlBtn'),
+    state = 'pending',
+    uploader1,
+    uploader2;
 
 
 // 文件上传实例1
@@ -18,17 +17,19 @@ uploader1 = WebUploader.create({
         swf:'/js/Uploader.swf',
 
         // 文件接收服务端。
-        server: API_HOST + '/server/fileupload',
+        server: '/demandside/product/upload',
         chunked: true,
         chunkSize: 2*1024*1024,
         chunkRetry:2,
         // duplicate: true,
-        headers: API_HEADER,
         // 选择文件的按钮。可选。
         // 内部根据当前运行是创建，可能是input元素，也可能是flash.
 
         // pick: '#picker'
         // multiple:false
+        headers:{
+            'X-CSRF-TOKEN': CSRF_TOKEN
+        }
     });
 
     // 当有文件添加进来的时候
@@ -132,13 +133,15 @@ uploader2 = WebUploader.create({
         chunkRetry:2,
 
         // 文件接收服务端。
-        server: API_HOST + '/server/fileupload',
+        server: '/demandside/product/upload',
         // duplicate: true,
-        headers: API_HEADER,
         // 选择文件的按钮。可选。
         // 内部根据当前运行是创建，可能是input元素，也可能是flash.
 
         // pick: '#picker'
+        headers:{
+            'X-CSRF-TOKEN': CSRF_TOKEN
+        }
     });
 
     // 当有文件添加进来的时候

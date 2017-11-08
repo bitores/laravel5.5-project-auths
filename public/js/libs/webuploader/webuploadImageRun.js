@@ -93,13 +93,17 @@
             swf: '/js/Uploader.swf',
             chunked: true,
             chunkSize: 5 * 1024 * 1024,
-            server: 'http://my.dev/demandside/product/upload',
+            server: '/demandside/product/upload',
             // runtimeOrder: 'flash',
             // 限制可接受的文件格式
             accept: {
                 title: 'Images',
                 extensions: 'gif,jpg,jpeg,bmp,png',
                 mimeTypes: 'image/jpg,image/jpeg,image/png,image/gif,image/bmp'
+            },
+
+            headers:{
+                'X-CSRF-TOKEN': CSRF_TOKEN
             },
 
             // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。

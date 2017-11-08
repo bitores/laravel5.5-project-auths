@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Config;
 use App\Http\Requests\Frontend\User\BrandRequest;
 use App\Repositories\Frontend\Access\User\BrandRepository;
-use Auth;
+use App\Repositories\Frontend\Access\User\UserRepository;
 
 /**
  * Class AccountController.
@@ -28,18 +28,17 @@ class BrandController extends Controller
      */
     public function create(BrandRequest $request)
     {	
-        // $request->only(
-        //     'name'
-        // )
         
+        // $this->brand->
+
         $brand = $this->brand->create([
-            'name' => 'test5',
+            'name' => $request->get('brd_name'),
             'user_id' => access()->id()
         ]);
   
             
         return ['code' => 0, 'data'=>[
-            'name' => $brand->name,
+            'brd_name' => $brand->name,
             'id' => $brand->id
         ], 'msg' => 'success'];
     }

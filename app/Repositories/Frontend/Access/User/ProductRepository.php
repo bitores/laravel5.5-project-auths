@@ -17,16 +17,50 @@ class ProductRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function create(array $data)
+    public function create($userid, array $data)
     {
         $product = self::MODEL;
 
         $product = new $product;
 
-        // $product->name = $data['name'];
-        $product->user_id = $data['user_id'];
+        
+        $product->product_no = $data['product_no'];
+        $product->style_id = $data['style_id'];
+        $product->a_id = $data['a_id'];
+        $product->b_id = $data['b_id'];
+        $product->brand_id = $data['brand_id'];
+        // // $product->cad_id = $data['cad_id'];
+        // // $product->file_id = $data['file_id'];
+        $product->fee = $data['fee'];
+        $product->introduction = $data['introduction'];
+
+        $product->user_id = $userid;
         $product->save();
 
         return $product;
+    }
+
+    public function update($proid, array $data)
+    {
+        $product = $this->find($proid);
+
+        if($product){
+            $product->product_no = $data['product_no'];
+            $product->style_id = $data['style_id'];
+            $product->a_id = $data['a_id'];
+            $product->b_id = $data['b_id'];
+            $product->brand_id = $data['brand_id'];
+            // $product->cad_id = $data['cad_id'];
+            // $product->file_id = $data['file_id'];
+            $product->fee = $data['fee'];
+            $product->introduction = $data['introduction'];
+
+            $product->save();
+
+
+        }
+        
+        return $product;
+        
     }
 }

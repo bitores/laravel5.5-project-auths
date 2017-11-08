@@ -79,7 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         //---------api
 
-        Route::get('brands', 'BrandController@create')->name('brand.create');
+        Route::post('demandside/brand/create', 'BrandController@create')->name('demandside.brand.create');
         Route::post('demandside/product/save', 'ProductController@save')->name('demandside.product.save');
         Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload');
     });

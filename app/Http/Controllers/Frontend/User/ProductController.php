@@ -7,7 +7,6 @@ use Config;
 use App\Http\Requests\Frontend\User\ProductRequest;
 use App\Repositories\Frontend\Access\User\ProductRepository;
 use App\Repositories\Frontend\Access\User\UserRepository;
-use Auth;
 
 /**
  * Class AccountController.
@@ -29,15 +28,12 @@ class ProductController extends Controller
      */
     public function save(ProductRequest $request)
     {	
-        // $request->only(
-        //     'name'
-        // )
-        $product = $this->product->create($request->only(
+        $data = $request->only(
+            'current_pro',
             'product_no',
             'style_id',
             'a_id',
             'b_id',
-            'user_id',
             'brand_id',
             'cad_id',
             'file_id',
@@ -45,9 +41,25 @@ class ProductController extends Controller
             'model_id',
             'fee',
             'introduction'
-        ));
+        );
+
+        if($request->get('current_pro'))
+        {
+            $product = $this->product->update($request->get('current_pro'),$data);
+
+            if(is_null($product))
+            {
+                return null;
+            }
+
+        } else {
+            $product = $this->product->create(access()->id(),$data);
+
+        }
+
+        
   
-            
+    
         return ['code' => 0, 'data'=>[
             'product_id' => $product->id
         ], 'msg' => 'success'];

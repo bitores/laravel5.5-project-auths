@@ -27,9 +27,16 @@ class ProductRequest extends Request
     public function rules()
     {
         return [
-    //         'first_name'  => 'required|max:191',
-    //         'last_name'  => 'required|max:191',
-    //         'email' => 'sometimes|required|email|max:191',
+        // 'current_pro' => 'numeric|exists:products,id',
+        // 'style_id' => 'numeric',
+        // 'a_id' => 'numeric',
+        // 'b_id' => 'numeric',
+        // 'brand_id' => 'numeric',
+        // 'cad_id' => 'numeric',
+        // 'file_id' => 'numeric',
+        // 'status_id' => 'numeric',
+        // 'model_id' => 'numeric',
+        // 'fee' => 'numeric'
         ];
     }
 }
