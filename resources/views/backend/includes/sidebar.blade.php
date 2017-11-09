@@ -81,6 +81,31 @@
             </li>
             @endauth
 
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-list"></i>
+                    <span>MLM</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu" style="display: none;">
+                    <li class="">
+                        <a href="{{ route('frontend.user.demandside.index') }}">
+                            <i class="fa fa-circle-o"></i>
+                            <span>AA</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="{{ route('frontend.user.demandside.index') }}">
+                            <i class="fa fa-circle-o"></i>
+                            <span>BB</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+
             <li class="{{ active_class(Active::checkUriPattern('admin/log-viewer*')) }} treeview">
                 <a href="#">
                     <i class="fa fa-list"></i>

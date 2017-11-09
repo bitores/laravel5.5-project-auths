@@ -7,3 +7,4 @@ Breadcrumbs::register('admin.dashboard', function ($breadcrumbs) {
 require __DIR__.'/Search.php';
 require __DIR__.'/Access.php';
 require __DIR__.'/LogViewer.php';
+require __DIR__.'/MLM.php';
