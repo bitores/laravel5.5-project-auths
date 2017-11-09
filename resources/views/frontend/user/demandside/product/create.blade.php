@@ -4,7 +4,6 @@
 
 @section('after-styles')
     <link href="/css/libs/webuploader/webuploader.css" rel="stylesheet">
-
 @endsection
 
 @section('content')
@@ -19,7 +18,7 @@
                     <div class="queueList">
                         <div id="dndArea" class="placeholder">
                             <div id="filePicker"></div>
-                            <p>最多上传10张</p>
+                            <p>最多上传20张</p>
                         </div>
                     </div>
                     <div class="statusBar" style="display:none;">
@@ -32,6 +31,24 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>CAD资料</label>
+                        <div class="btn btn-block btn-default fileupload1" id="fileupload1">上传</div>
+                        <span class="filelist1" id="filelist1" style="word-break: break-all;"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>其它资料</label>
+                        <div class="btn btn-block btn-default fileupload2" id="fileupload2">上传</div>
+                        <span class="filelist2" id="filelist2" style="word-break: break-all;"></span>
+                    </div>
+                </div>
+
         	</div>
         	<div class="col-md-4">
     			 {{ Form::open(['route' => 'frontend.auth.register.mobile.post', 'class' => 'form-horizontal']) }}
@@ -125,31 +142,7 @@
                         </div>
                     </div><!--form-group-->
 
-<!--                     <div class="form-group">
-                        <div class="col-md-12">
-                            <label>CAD资料</label>
-                            <div class="btn btn-block btn-default fileupload1">
-                            <span class="filelist1"></span>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>CAD资料</label>
-                            <div class="btn btn-block btn-default fileupload1" id="fileupload1">上传</div>
-                            <span class="filelist1" id="filelist1"></span>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>其它资料</label>
-                            <div class="btn btn-block btn-default fileupload2" id="fileupload2">上传</div>
-                            <span class="filelist2" id="filelist2"></span>
-                        </div>
-                    </div>
+                    
 
 
                     <div class="form-group">
@@ -170,6 +163,14 @@
 @section('after-scripts')
 <script type="text/javascript">
 var CSRF_TOKEN = $('input[name="_token"]').val();
+var webupload_pickList=[
+// {'path':"https://dim3d.xyz/uploads/materials/20171026/150899935276c708cf0155e8de.jpg",'id':1}
+@if(isset($images))
+@foreach($images as $image)
+{'path':"/uploads/materials/{{str_replace("\\",'/',$image->path)}}",'id':"{{$image->id}}"},
+@endforeach
+@endif
+];
 </script>
 
 <script src="/js/libs/webuploader/webuploader.nolog.js"></script>
@@ -187,6 +188,14 @@ var $_currentProduct=null, saveBtn_handling = false;
 $("#saveBtn").on('click', function(){
     if(saveBtn_handling==false){
         saveBtn_handling = true;
+
+        var $lis = $('#uploader .state-complete');
+
+        var ret = [];
+        $lis.each(function(index, item){
+            ret[index] = $(item).attr('file_id');
+        });
+
         $.ajax({
              type: "POST",
              url: "{{route('frontend.user.demandside.product.save')}}",
@@ -197,10 +206,11 @@ $("#saveBtn").on('click', function(){
                 'a_id':$("#categoryA").val(),
                 'b_id':$("#categoryB").val(),
                 'brand_id':$("#brand").val(),
-                'cad_id':$("#cad").val(),
-                'file_id':$("#ofile").val(),
+                'cad_id':$("#filelist1").attr('file_id'),
+                'file_id':$("#filelist2").attr('file_id'),
                 'fee':$("#fee").val(),
-                'introduction':$("#introduction").val()
+                'introduction':$("#introduction").val(),
+                'images':ret.join(',')
             },
             dataType: "json",
             success: function(res){
@@ -223,38 +233,28 @@ $('#createBrand').on('click', function(){
         animation: "slide-from-top",   
         inputPlaceholder: "品牌/厂家",
     },function(inputValue){   
-            return new Promise(function(resolve, reject) {
-                console.log(inputValue);
-                if (inputValue) {
-                    $.ajax({
-                        url: "/demandside/brand/create",
-                        type:'POST',
-                        data:{
-                            'brd_name':inputValue
-                        },
-                        success: function(res) {
-                            if(0 === res.code){
-                                $('#brand').append("<option value='"+res.data['id']+"' selected='selected'>"+res.data['brd_name']+"</option>")
-                            }
-                            resolve();
-                        },
-                        error: function() {
-                           reject('error!');
-                        }
-                    });
-                    
-                } else {
-                    reject();
-                }
-            }).then(function(result) {
-                if (result) {
-                    swal({
-                      type: 'success',
-                      html: 'You entered: ' + result
-                    });
+            
+        if (inputValue) {
+            $.ajax({
+                url: "/demandside/brand/create",
+                type:'POST',
+                data:{
+                    'brd_name':inputValue
+                },
+                success: function(res) {
+                    if(0 === res.code){
+                        $('#brand').append("<option value='"+res.data['id']+"' selected='selected'>"+res.data['brd_name']+"</option>")
+                    }
+                    swal.close();
+                },
+                error: function(res) {
+                    // swal.close()
+                    swal("OMG", "品牌已存在", "error");
                 }
             });
-        });
+            
+        }
+    });
 });
 
 </script>

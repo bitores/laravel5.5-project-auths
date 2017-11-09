@@ -1,7 +1,7 @@
 // 文件上传
 //  后期时间多了应该封装一下，不能这样子丑陋的留2个实例在这里
 //  
-var bindWebupload = function(uploadBtn, filelist, innerHTML){
+var bindWebupload = function(uploadBtn, filelist, innerHTML, filetTpe){
 
     this.filelist = filelist;
     this.state = 'pending';
@@ -33,6 +33,10 @@ var bindWebupload = function(uploadBtn, filelist, innerHTML){
             title: 'Images',
             extensions: 'rar,zip,7z,cad,max',
             mimeTypes: 'application/x-rar-compressed,application/zip,'
+        },
+
+        formData:{
+            datatype:filetTpe
         },
 
         headers:{
@@ -76,9 +80,10 @@ var bindWebupload = function(uploadBtn, filelist, innerHTML){
 
     this.uploader.on( 'uploadSuccess', function( file, res ) {
         $( '#'+file.id ).find('p.state').text('已上传');
-        that.uploaderBtn.remove();
+        // 删除上传按钮
+        // that.uploaderBtn.remove();
         that.filelist.attr({
-            file_id:res.file_id
+            file_id: res.file_id
        });
     });
 
@@ -115,5 +120,5 @@ var bindWebupload = function(uploadBtn, filelist, innerHTML){
 
 };
 
-new bindWebupload('#fileupload1',$('#filelist1'),'上传CAD压缩包');
-new bindWebupload('#fileupload2',$('#filelist2'),'上传其它资料压缩包');
+new bindWebupload('#fileupload1',$('#filelist1'),'上传CAD压缩包','CAD');
+new bindWebupload('#fileupload2',$('#filelist2'),'上传其它资料压缩包','OTHER');

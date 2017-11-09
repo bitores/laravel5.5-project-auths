@@ -8,7 +8,9 @@
 	    <div class="panel-body">
 	        <div class="row">
 	        	<div class="col-md-12">
-	        		
+	        		@foreach($products as $product)
+	        		<h4><a href="{{route('frontend.user.demandside.product.edit', $product->id)}}">{{$product->id}}</a></h4>
+	        		@endforeach
 	        	</div>	        	
 	        </div>
 	    </div>

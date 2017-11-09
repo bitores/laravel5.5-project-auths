@@ -3,41 +3,46 @@
 namespace App\Http\Controllers\Frontend\User;
 
 use App\Http\Controllers\Controller;
-// use Illuminate\Http\Request;
-// use App\Models\Uploadfiles;
+use App\Repositories\Frontend\Access\User\UserRepository;
+use App\Repositories\Frontend\Access\User\UFileRepository;
+use App\Repositories\Frontend\Access\User\UCadRepository;
+use App\Repositories\Frontend\Access\User\UImageRepository;
 
 class UploadController extends Controller
 {
 
+	/**
+     * @var UserRepository
+     */
+    protected $ucad;
+    protected $ufile;
+    protected $uimage;
+
+    /**
+     * ProfileController constructor.
+     *
+     * @param UserRepository $user
+     */
+    public function __construct(UCadRepository $ucad, UImageRepository $uimage, UFileRepository $ufile)
+    {
+       $this->ucad = $ucad;
+       $this->uimage = $uimage;
+       $this->ufile = $ufile;
+    }
+
 	public function index() 
 	{
-		// header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-  //       header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-  //       header("Cache-Control: no-store, no-cache, must-revalidate");
-  //       header("Cache-Control: post-check=0, pre-check=0", false);
-  //       header("Pragma: no-cache");
- 
-  //       if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-  //           exit; // finish preflight CORS requests here
-  //       }
-  //       if ( !empty($_REQUEST[ 'debug' ]) ) {
-  //           $random = rand(0, intval($_REQUEST[ 'debug' ]) );
-  //           if ( $random === 0 ) {
-  //               header("HTTP/1.0 500 Internal Server Error");
-  //               exit;
-  //           }
-  //       }
- 
+
         // 5 minutes execution time
         @set_time_limit(5 * 60);
         // Uncomment this one to fake upload time
         usleep(5000);
         // Settings
-        // $targetDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials_tmp';
-        // $uploadDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials'.DIRECTORY_SEPARATOR.date('Ymd');
+        
 
-        $targetDir = "./uploads/materials_tmp";
-        $uploadDir = "./uploads/materials/".date("Ymd");
+        $currentDay = date("Ymd");
+        $targetDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials_tmp';
+        $uploadDir = '.'.DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR.'materials'.DIRECTORY_SEPARATOR.$currentDay;
         $cleanupTargetDir = true; // Remove old files
         $maxFileAge = 5 * 3600; // Temp file age in seconds
  
@@ -128,6 +133,8 @@ class UploadController extends Controller
             $hashStr = substr(md5($pathInfo['basename']),8,16);
             $hashName = time() . $hashStr . '.' .$oldInfo['extension'];
             $uploadPath = $uploadDir . DIRECTORY_SEPARATOR .$hashName;
+
+            $currentPath = $currentDay . DIRECTORY_SEPARATOR .$hashName;
  
             if (!$out = @fopen($uploadPath, "wb")) {
                 die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream666."}, "id" : "id"}');
@@ -147,22 +154,40 @@ class UploadController extends Controller
             }
             @fclose($out);
 
+            $datatype = $_REQUEST["datatype"];
+
             $response = [
                 'success'=>true,
                 'oldName'=>$oldName,
                 'filePath'=>$uploadPath,
-                'fileSuffixes'=>$pathInfo['extension']
+                'currentPath' => $currentPath,
+                'fileSuffixes'=>$pathInfo['extension'],
+                'dataType' => $datatype
             ];
 
-            // $attributes = [
-            // 	'original_name' => $oldName,
-            // 	'storage_path' => $uploadPath,
-            // 	'user_id' => $this->user()->id
-            // ];
+            if('IMAGE' === $datatype) {
 
+	            $file = $this->uimage->create([
+	            	'path' => $currentPath,
+	            	'user_id' => access()->id()
+	            ]);
 
-            // $file = Uploadfiles::create($attributes);
-            $file=null;
+            } elseif('CAD' === $datatype) {
+
+            	$file = $this->ucad->create([
+	            	'path' => $currentPath,
+	            	'user_id' => access()->id()
+	            ]);
+
+            } elseif('OTHER' === $datatype) {
+
+            	$file = $this->ufile->create([
+	            	'path' => $currentPath,
+	            	'user_id' => access()->id()
+	            ]);
+
+            }
+
             if($file) {
             	die(json_encode([
             		"file_id" => $file->id

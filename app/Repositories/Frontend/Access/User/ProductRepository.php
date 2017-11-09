@@ -29,12 +29,12 @@ class ProductRepository extends BaseRepository
         $product->a_id = $data['a_id'];
         $product->b_id = $data['b_id'];
         $product->brand_id = $data['brand_id'];
-        // // $product->cad_id = $data['cad_id'];
-        // // $product->file_id = $data['file_id'];
+        $product->cad_id = $data['cad_id'];
+        $product->file_id = $data['file_id'];
         $product->fee = $data['fee'];
         $product->introduction = $data['introduction'];
-
         $product->user_id = $userid;
+        // $product->status_id = 1000;
         $product->save();
 
         return $product;
@@ -50,17 +50,28 @@ class ProductRepository extends BaseRepository
             $product->a_id = $data['a_id'];
             $product->b_id = $data['b_id'];
             $product->brand_id = $data['brand_id'];
-            // $product->cad_id = $data['cad_id'];
-            // $product->file_id = $data['file_id'];
+            $product->cad_id = $data['cad_id'];
+            $product->file_id = $data['file_id'];
             $product->fee = $data['fee'];
             $product->introduction = $data['introduction'];
-
+            // $product->status_id = 1000;
             $product->save();
 
 
         }
         
-        return $product;
-        
+        return $product;    
     }
+
+    public function findAll()
+    {
+        return $this->query()->where('user_id', access()->id())->get();
+    }
+
+    public function findDataById($id)
+    {   
+
+        return $this->query()->where('user_id', access()->id())->where('id',$id)->first();
+    }
+
 }

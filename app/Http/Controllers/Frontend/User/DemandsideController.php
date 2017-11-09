@@ -8,6 +8,8 @@ use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Repositories\Frontend\Access\User\CategoryARepository;
 use App\Repositories\Frontend\Access\User\CategoryBRepository;
 use App\Repositories\Frontend\Access\User\StyleRepository;
+use App\Repositories\Frontend\Access\User\UImageRepository;
+use App\Repositories\Frontend\Access\User\ProductRepository;
 
 /**
  * Class DashboardController.
@@ -19,9 +21,13 @@ class DemandsideController extends Controller
         $this->brand = $brand;
     }
 
-    public function index()
-    {
-        return view('frontend.user.demandside.index');
+    public function index(ProductRepository $productRes)
+    {   
+        $products = $productRes->findAll();
+
+        return view('frontend.user.demandside.index',[
+            'products' => $products
+        ]);
     }
 
     public function readme()
@@ -36,10 +42,6 @@ class DemandsideController extends Controller
         $categories_b = $categoryb->findAllData();
 
 
-
-
-        // $styles = [];
-
         return view('frontend.user.demandside.product.create',[
             'brands'=>$brands,
             'categories_a'=>$categories_a,
@@ -48,9 +50,30 @@ class DemandsideController extends Controller
         ]);
     }
 
-    public function edit()
+    public function edit(CategoryARepository $categorya,CategoryBRepository $categoryb,StyleRepository $style, UImageRepository $imageRes, ProductRepository $productRes, $productid)
     {
-        return view('frontend.user.demandside.product.edit');
+        $product = $productRes->findDataById($productid);
+
+        $brands = $this->brand->findDataById(access()->id());
+        $categories_a = $categorya->findAllData();
+        $categories_b = $categoryb->findAllData();
+
+        $images = $imageRes->findAllDataByProductId($productid);
+
+        if($product) {
+            return view('frontend.user.demandside.product.edit',[
+                'product' => $product,
+
+                'brands'=>$brands,
+                'categories_a'=>$categories_a,
+                'categories_b'=>$categories_b,
+                'styles'=>$style->getAll(),
+                'images'=> $images
+            ]);
+        } else {
+            return redirect()->route('frontend.user.demandside.index')->withFlashSuccess('无此产品');
+        }
+        
     }
 
     public function show()

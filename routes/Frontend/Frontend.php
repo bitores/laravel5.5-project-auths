@@ -48,13 +48,13 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         // 需求方业务
-        Route::get('demandside', 'DemandsideController@index')->name('demandside.index');
-        Route::get('demandside/readme', 'DemandsideController@readme')->name('demandside.readme');
+        Route::get('products', 'DemandsideController@index')->name('demandside.index');
+        Route::get('readme', 'DemandsideController@readme')->name('demandside.readme');
 
-        Route::get('demandside/product/create', 'DemandsideController@create')->name('demandside.product.create');
-        Route::get('demandside/product/edit', 'DemandsideController@edit')->name('demandside.product.edit');
-        Route::get('demandside/product/show', 'DemandsideController@show')->name('demandside.product.show');
-        Route::get('demandside/product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
+        Route::get('product/create', 'DemandsideController@create')->name('demandside.product.create');
+        Route::get('product/{productid}/edit', 'DemandsideController@edit')->name('demandside.product.edit');
+        Route::get('product/show', 'DemandsideController@show')->name('demandside.product.show');
+        Route::get('product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
 
            
         

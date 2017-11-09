@@ -7,6 +7,7 @@ use Config;
 use App\Http\Requests\Frontend\User\ProductRequest;
 use App\Repositories\Frontend\Access\User\ProductRepository;
 use App\Repositories\Frontend\Access\User\UserRepository;
+use App\Repositories\Frontend\Access\User\UImageRepository;
 
 /**
  * Class AccountController.
@@ -26,7 +27,7 @@ class ProductController extends Controller
      * @author wuyanwen(2017Äê9ÔÂ20ÈÕ)
      * @param Request $request
      */
-    public function save(ProductRequest $request)
+    public function save(ProductRequest $request, UImageRepository $uimageRes)
     {	
         $data = $request->only(
             'current_pro',
@@ -37,7 +38,6 @@ class ProductController extends Controller
             'brand_id',
             'cad_id',
             'file_id',
-            'status_id',
             'model_id',
             'fee',
             'introduction'
@@ -53,8 +53,15 @@ class ProductController extends Controller
             }
 
         } else {
-            $product = $this->product->create(access()->id(),$data);
 
+            $product = $this->product->create(access()->id(),$data);
+        }
+
+        $uimageRes->resetProductId($product->id);
+
+        if($request->get('images'))
+        {
+            $images = $uimageRes->updateProductId(explode(',',$request->get('images')),$product->id);
         }
 
         

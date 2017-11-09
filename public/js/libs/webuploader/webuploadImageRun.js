@@ -102,6 +102,10 @@
                 mimeTypes: 'image/jpg,image/jpeg,image/png,image/gif,image/bmp'
             },
 
+            formData:{
+                datatype:'IMAGE'
+            },
+
             headers:{
                 'X-CSRF-TOKEN': CSRF_TOKEN
             },
@@ -109,7 +113,7 @@
             // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
             disableGlobalDnd: true,
             // 设置单次允许上传 10 张
-            fileNumLimit: 10,
+            fileNumLimit: 20,
             fileSizeLimit: 200 * 1024 * 1024,    // 200 M
             fileSingleSizeLimit: 50 * 1024 * 1024    // 50 M
         });
@@ -154,15 +158,18 @@
         // });
 
         // 当有文件添加进来时执行，负责view的创建
-        function addFile( file ) {
+        function addFile( file , params) {
             var $li = $( '<li id="' + file.id + '">' +
-                    '<p class="title">' + file.name + '</p>' +
                     '<p class="imgWrap"></p>'+
                     '<p class="progress"><span></span></p>' +
                     '<div class="file-panel"><span class="cancel">删除</span></div>'+
                     '</li>' );
                 $li.appendTo( $queue );
+            if(params) {
+                $li.attr('file_id', params);
+                $li.attr('class', "state-complete");
                 // 设置为封面
+            }
             var $btns =  $li.find('file-panel'),
                 $prgress_parent = $li.find('p.progress'),
                 $prgress = $li.find('p.progress span'),
@@ -188,6 +195,8 @@
 
                     $info.text( text ).appendTo( $li );
                 };
+
+            $prgress_parent.hide();
 
             if ( file.getStatus() === 'invalid' ) {
                 showError( file.statusText );
@@ -227,6 +236,7 @@
 
             file.on('statuschange', function( cur, prev) {
                 if ( prev === 'progress' ) {
+                    $prgress_parent.show();
                     $prgress.hide().width(0);
                 } else if ( prev === 'queued' ) {
                     $li.off( 'mouseenter mouseleave' );
@@ -517,6 +527,57 @@
 
         $upload.addClass( 'state-' + state );
         updateTotalProgress();
+
+
+
+
+
+
+        var getFileBlob = function (url, params, cb) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.responseType = "blob";
+            xhr.addEventListener('load', function() {
+                cb(xhr.response, params);
+            });
+            xhr.send();
+        };
+
+        var blobToFile = function (blob, name) {
+            blob.lastModifiedDate = new Date();
+            blob.name = name;
+            return blob;
+        };
+
+        var getFileObject = function(filePathOrUrl,params, cb) {
+            getFileBlob(filePathOrUrl, params, function (blob,params) {
+                cb(blobToFile(blob, 'test.jpg'),params);
+            });
+        };
+
+        //需要编辑的图片列表
+        var picList = ['https://dim3d.xyz/uploads/materials/20171026/150899935276c708cf0155e8de.jpg','https://dim3d.xyz/uploads/materials/20171026/150899935276c708cf0155e8de.jpg' ]
+            picList = [];
+        $.each(webupload_pickList, function(index,item){
+            getFileObject(item.path, item.id, function (fileObject, params) {
+                var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'),fileObject);
+                var file = new WebUploader.File(wuFile);
+
+                fileCount++;
+                fileSize += file.size;
+
+                if ( fileCount === 1 ) {
+                    $placeHolder.addClass( 'element-invisible' );
+                    $statusBar.show();
+                }
+
+                addFile(file,params)
+                setState( 'ready' );
+                updateTotalProgress();
+
+            })
+        });
+
     });
 
 })( jQuery );
