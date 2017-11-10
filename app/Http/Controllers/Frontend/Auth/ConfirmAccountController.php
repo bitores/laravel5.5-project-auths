@@ -6,7 +6,6 @@ use App\Models\Access\User\User;
 use App\Http\Controllers\Controller;
 use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Notifications\Frontend\Auth\UserNeedsConfirmation;
-use App\Notifications\Frontend\Auth\UserNeedsBinding;
 
 /**
  * Class ConfirmAccountController.
@@ -53,23 +52,10 @@ class ConfirmAccountController extends Controller
     }
 
 
-    public function bind($token)
-    {
-        $user = $this->user->findByConfirmationToken($token);
+    // public function bindEmail($token)
+    // {
+    //     $user = $this->user->findByConfirmationToken($token);
 
-        return redirect()->route('frontend.auth.login')->withFlashSuccess(trans('exceptions.frontend.auth.confirmation.success'));
-    }
-
-    /**
-     * @param $user
-     *
-     * @return mixed
-     */
-    public function sendBindingEmail()
-    {
-        $user = $this->user->find(access()->id());
-        $user->notify(new UserNeedsBinding($user->confirmation_code));
-
-        // return redirect()->route('frontend.auth.login')->withFlashSuccess(trans('exceptions.frontend.auth.confirmation.resent'));
-    }
+    //     return redirect()->route('frontend.auth.login')->withFlashSuccess(trans('exceptions.frontend.auth.confirmation.success'));
+    // }
 }

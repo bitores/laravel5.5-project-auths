@@ -52,7 +52,7 @@ class UserNeedsBinding extends Notification
         return (new MailMessage())
             ->subject(app_name().': '.trans('exceptions.frontend.auth.confirmation.bind'))
             ->line('点击绑定邮箱')
-            ->action('邮箱绑定', route('frontend.auth.account.bind.email', $this->confirmation_code))
+            ->action('邮箱绑定', route('frontend.user.email.bind', $this->confirmation_code))
             ->line(trans('strings.emails.auth.thank_you_for_using_app'));
     }
 }

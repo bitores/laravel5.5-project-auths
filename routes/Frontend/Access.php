@@ -43,8 +43,8 @@ Route::group(['namespace' => 'Auth', 'as' => 'auth.'], function () {
         Route::get('account/confirm/resend/{user}', 'ConfirmAccountController@sendConfirmationEmail')->name('account.confirm.resend');
 
         // bind email
-        Route::get('email/confirm/{token}', 'ConfirmAccountController@bind')->name('account.email.bind');
-        Route::post('email/confirm/send', 'ConfirmAccountController@sendBindingEmail')->name('account.bind.email.send');
+        
+        
         
 
         // Password Reset Routes
