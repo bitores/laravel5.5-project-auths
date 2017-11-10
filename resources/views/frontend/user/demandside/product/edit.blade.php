@@ -246,6 +246,9 @@ $("#saveBtn").on('click', function(){
                 saveBtn_handling = false;
                 $_currentProduct = res.data['product_id'];
                 console.log($_currentProduct);
+            },
+            error: function(){
+                saveBtn_handling = false;
             }
          });
     }

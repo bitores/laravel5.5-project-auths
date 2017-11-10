@@ -33,8 +33,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::patch('profile/update', 'ProfileController@update')->name('profile.update');
 
         Route::post('mobile/bind', 'MobileBindController@bind')->name('mobile.bind');
-        Route::post('email/bind', 'EmailBindController@bind')->name('email.bind');
-        Route::get('email/confirm/{token}', 'EmailBindController@confirm')->name('email.confirm');
+
+        // Route::post('email/bind', 'EmailBindController@bind')->name('email.bind');
+        // Route::get('email/confirm/{token}', 'EmailBindController@confirm')->name('email.confirm');
 
         /*
          * 后面是普通业务功能页面 
@@ -53,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('product/create', 'DemandsideController@create')->name('demandside.product.create');
         Route::get('product/{productid}/edit', 'DemandsideController@edit')->name('demandside.product.edit');
-        Route::get('product/show', 'DemandsideController@show')->name('demandside.product.show');
+        Route::get('product/{productid}/show', 'DemandsideController@show')->name('demandside.product.show');
         Route::get('product/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
 
            
@@ -78,7 +79,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         //---------api
-
+        Route::post('products', 'ProductController@table')->name('demandside.products.get');
         Route::post('demandside/brand/create', 'BrandController@create')->name('demandside.brand.create');
         Route::post('demandside/product/save', 'ProductController@save')->name('demandside.product.save');
         Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload');

@@ -9,19 +9,19 @@
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-7">
-        		<h3>产品图片 <small> # 简要说明为何需要设置主图片（要求全部展示，不要局部照片）</small></h3>
-        		
-        			左边
+        		<h3>产品图片</h3>
+        			@foreach($images as $image)
+                    <img style="width:150px;height: 150px" src="/uploads/materials/{{str_replace("\\",'/',$image->path)}}">
+                    @endforeach
         		<!-- </div> -->
         	</div>
         	<div class="col-md-4">
-    			 {{ Form::open(['route' => 'frontend.auth.register.mobile.post', 'class' => 'form-horizontal']) }}
 
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>品牌/厂家</label>
                             <div class="col-md-12">
-                                品牌/厂家
+                                {{$brand->name}}
                             </div>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                     	<div class="col-md-12">
                             <label>产品型号/名字</label>
                     		<div class="col-md-12">
-                                产品型号/名字      
+                                {{$product->product_no}}     
                             </div>
                     	</div>
                     </div><!--form-group-->
@@ -39,7 +39,7 @@
                         <div class="col-md-12">
                             <label>品类</label>
                             <div class="col-md-12">
-                                一些品类信息
+                                {{$product->a_id . '-' . $product->b_id}}
                             </div>
                         </div>
                         
@@ -49,7 +49,7 @@
                         <div class="col-md-12">
                             <label>风格类别</label>
                             <div class="col-md-12">
-                                一些风格类别信息
+                                {{$product->style_id}}
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                     	<div class="col-md-12">
                             <label>建模费用</label>
                     		<div class="col-md-12">
-                                一些建模费用信息
+                                {{$product->fee}}
                             </div>
                     	</div>
                     </div><!--form-group-->
@@ -67,7 +67,7 @@
                     	<div class="col-md-12">
                             <label>产品简介</label>
                     		<div class="col-md-12">
-                                一些产品简介信息
+                                {{$product->introduction}}
                             </div>
                     	</div>
                     </div><!--form-group-->
@@ -76,7 +76,11 @@
                         <div class="col-md-12">
                             <label>CAD资料</label>
                             <div class="col-md-12">
-                                已上传
+                                @if(is_null($product->cad_id))
+                                    未上传
+                                @else
+                                    已上传
+                                @endif
                             </div>
                         </div>
                     </div><!--form-group-->
@@ -85,7 +89,11 @@
                         <div class="col-md-12">
                             <label>其它资料</label>
                             <div class="col-md-12">
-                                已上传
+                                @if(is_null($product->file_id))
+                                    未上传
+                                @else
+                                    已上传
+                                @endif
                             </div>
                         </div>
                     </div><!--form-group-->
@@ -127,7 +135,6 @@
                         </div>
                     </div><!--form-group-->
 
-                {{ Form::close() }}
     		</div>
     	</div>
     </div>

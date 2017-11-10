@@ -1,4 +1,4 @@
-{{ Form::open(['route' => 'frontend.user.email.bind', 'class' => 'form-horizontal']) }}
+{{ Form::open(['route' => 'frontend.auth.account.bind.email.send', 'class' => 'form-horizontal']) }}
 
 <div class="form-group">
     {{ Form::label('email', trans('validation.attributes.frontend.email'), ['class' => 'col-md-4 control-label']) }}

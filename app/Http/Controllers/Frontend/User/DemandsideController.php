@@ -76,11 +76,31 @@ class DemandsideController extends Controller
         
     }
 
-    public function show()
+    public function show(CategoryARepository $categorya,CategoryBRepository $categoryb,StyleRepository $style, UImageRepository $imageRes, ProductRepository $productRes, $productid)
     {
-        return view('frontend.user.demandside.product.show',[
-            'status' => 1
-        ]);
+        $product = $productRes->findDataById($productid);
+
+        $brand = $this->brand->find($product->brand_id);
+
+        $categories_a = $categorya->findAllData();
+        $categories_b = $categoryb->findAllData();
+
+        $images = $imageRes->findAllDataByProductId($productid);
+
+        if($product) {
+            return view('frontend.user.demandside.product.show',[
+                'product' => $product,
+                'brand'=>$brand,
+                'categories_a'=>$categories_a,
+                'categories_b'=>$categories_b,
+                'styles'=>$style->getAll(),
+                'images'=> $images,
+                'status' => $product->status_no
+            ]);
+        } else {
+            return redirect()->route('frontend.user.demandside.index')->withFlashSuccess('无此产品');
+        }
+        
     }
 
     public function assessment()

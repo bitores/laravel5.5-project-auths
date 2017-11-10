@@ -59,6 +59,7 @@ return [
             'confirmation' => [
                 'already_confirmed' => '您的帐户已确认。',
                 'confirm'           => '确认您的帐户！',
+                'bind'           => '绑定到您的帐户！',
                 'created_confirm'   => '您的帐户已成功创建。我们已向您发送电子邮件以确认您的帐户。',
                 'created_pending'   => '账号已创建，现在待审核中，审核后会有邮件通知您.',
                 'mismatch'          => '您的确认码不匹配。',
