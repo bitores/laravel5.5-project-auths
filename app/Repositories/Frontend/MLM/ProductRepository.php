@@ -37,18 +37,33 @@ class ProductRepository extends BaseRepository
             ->orderBy('updated_at','desc');
     }
 
-
-    /**
-     * @param User $user
-     *
-     * @return mixed
-     */
-    public function create($userid, array $data)
+    public function getForAuditorDataTable()
     {
-        $product = self::MODEL;
+        return $this->query()->where('user_id', access()->id())->where('status_no', 1001)->leftjoin('product_styles','products.style_id','=','product_styles.id')
+            ->select([
+                'products.id',
+                'products.product_no',
+                'products.style_id',
+                // 'products.brand_id',
+                // 'products.a_id',
+                // 'products.b_id',
+                'products.images',
+                'products.cad_id',
+                // 'products.user_id',
+                'products.file_id',
+                // 'products.model_id',
+                // 'products.status_no',
+                'products.cycle',
+                'products.fee',
+                'product_styles.name as style_name'
+                // 'products.introduction',
+            ])
+            ->orderBy('products.updated_at','desc');
+    }
 
-        $product = new $product;
 
+    public function save($product, array $data, $status)
+    {
         if(isset($data['product_no']))
         {
             $product->product_no = $data['product_no'];
@@ -94,67 +109,51 @@ class ProductRepository extends BaseRepository
             $product->introduction = $data['introduction'];
         }
         
-        $product->user_id = $userid;
-        $product->status_no = 1000;
-        $product->save();
+        if(isset($data['images']))
+        {
+            $images = explode(',',$data['images']);
+            $product->images = count($images);
+        }
 
+        $product->status_no = $status;
+        $product->save();
+    }
+
+
+    /**
+     * @param User $user
+     *
+     * @return mixed
+     */
+    public function create($userid, array $data, $status)
+    {
+        $product = self::MODEL;
+
+        $product = new $product;
+        $product->user_id = $userid;
+        
+        $this->save($product, $data, $status);
         return $product;
     }
 
-    public function update($proid, array $data)
+    public function update($proid, array $data, $status)
     {
         $product = $this->find($proid);
 
         if($product){
-            if(isset($data['product_no']))
-            {
-                $product->product_no = $data['product_no'];
-            }
-            
-            if(isset($data['style_id']))
-            {
-                $product->style_id = $data['style_id'];
-            }
-            
-            if(isset($data['a_id']))
-            {
-                $product->a_id = $data['a_id'];
-            }
-            
-            if(isset($data['b_id']))
-            {
-                $product->b_id = $data['b_id'];
-            }
-            
-            if(isset($data['brand_id']))
-            {
-                $product->brand_id = $data['brand_id'];
-            }
-            
-            if(isset($data['cad_id']))
-            {
-                $product->cad_id = $data['cad_id'];
-            }
-            
-            if(isset($data['file_id']))
-            {
-                $product->file_id = $data['file_id'];
-            }
-            
-            if(isset($data['fee']))
-            {
-                $product->fee = $data['fee'];
-            }
-            
-            if(isset($data['introduction']))
-            {
-                $product->introduction = $data['introduction'];
-            }
-            $product->status_no = 1000;
-            $product->save();
+            $this->save($product, $data, $status);
         }
         
         return $product;    
+    }
+
+    public function updateStatus($proid, $status)
+    {
+        $product = $this->find($proid);
+        $product->status_no = $status;
+        $product->save();
+
+        return $product;
     }
 
     public function findAll()

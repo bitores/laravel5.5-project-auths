@@ -10,7 +10,7 @@ use App\Repositories\Frontend\MLM\CategoryBRepository;
 use App\Repositories\Frontend\MLM\StyleRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\ProductRepository;
-
+use App\Repositories\Frontend\MLM\ProductsViewRepository;
 /**
  * Class DashboardController.
  */
@@ -54,13 +54,15 @@ class DemandsideController extends Controller
     {
         $product = $productRes->findDataById($productid);
 
-        $brands = $this->brand->findDataById(access()->id());
-        $categories_a = $categorya->findAllData();
-        $categories_b = $categoryb->findAllData();
-
-        $images = $imageRes->findAllDataByProductId($productid);
+        
 
         if($product) {
+            $brands = $this->brand->findDataById(access()->id());
+            $categories_a = $categorya->findAllData();
+            $categories_b = $categoryb->findAllData();
+
+            $images = $imageRes->findAllDataByProductId($productid);
+
             return view('frontend.mlm.demandside.product.edit',[
                 'product' => $product,
 
@@ -71,34 +73,36 @@ class DemandsideController extends Controller
                 'images'=> $images
             ]);
         } else {
-            return redirect()->route('frontend.mlm.demandside.index')->withFlashSuccess('无此产品');
+            return redirect()->route('frontend.mlm.demandside.index')->withFlashSuccess('您无此产品');
         }
         
     }
-
-    public function show(CategoryARepository $categorya,CategoryBRepository $categoryb,StyleRepository $style, UImageRepository $imageRes, ProductRepository $productRes, $productid)
+// CategoryARepository $categorya,CategoryBRepository $categoryb,StyleRepository $style,
+    public function show( UImageRepository $imageRes, ProductsViewRepository $productRes, $productid)
     {
         $product = $productRes->findDataById($productid);
 
-        $brand = $this->brand->find($product->brand_id);
-
-        $categories_a = $categorya->findAllData();
-        $categories_b = $categoryb->findAllData();
-
-        $images = $imageRes->findAllDataByProductId($productid);
+        
 
         if($product) {
+            // $brand = $this->brand->find($product->brand_id);
+
+            // $categories_a = $categorya->findAllData();
+            // $categories_b = $categoryb->findAllData();
+
+            $images = $imageRes->findAllDataByProductId($productid);
+
             return view('frontend.mlm.demandside.product.show',[
                 'product' => $product,
-                'brand'=>$brand,
-                'categories_a'=>$categories_a,
-                'categories_b'=>$categories_b,
-                'styles'=>$style->getAll(),
+                // 'brand'=>$brand,
+                // 'categories_a'=>$categories_a,
+                // 'categories_b'=>$categories_b,
+                // 'styles'=>$style->getAll(),
                 'images'=> $images,
-                'status' => $product->status_no
+                // 'status' => $product->status_no
             ]);
         } else {
-            return redirect()->route('frontend.mlm.demandside.index')->withFlashSuccess('无此产品');
+            return redirect()->route('frontend.mlm.demandside.index')->withFlashSuccess('您无此产品');
         }
         
     }

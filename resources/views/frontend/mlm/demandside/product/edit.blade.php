@@ -41,11 +41,7 @@
                             <label>CAD资料</label>
                             <div class="btn btn-block btn-default fileupload1" id="fileupload1">上传</div>
                             <span class="filelist1" id="filelist1" style="word-break: break-all;" file_id="{{$product->cad_id}}">
-                                @if($product->cad_id)
-                                <h4>已上传</h4>
-                                @else
-                                <h4>未上传</h4>
-                                @endif
+                                {{$product->cad_id?'已上传':'未上传'}}
                             </span>
                         </div>
                     </div>
@@ -56,11 +52,7 @@
                             <label>其它资料</label>
                             <div class="btn btn-block btn-default fileupload2" id="fileupload2">上传</div>
                             <span class="filelist2" id="filelist2" style="word-break: break-all;" file_id="{{$product->file_id}}">
-                                @if($product->file_id)
-                                <h4>已上传</h4>
-                                @else
-                                <h4>未上传</h4>
-                                @endif
+                                {{$product->file_id?'已上传':'未上传'}}
                             </span>
                         </div>
                     </div>
@@ -180,8 +172,7 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-
-                                {{ Form::submit('提交审核', ['class' => 'btn btn-block btn-success']) }}
+                                <div id="submitBtn" class="btn btn-block btn-success">提交审核</div>
                         </div>
                     </div><!--form-group-->
 
@@ -218,6 +209,97 @@ $("#categoryA").change(function(){
     $("#categoryB option[class="+tag+"]").show();
 });
 var $_currentProduct=null, saveBtn_handling = false;
+
+$("#submitBtn").on('click', function(){
+    // 本地验证 信息的完整性
+    var $lis = $('#uploader .state-complete');
+
+    if($("#brand").val()==null){
+        return swal("OMG", "品牌厂家未选择", "error"); 
+    }
+
+    if($("#product_no").val()==""){
+        return swal("OMG", "产品名称未填写", "error"); 
+    }
+
+    if($("#categoryA").val()==null){
+        return swal("OMG", "一级品类未选择", "error"); 
+    }
+
+    if($("#categoryB").val()==null){
+        return swal("OMG", "二级品类未选择", "error"); 
+    }
+
+    if($("#style").val()==null){
+        return swal("OMG", "风格类别未选择", "error"); 
+    }
+
+    if($("#fee").val()==""){
+        return swal("OMG", "费用未填写", "error"); 
+    }
+
+    if($("#introduction").val()==""){
+        return swal("OMG", "产品简介未填写", "error"); 
+    }
+
+    if($lis.length==0){
+        return swal("OMG", "产品图片没有上传", "error"); 
+    }
+
+
+    // 服务端验证 信息的完整性
+    var ret = [];
+    $lis.each(function(index, item){
+        ret[index] = $(item).attr('file_id');
+    });
+        
+    $.ajax({
+         type: "POST",
+         url: "{{route('frontend.mlm.demandside.product.submit')}}",
+         data: {
+            'current_pro': "{{$product->id}}",
+            'product_no':$("#product_no").val(),
+            'style_id':$("#style").val(),
+            'a_id':$("#categoryA").val(),
+            'b_id':$("#categoryB").val(),
+            'brand_id':$("#brand").val(),
+            'cad_id':$("#filelist1").attr('file_id'),
+            'file_id':$("#filelist2").attr('file_id'),
+            'fee':$("#fee").val(),
+            'introduction':$("#introduction").val(),
+            'images':ret.join(',')
+        },
+        dataType: "json",
+        success: function(res){
+            saveBtn_handling = false;
+            if(0 == res.code) {
+                $_currentProduct = res.data['product_id'];
+                console.log($_currentProduct);
+                // swal("OK", "已提交审核", "success").then(function(){
+                //     localtion.href="/products";
+                // });
+
+                swal({
+                    title: "OK",
+                      text: "已提交审核,点击跳转",
+                      type: "success",
+                      confirmButtonColor: "#DD6B55",
+                      confirmButtonText: "确认",
+                      closeOnConfirm: false
+                }, function(){
+                    location.href="/products";
+                });
+            } else {
+                swal("OMG", "信息不完整", "error");
+            }
+            
+        },
+        error: function(){
+            saveBtn_handling = false;
+        }
+     });
+});
+
 $("#saveBtn").on('click', function(){
     if(saveBtn_handling==false){
         saveBtn_handling = true;
@@ -250,6 +332,7 @@ $("#saveBtn").on('click', function(){
                 saveBtn_handling = false;
                 $_currentProduct = res.data['product_id'];
                 console.log($_currentProduct);
+                swal("OK", "内容成功保存", "success");
             },
             error: function(){
                 saveBtn_handling = false;
@@ -281,7 +364,7 @@ $('#createBrand').on('click', function(){
                         $('#brand').append("<option value='"+res.data['id']+"' selected='selected'>"+res.data['brd_name']+"</option>")
                     }
                     // swal.close();
-                    swal("操作成功", "创建成功", "success");
+                    swal("OK", "品牌创建成功", "success");
                 },
                 error: function(res) {
                     // swal.close()

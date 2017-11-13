@@ -86,9 +86,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         //---------api
-        Route::post('products', 'ProductController@table')->name('demandside.products.get');
+        Route::post('demandside/products', 'ProductController@table')->name('demandside.products.get');
         Route::post('demandside/brand/create', 'BrandController@create')->name('demandside.brand.create');
         Route::post('demandside/product/save', 'ProductController@save')->name('demandside.product.save');
-        Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload');    
+        Route::post('demandside/product/submit', 'ProductController@submit')->name('demandside.product.submit');
+        Route::post('demandside/product/oncesubmit', 'ProductController@oncesubmit')->name('demandside.product.oncesubmit');
+        Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload'); 
+
+        Route::post('auditor/products', 'ProductController@demandsidproducts')->name('demandside.product.list'); 
+        Route::post('auditor/product/nopass', 'ProductController@nopass')->name('demandside.product.nopass'); 
+        Route::post('auditor/product/pass', 'ProductController@pass')->name('demandside.product.pass'); 
     });
 });

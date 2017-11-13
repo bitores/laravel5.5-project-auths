@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Frontend\User;
+namespace App\Http\Controllers\Frontend\MLM;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Frontend\Access\User\UserRepository;
-use App\Repositories\Frontend\Access\User\UFileRepository;
-use App\Repositories\Frontend\Access\User\UCadRepository;
-use App\Repositories\Frontend\Access\User\UImageRepository;
+use App\Repositories\Frontend\MLM\UFileRepository;
+use App\Repositories\Frontend\MLM\UCadRepository;
+use App\Repositories\Frontend\MLM\UImageRepository;
 
 class UploadController extends Controller
 {

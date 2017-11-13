@@ -28,7 +28,7 @@
                     <div class="col-md-12">
                         <label>CAD资料</label>
                         <div class="col-md-12">
-                            
+                            {{$product->cad_path?'已上传':'未上传'}}
                         </div>
                     </div>
                 </div><!--form-group-->
@@ -37,7 +37,7 @@
                     <div class="col-md-12">
                         <label>其它资料</label>
                         <div class="col-md-12">
-                            {{$product->file_id?'已上传':'未上传'}}
+                            {{$product->file_path?'已上传':'未上传'}}
                         </div>
                     </div>
                 </div><!--form-group-->
@@ -49,7 +49,7 @@
                         <div class="col-md-12">
                             <label>品牌/厂家</label>
                             <div class="col-md-12">
-                                {{$brand->name?:'-'}}
+                                {{$product->brand_name?:'-'}}
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         <div class="col-md-12">
                             <label>品类</label>
                             <div class="col-md-12">
-                                {{($product->a_id?:'-') . ':' . ($product->b_id?:'-')}}
+                                {{($product->ca_name?:'-') . ':' . ($product->cb_name?:'-')}}
                             </div>
                         </div>
                         
@@ -77,7 +77,7 @@
                         <div class="col-md-12">
                             <label>风格类别</label>
                             <div class="col-md-12">
-                                {{$product->style_id?:'-'}}
+                                {{$product->style_name?:'-'}}
                             </div>
                         </div>
                     </div>
@@ -100,40 +100,34 @@
                     	</div>
                     </div><!--form-group-->
 
-                    
-
-
 
                     <div class="form-group">
-                        <div class="col-md-12" style="padding: 0">
-                            @if(0==$status)
+                        <div class="col-md-12" style="padding: 20px 0">
+                            @if(1000==$product->status_no)
                             <!-- 未提交审核 -->
                             <div class="col-xs-6">
-                                <div class="btn btn-block btn-danger">编辑</div>
+                                <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
                             </div>
                             <div class="col-xs-6">
-                                <div class="btn btn-block btn-info">提交审核</div>
+                                <div id="submitBtn" class="btn btn-block btn-info">提交审核</div>
                             </div>
-                            @elseif(1==$status)
+                            @elseif(1001==$product->status_no)
                             <!-- 审核中 -->
-                            <!-- <div class="col-xs-6">
-                                <div class="btn btn-block btn-danger">编辑</div>
+                            <div class="col-xs-12">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="download">下载资料包</div>
                             </div>
-                            <div class="col-xs-6">
-                                <div class="btn btn-block btn-info">查看审核结果</div>
-                            </div> -->
-                            @elseif(2==$status)
+                            @elseif(1002==$product->status_no)
                             <!-- 审核未通过 -->
                             <div class="col-xs-6">
-                                <div class="btn btn-block btn-danger">编辑</div>
+                                <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
                             </div>
                             <div class="col-xs-6">
                                 <div class="btn btn-block btn-info">查看审核结果</div>
                             </div>
-                            @elseif(3==$status)
+                            @elseif(1003==$product->status_no)
                             <!-- 审核通过 -->
-                            <div class="col-xs-6">
-                                <div class="btn btn-block btn-info">发布任务</div>
+                            <div class="col-xs-12">
+                                <div class="btn btn-block btn-info" id="sendTask">发布任务</div>
                             </div>
                             @endif
                         </div>
@@ -143,4 +137,87 @@
     	</div>
     </div>
 </div>
+@endsection
+
+@section("after-scripts")
+<script type="text/javascript">
+$("#submitBtn").on('click', function(){
+    // 本地验证 信息的完整性
+    if("{{$product->brand_name}}"==""){
+        return swal("OMG", "品牌厂家未选择", "error"); 
+    }
+
+    if("{{$product->product_no}}"==""){
+        return swal("OMG", "产品名称未填写", "error"); 
+    }
+
+    if("{{$product->ca_name}}"==""){
+        return swal("OMG", "一级品类未选择", "error"); 
+    }
+
+    if("{{$product->cb_name}}"==""){
+        return swal("OMG", "二级品类未选择", "error"); 
+    }
+
+    if("{{$product->style_name}}"==""){
+        return swal("OMG", "风格类别未选择", "error"); 
+    }
+
+    if("{{$product->fee}}"==""){
+        return swal("OMG", "费用未填写", "error"); 
+    }
+
+    if("{{$product->introduction}}"==""){
+        return swal("OMG", "产品简介未填写", "error"); 
+    }
+
+    if({{count($images)}}==0){
+        return swal("OMG", "产品图片没有上传", "error"); 
+    }
+
+
+    // 服务端验证 信息的完整性
+        
+    $.ajax({
+         type: "POST",
+         url: "{{route('frontend.mlm.demandside.product.oncesubmit')}}",
+         data: {
+            'current_pro': "{{$product->id}}",
+
+        },
+        dataType: "json",
+        success: function(res){
+            saveBtn_handling = false;
+            if(0 == res.code) {
+                $_currentProduct = res.data['product_id'];
+                console.log($_currentProduct);
+                // swal("OK", "已提交审核", "success").then(function(){
+                //     localtion.href="/products";
+                // });
+
+                swal({
+                    title: "OK",
+                      text: "已提交审核,点击跳转",
+                      type: "success",
+                      confirmButtonColor: "#DD6B55",
+                      confirmButtonText: "确认",
+                      closeOnConfirm: false
+                }, function(){
+                    location.href="/products";
+                });
+            } else {
+                swal("OMG", "信息不完整", "error");
+            }
+            
+        },
+        error: function(){
+            saveBtn_handling = false;
+        }
+     });
+
+    $("#download").on('click', function(){
+        console.log('download');
+    });
+});
+</script>
 @endsection
