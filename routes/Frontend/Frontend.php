@@ -43,6 +43,11 @@ Route::group(['middleware' => 'auth'], function () {
          * 后面是普通业务功能页面 
          */
 
+        
+    });
+
+
+    Route::group(['namespace' => 'MLM', 'as' => 'mlm.'], function () {
         // 权限设置
         Route::group([
             'middleware' => 'access.routeNeedsRole:demandside', // 
@@ -84,6 +89,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('products', 'ProductController@table')->name('demandside.products.get');
         Route::post('demandside/brand/create', 'BrandController@create')->name('demandside.brand.create');
         Route::post('demandside/product/save', 'ProductController@save')->name('demandside.product.save');
-        Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload');
+        Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload');    
     });
 });
