@@ -3,16 +3,28 @@
 @section('title', app_name() . ' | 需求审核')
 
 @section('after-styles')
+    @include('vendor.ueditor.assets')
     {{ Html::style("/css/backend/plugin/datatables/dataTables.bootstrap.min.css") }}
+    <style>
+    .alert-editor{
+        width: 100%;
+    }
+    </style>
 @endsection
 
 @section('content')
 	<div class="panel panel-default">
 	    <div class="panel-heading">需求审核任务列表</div>
+        <div id="alert-editor" class="alert-editor" hidden="">
+            <div id="editor" class="editor"></div>
+            <div id="save-content" class="btn btn-info pull-right save-content">提交修改意见</div>
+        </div>
+
 	    <div class="panel-body">
 	        <div class="row">
 	        	<div class="col-md-12">
 	        		<div class="box box-success">
+                        
 
 	        			<div class="box-body">
 				            <div class="table-responsive">
@@ -32,11 +44,16 @@
 				            </div><!--table-responsive-->
 				        </div><!-- /.box-body -->
 
+
+                        
+
 	        		</div>
 	        	</div>
 	        </div>
 	    </div>
 	</div>
+
+    
 @endsection
 
 @section('after-scripts')
@@ -44,7 +61,22 @@
     {{ Html::script("js/backend/plugin/datatables/dataTables-extend.js") }}
 
     <script>
-        $(function() {
+    $(function() {
+
+        var toolbars = [["fullscreen","source","undo","redo","insertunorderedlist",  
+        "insertorderedlist","cleardoc","selectall","searchreplace","preview","justifyleft","justifycenter","justifyright","justifyjustify",  
+        "touppercase","tolowercase","indent","removeformat","formatmatch","autotypeset","customstyle","paragraph","rowspacingbottom","rowspacingtop","lineheight","fontsize","charts"]];
+
+            var ue = UE.getEditor('editor',{    
+            toolbars: toolbars,
+            autoWidth: true
+            });
+            ue.ready(function() {
+                ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
+            });
+
+
+
             $('#products-table').DataTable({
                 dom: 'lfrtip',
                 processing: false,
@@ -69,24 +101,36 @@
                 ],
                 // order: [[1, "asc"]]
             });
-        });
-    </script>
 
-    <script type="text/javascript">
-    	$("#products-table").on('click', '.nopass', function(){
-    		var proid = $(this).attr('data-proid');
-    		console.log(proid);
-    		$.ajax({
+
+            $("#products-table").on('click', '.nopass', function(){
+            var proid = $(this).attr('data-proid');
+            console.log(proid);
+            $("#alert-editor").show();
+            
+
+
+        });
+
+        $("#save-content").on('click', function(){
+            var content= ue.getContent(),
+            // content = content.replace(new RegExp("<","g"),"<").replace(new RegExp(">","g"),">").replace(new RegExp("\"","g"),"'");
+
+            // console.log(content);
+            // return;
+
+            $.ajax({
                 url: "/auditor/product/nopass",
                 type:'POST',
                 data:{
-                    'productid':proid
+                    'productid':proid,
+                    'content':content
                 },
                 success: function(res) {
                     if(0 === res.code){
                         swal("OK", "操作成功", "success");
                     } else {
-                    	swal("OMG", "操作失败", "error");
+                     swal("OMG", "操作失败", "error");
                     }
                     location.reload();
                 },
@@ -96,12 +140,12 @@
                     location.reload();
                 }
             });
-    	});
+        });
 
-    	$("#products-table").on('click', '.pass', function(){
-    		var proid = $(this).attr('data-proid');
-    		console.log(proid);
-    		$.ajax({
+        $("#products-table").on('click', '.pass', function(){
+            var proid = $(this).attr('data-proid');
+            console.log(proid);
+            $.ajax({
                 url: "/auditor/product/pass",
                 type:'POST',
                 data:{
@@ -111,7 +155,7 @@
                     if(0 === res.code){
                         swal("OK", "操作成功", "success");
                     } else {
-                    	swal("OMG", "操作失败", "error");
+                        swal("OMG", "操作失败", "error");
                     }
                     location.reload();
                 },
@@ -121,6 +165,28 @@
                     location.reload();
                 }
             });
-    	});
-    </script>
+        });
+
+
+
+
+    });
+
+    	
+
+
+
+    
+                    
+    function doprint(){
+    //  bdhtml=window.document.body.innerHTML;   
+        // sprnstr="<!--startprint-->";   
+        // eprnstr="<!--endprint-->";   
+        // prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17);   
+        // prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));   
+        // window.document.body.innerHTML=;  
+        // window.print();
+    }
+</script>
+                    
 @endsection
