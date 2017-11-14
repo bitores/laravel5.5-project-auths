@@ -9,7 +9,7 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">编辑产品 <div class="btn pull-right">删除产品</div></div>
+    <div class="panel-heading">编辑产品  <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div></div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-7">
@@ -201,7 +201,45 @@ var webupload_pickList=[
 <script src="/js/libs/webuploader/webuploadRun.js"></script>
 <script src="/js/libs/webuploader/webuploadImageRun.js"></script>
 <script>
+$("#delbtn").on('click', function(){
+    // $(this).hide();
+    var proid = $(this).attr('data-proid');
 
+    swal({
+        title: "删除此产品",
+      text: "点击确认删除产品，或点击取消删除",
+      type: "warning",
+      showCancelButton:true,
+      cancelButtonText:'取消',
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "确认",
+      closeOnConfirm: true
+    }, function(){
+
+        $.ajax({
+            url: "/demandside/product/del",
+            type:'POST',
+            data:{
+                'productid':proid
+            },
+            success: function(res) {
+                if(0 === res.code){
+                    swal("OK", "操作成功", "success");
+                } else {
+                    swal("OMG", "操作失败", "error");
+                }
+                location.href="/products";
+            },
+            error: function(res) {
+                // swal.close()
+                swal("OMG", "操作失败", "error");
+                location.href="/products";
+            }
+        });
+        
+    });   
+
+});
 $("#categoryA").change(function(){
     $("#categoryB").val(-1);
     $("#categoryB option[value!=-1]").hide();

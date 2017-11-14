@@ -210,6 +210,7 @@ return [
         // ueditor
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
 
+        HTMLMin\HTMLMin\HTMLMinServiceProvider::class,
     ],
 
     /*
@@ -275,6 +276,8 @@ return [
 
         // reset by email and phone
         'RyanPassword' => App\Foundation\Auth\Passwords\Facade\RyanPassword::class,
+
+        'HTMLMin' => HTMLMin\HTMLMin\Facades\HTMLMin::class,
     ],
 
 ];

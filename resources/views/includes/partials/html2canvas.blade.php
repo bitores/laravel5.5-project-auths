@@ -1,7 +1,7 @@
 <script type="text/javascript" src="/js/libs/html2pdf/canvg2.js"></script>
 <script type="text/javascript" src="/js/libs/html2pdf/html2canvas-0.4.1.js"></script>
 <script type="text/javascript" src="/js/libs/html2pdf/jspdf.min.js"></script>
-<script type="text/javascript" src="/js/libs/html2pdf/jquery-2.1.4.min.js"></script>
+<!-- <script type="text/javascript" src="/js/libs/html2pdf/jquery-2.1.4.min.js"></script> -->
 <script type="text/javascript">
     $(function () {
         $("#downloadPdf").click(function () {
@@ -35,7 +35,7 @@
                     //删除复制出来的div
                     copyDom.remove();
                 },
-                background: "#fff",
+                background: "#ffffff",
                 //这里给生成的图片默认背景，不然的话，如果你的html根节点没设置背景的话，会用黑色填充。
                 allowTaint: true //避免一些不识别的图片干扰，默认为false，遇到不识别的图片干扰则会停止处理html2canvas
             });

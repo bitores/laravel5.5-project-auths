@@ -104,8 +104,8 @@
 
 
             $("#products-table").on('click', '.nopass', function(){
-            var proid = $(this).attr('data-proid');
-            console.log(proid);
+            ue.proid = $(this).attr('data-proid');
+            console.log(ue.proid);
             $("#alert-editor").show();
             
 
@@ -113,26 +113,38 @@
         });
 
         $("#save-content").on('click', function(){
-            var content= ue.getContent(),
-            // content = content.replace(new RegExp("<","g"),"<").replace(new RegExp(">","g"),">").replace(new RegExp("\"","g"),"'");
+            var content= ue.getContent();
+            // 
 
             // console.log(content);
             // return;
-
+            $("#alert-editor").hide();
             $.ajax({
                 url: "/auditor/product/nopass",
                 type:'POST',
                 data:{
-                    'productid':proid,
+                    'productid':ue.proid,
                     'content':content
                 },
                 success: function(res) {
                     if(0 === res.code){
                         swal("OK", "操作成功", "success");
+                        swal({
+		                    title: "OK",
+							text: "操作成功,点击跳转",
+							type: "success",
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "确认",
+							closeOnConfirm: false
+		                }, function(){
+		                    location.reload();
+		                });
+
                     } else {
                      swal("OMG", "操作失败", "error");
+                     location.reload();
                     }
-                    location.reload();
+                    
                 },
                 error: function(res) {
                     // swal.close()
@@ -145,26 +157,45 @@
         $("#products-table").on('click', '.pass', function(){
             var proid = $(this).attr('data-proid');
             console.log(proid);
-            $.ajax({
-                url: "/auditor/product/pass",
-                type:'POST',
-                data:{
-                    'productid':proid
-                },
-                success: function(res) {
-                    if(0 === res.code){
-                        swal("OK", "操作成功", "success");
-                    } else {
-                        swal("OMG", "操作失败", "error");
-                    }
-                    location.reload();
-                },
-                error: function(res) {
-                    // swal.close()
-                    swal("OMG", "操作失败", "error");
-                    location.reload();
-                }
-            });
+
+            swal({
+	            title: "确认产品",
+	            text: "如果你确定，请输入开发周期",
+	            type: "input",
+	            inputType: "text",
+	            showCancelButton: true,
+	            closeOnConfirm: true
+	        }, function (cycle) {
+	            console.log(cycle);
+
+	            $.ajax({
+	                url: "/auditor/product/pass",
+	                type:'POST',
+	                data:{
+	                    'productid':proid,
+	                    'cycle': cycle
+	                },
+	                success: function(res) {
+	                    if(0 === res.code){
+	                        swal("OK", "操作成功", "success");
+	                    } else {
+	                        swal("OMG", "操作失败", "error");
+	                    }
+	                    location.reload();
+	                },
+	                error: function(res) {
+	                    // swal.close()
+	                    swal("OMG", "操作失败", "error");
+	                    location.reload();
+	                }
+	            });
+
+	        });
+
+
+            
+
+
         });
 
 

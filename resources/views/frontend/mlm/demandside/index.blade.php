@@ -12,9 +12,6 @@
 	    <div class="panel-body">
 	        <div class="row">
 	        	<div class="col-md-12">
-<!-- 	        		@foreach($products as $product)
-	        		<h4><a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}">{{$product->id}}</a></h4>
-	        		@endforeach -->
 
 	        		<div class="box box-success">
 	        			<div class="box-body">
@@ -22,26 +19,12 @@
 				                <table id="products-table" class="table table-condensed table-hover">
 				                    <thead>
 				                        <tr>
-				                            <!-- <th>模型名称</th>
-				                            <th>模型制作周期</th>
-				                            <th>任务状态</th>
-				                            
-				                            <th>模型制作费用（单位/元）</th> -->
-				                            <!-- <th>ID</th> -->
+
 				                            <th>模型名称</th>
 				                            <th>模型制作周期</th>
-				                            <!-- <th>style_id</th>
-				                            <th>a_id</th>
-				                            <th>b_id</th>
-				                            <th>user_id</th>
-				                            <th>brand_id</th>
-				                            <th>cad_id</th>
-				                            <th>file_id</th> -->
 				                            <th>任务状态</th>
-				                            <!-- <th>model_id</th> -->
 				                            <th>是否撤单（接单后不允许撤单）</th>
 				                            <th>模型制作费用（单位/元）</th>
-				                            <!-- <th>introduction</th> -->
 
 				                        </tr>
 				                    </thead>
@@ -60,7 +43,9 @@
 @section('after-scripts')
     {{ Html::script("/js/backend/plugin/dt-1.10.15/datatables.min.js") }}
     {{ Html::script("js/backend/plugin/datatables/dataTables-extend.js") }}
-
+    <script type="text/javascript" src="/js/libs/html2pdf2/jspdf.min.js"></script>
+	<script type="text/javascript" src="/js/libs/html2pdf2/html2canvas.min.js"></script>
+	<script type="text/javascript" src="/js/libs/html2pdf2/html2pdf.js"></script>
     <script>
         $(function() {
             $('#products-table').DataTable({
@@ -77,24 +62,110 @@
                     }
                 },
                 columns: [
-                    // {data: 'id', name: ''},
                     {data: 'product_no', name: ''},
                     {data: 'cycle', name: ''},
-                    // {data: 'style_id', name: ''},
-                    // {data: 'a_id', name: ''},
-                    // {data: 'b_id', name: ''},
-                    // {data: 'user_id', name: ''},
-                    // {data: 'brand_id', name: ''},
-                    // {data: 'cad_id', name: ''},
-                    // {data: 'file_id', name: ''},
                     {data: 'status_no', name: ''},
-                    // {data: 'model_id', name: ''},
                     {data:'actions', name:''},
                     {data: 'fee', name: ''},
-                    // {data: 'introduction', name: ''}
                 ],
                 // order: [[1, "asc"]]
             });
+
+            $("#products-table").on('click', '.download', function(){
+	            var proid = $(this).attr('data-proid');
+	            console.log(proid);
+
+	            swal({
+		            title: "下载修改意见",
+		            text: "点击确认下载修改意见文档",
+		            type: "warning",
+		            showCancelButton: true,
+		            closeOnConfirm: true,
+		            cancelButtonText:'取消',
+		            confirmButtonText:'确认',
+		            closeOnConfirm: true
+		        }, function (cycle) {
+		            console.log(cycle);
+		            if(true === cycle) {
+		            	$.ajax({
+				            url: "/demandside/product/review",
+				            type:'POST',
+				            data:{
+				                'productid':proid
+				            },
+				            success: function(res) {
+				                if(0 === res.code){
+				                    swal("OK", "操作成功", "success");
+									html2pdf(res.data.comments, {
+									  margin:       1,
+									  filename:     '修改意见文档.pdf',
+									  image:        { type: 'jpeg', quality: 0.98 },
+									  html2canvas:  { dpi: 192, letterRendering: true },
+									  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+									});
+				                } else {
+				                    swal("OMG", "操作失败", "error");
+				                }
+				            },
+				            error: function(res) {
+				                // swal.close()
+				                swal("OMG", "操作失败", "error");
+				            }
+				        });
+		            }
+		            
+
+		            
+		        });
+        	});
+
+        	$("#products-table").on('click', '.cancelbtn', function(){
+	            var proid = $(this).attr('data-proid');
+	            console.log(proid);
+
+	            swal({
+		            title: "撤消产品任务",
+		            text: "点击确认撤消任务",
+		            type: "warning",
+		            showCancelButton: true,
+		            closeOnConfirm: true,
+		            cancelButtonText:'取消',
+		            confirmButtonText:'确认',
+		            closeOnConfirm: true
+		        }, function (cycle) {
+		            console.log(cycle);
+		            if(true === cycle) {
+
+		            	$.ajax({
+				            url: "/demandside/product/canceltask",
+				            type:'POST',
+				            data:{
+				                'productid':proid
+				            },
+				            success: function(res) {
+				                if(0 === res.code){
+				                    swal("OK", "操作成功", "success");
+				                } else {
+				                    swal("OMG", "操作失败", "error");
+				                }
+
+				                location.reload();
+				            },
+				            error: function(res) {
+				                // swal.close()
+				                swal("OMG", "操作失败", "error");
+				                location.reload();
+				            }
+				        });
+
+		            }
+	
+
+		            
+		        });
+        	});
+
+
         });
     </script>
 @endsection

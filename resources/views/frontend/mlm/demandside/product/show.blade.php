@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">产品信息</div>
+    <div class="panel-heading">产品信息 <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div></div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-7">
@@ -122,12 +122,15 @@
                                 <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
                             </div>
                             <div class="col-xs-6">
-                                <div class="btn btn-block btn-info">查看审核结果</div>
+                                <a href="{{route('frontend.mlm.demandside.product.assessment', $product->id)}}" class="btn btn-block btn-info">查看审核结果</a>
                             </div>
                             @elseif(1003==$product->status_no)
                             <!-- 审核通过 -->
-                            <div class="col-xs-12">
-                                <div class="btn btn-block btn-info" id="sendTask">发布任务</div>
+                            <div class="col-xs-6">
+                                <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="postbtn">发布任务</div>
                             </div>
                             @endif
                         </div>
@@ -141,6 +144,85 @@
 
 @section("after-scripts")
 <script type="text/javascript">
+$("#postbtn").on('click', function(){
+    var proid = $(this).attr('data-proid');
+
+    swal({
+        title: "发布此产品的任务",
+        text: "点击确认则发布任务",
+        type: "warning",
+        showCancelButton:true,
+        cancelButtonText:'取消',
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "确认",
+        closeOnConfirm: true
+    }, function(){
+
+        $.ajax({
+            url: "/demandside/product/posttask",
+            type:'POST',
+            data:{
+                'productid':proid
+            },
+            success: function(res) {
+                if(0 === res.code){
+                    swal("OK", "操作成功", "success");
+                } else {
+                    swal("OMG", "操作失败", "error");
+                }
+                // location.href="/products";
+            },
+            error: function(res) {
+                // swal.close()
+                swal("OMG", "操作失败", "error");
+                // location.href="/products";
+            }
+        });
+        
+    });   
+
+});
+$("#delbtn").on('click', function(){
+    // $(this).hide();
+    var proid = $(this).attr('data-proid');
+
+    swal({
+        title: "删除此产品",
+      text: "点击确认则删除产品或点击取消",
+      type: "warning",
+      showCancelButton:true,
+      cancelButtonText:'取消',
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "确认",
+      closeOnConfirm: true
+    }, function(){
+
+        $.ajax({
+            url: "/demandside/product/del",
+            type:'POST',
+            data:{
+                'productid':proid
+            },
+            success: function(res) {
+                if(0 === res.code){
+                    swal("OK", "操作成功", "success");
+                } else {
+                    swal("OMG", "操作失败", "error");
+                }
+                location.href="/products";
+            },
+            error: function(res) {
+                // swal.close()
+                swal("OMG", "操作失败", "error");
+                location.href="/products";
+            }
+        });
+        
+    });   
+
+});
+
+
 $("#submitBtn").on('click', function(){
     // 本地验证 信息的完整性
     if("{{$product->brand_name}}"==""){

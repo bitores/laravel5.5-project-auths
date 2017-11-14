@@ -9,14 +9,7 @@
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-12" id="pdfContainer">
-        		<pre>
-        			您提交的产品信息不完成或者，详细如下
-		        	1、
-		        	2、
-		        	3、
-        		</pre>
         	</div>
-        	
         </div>
     </div>
 </div>
@@ -24,5 +17,18 @@
 @endsection
 
 @section('after-scripts')
-@include('includes.partials.html2canvas')
+@include('includes.partials.html2pdf')
+<script type="text/javascript">
+(function(){
+    //HTML反转义
+function HTMLDecode(text) { 
+var temp = document.createElement("div"); 
+temp.innerHTML = text; 
+var output = temp.innerText || temp.textContent; 
+temp = null; 
+return output; 
+}
+$("#pdfContainer").html(HTMLDecode("{{$content}}"));
+})();
+</script>
 @endsection

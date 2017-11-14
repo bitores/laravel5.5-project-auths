@@ -12,11 +12,13 @@
         "davejamesmiller/laravel-breadcrumbs": "^4.2",
         "fideloper/proxy": "~3.3",
         "hieu-le/active": "^3.5",
+        "htmlmin/htmlmin": "^5.0",
         "laravel/framework": "5.5.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.5",
         "overtrue/laravel-ueditor": "^1.2",
+        "spipu/html2pdf": "^5.0",
         "toplan/laravel-sms": "~2.6",
         "yajra/laravel-datatables-oracle": "^8.1"
     },

@@ -11,6 +11,11 @@ use App\Repositories\Frontend\MLM\StyleRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\ProductRepository;
 use App\Repositories\Frontend\MLM\ProductsViewRepository;
+use App\Repositories\Frontend\MLM\ProductReviewRepository;
+use Spipu\Html2Pdf\Html2Pdf;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+
 /**
  * Class DashboardController.
  */
@@ -65,7 +70,6 @@ class DemandsideController extends Controller
 
             return view('frontend.mlm.demandside.product.edit',[
                 'product' => $product,
-
                 'brands'=>$brands,
                 'categories_a'=>$categories_a,
                 'categories_b'=>$categories_b,
@@ -107,8 +111,37 @@ class DemandsideController extends Controller
         
     }
 
-    public function assessment()
+    public function assessment(ProductReviewRepository $productReview, $productid)
     {
-        return view('frontend.mlm.demandside.product.assessment');
+        $review = $productReview->findDataById($productid);
+        if($review) {
+            return view('frontend.mlm.demandside.product.assessment',[
+                'content' => $review->comments
+            ]);
+        } else {
+            return view('frontend.mlm.demandside.product.assessment',[
+                'content' => "无修改意见"
+            ]);
+        }
+        
+    }
+
+
+    public function html2pdf(ProductReviewRepository $productReview, $productid)
+    {
+        $review = $productReview->findDataById($productid);
+        if($review) {
+            $content = $review->comments;
+        } else {
+            $content = '暂无修改意见';
+        }
+
+
+
+        $html2pdf = new Html2Pdf('P', 'A4', 'tr', true, 'UTF-8', 3);
+        $html2pdf->pdf->SetDisplayMode('real');
+        $html2pdf->setDefaultFont('Arial');
+        $html2pdf->writeHTML($content);
+        $html2pdf->output("修改意见文档.pdf");
     }
 }

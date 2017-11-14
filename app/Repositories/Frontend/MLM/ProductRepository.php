@@ -17,7 +17,7 @@ class ProductRepository extends BaseRepository
      */
     public function getForDataTable()
     {
-        return $this->query()->where('user_id', access()->id())
+        return $this->query()->where('user_id', access()->id())->where('status_no','<>',1004)
             ->select([
                 'products.id',
                 'products.product_no',
@@ -152,6 +152,28 @@ class ProductRepository extends BaseRepository
         $product = $this->find($proid);
         $product->status_no = $status;
         $product->save();
+
+        return $product;
+    }
+
+    public function updateCycle($proid, $cycle)
+    {
+        $product = $this->find($proid);
+        $product->cycle = $cycle;
+        $product->save();
+
+        return $product;
+    }
+
+    public function delProduct($proid)
+    {
+        $product = $this->findDataById($proid);
+        if($product) {
+            $product->status_no = 1004;
+            // $product->deleted_at = time();
+            $product->save();
+        }
+        
 
         return $product;
     }
