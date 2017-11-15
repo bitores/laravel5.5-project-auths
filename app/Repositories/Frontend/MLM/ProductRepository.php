@@ -61,6 +61,31 @@ class ProductRepository extends BaseRepository
             ->orderBy('products.updated_at','desc');
     }
 
+    public function getProducerModelsDataTable()
+    {
+        return $this->query()->where('user_id', access()->id())->where('status_no', 1007)->leftjoin('product_styles','products.style_id','=','product_styles.id')
+            ->select([
+                'products.id',
+                'products.product_no',
+                'products.style_id',
+                // 'products.brand_id',
+                // 'products.a_id',
+                // 'products.b_id',
+                'products.images',
+                'products.cad_id',
+                // 'products.user_id',
+                'products.file_id',
+                // 'products.model_id',
+                // 'products.status_no',
+                'products.cycle',
+                'products.fee',
+                'product_styles.name as style_name'
+                // 'products.introduction',
+            ])
+            ->orderBy('products.updated_at','desc');
+    }
+
+
     public function getForProducerDataTable()
     {
         return $this->query()->where('user_id', access()->id())->where('status_no', 1005)

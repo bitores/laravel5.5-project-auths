@@ -37,7 +37,7 @@
 				                            <th>模型风格</th>
 				                            <th>模型制作周期</th>
 				                            <th>是否审核通过</th>
-				                            <th>下载模型</th>
+				                            <th>下载模型和资料包</th>
 				                        </tr>
 				                    </thead>
 				                </table>
@@ -83,7 +83,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route("frontend.mlm.demandside.product.list") }}',
+                    url: '{{ route("frontend.mlm.producer.model.list") }}',
                     type: 'post',
                     error: function (xhr, err) {
                         if (err === 'parsererror')

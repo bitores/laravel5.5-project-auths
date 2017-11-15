@@ -99,8 +99,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('auditor/product/nopass', 'ProductController@nopass')->name('demandside.product.nopass'); 
         Route::post('auditor/product/pass', 'ProductController@pass')->name('demandside.product.pass'); 
 
-         Route::post('auditor/model/nopass', 'ProductController@nopass')->name('producer.product.nopass'); 
-        Route::post('auditor/model/pass', 'ProductController@pass')->name('producer.product.pass'); 
+        Route::post('auditor/models', 'ProductController@producermodels')->name('producer.model.list'); 
+        Route::post('auditor/model/nopass', 'ProductController@modelnopass')->name('producer.model.nopass'); 
+        Route::post('auditor/model/pass', 'ProductController@modelpass')->name('producer.model.pass'); 
 
         Route::post('demandside/product/del', 'ProductController@del')->name('demandside.product.del'); 
         Route::post('demandside/product/posttask', 'ProductController@postTask')->name('demandside.product.posttask'); 
