@@ -8,6 +8,7 @@
         "php": ">=7.0.0",
         "arcanedev/log-viewer": "^4.4",
         "arcanedev/no-captcha": "^5.0",
+        "chumper/zipper": "^1.0",
         "creativeorange/gravatar": "^1.0",
         "davejamesmiller/laravel-breadcrumbs": "^4.2",
         "fideloper/proxy": "~3.3",
@@ -39,6 +40,7 @@
             "App\\": "app/"
         },
         "files": [
+            "app/constants.php",
             "app/helpers.php"
         ]
     },

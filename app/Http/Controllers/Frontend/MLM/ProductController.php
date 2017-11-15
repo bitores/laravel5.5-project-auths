@@ -7,10 +7,14 @@ use Config;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\ProductRepository;
+use App\Repositories\Frontend\MLM\UProductRepository;
 use App\Repositories\Frontend\MLM\ProductReviewRepository;
 use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\StyleRepository;
+use App\Repositories\Frontend\MLM\ProductsViewRepository;
+
+use \Chumper\Zipper\Zipper;
 
 /**
  * Class AccountController.
@@ -286,16 +290,16 @@ class ProductController extends Controller
                 return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
-                return '<div data-proid="'.$product->id.'" class="btn btn-info">下载资料包</div>';
+                return '<div data-proid="'.$product->id.'" class="btn btn-info download">下载资料包</a>';
             })
             ->make(true);
     }
 
 
-    public function productspass()
+    public function tasks()
     {
 
-        return DataTables::of($this->product->getForAuditorDataTable())
+        return DataTables::of($this->product->getForProducerDataTable())
             ->escapeColumns(['fee'])
             ->addColumn('product_no', function ($product) {
                 if(is_null($product->product_no)) {
@@ -335,6 +339,83 @@ class ProductController extends Controller
             // })
             ->addColumn('orders', function($product) {
                 return '<div data-proid="'.$product->id.'" class="btn btn-info orderbtn">接单</div>';
+            })
+
+            ->make(true);
+    }
+
+
+    public function minetasks()
+    {
+
+        return DataTables::of($this->product->getForProducerSelfDataTable())
+            ->escapeColumns(['fee'])
+            ->addColumn('product_finish', function ($product) {
+                if($product->status_no===1009) {
+                    return '具体时间';
+                }
+
+                return '未完成';
+            })
+            ->addColumn('product_status', function ($product) {
+
+                if($product->status_no === 1006) {
+                    return '<div style="color:green">制作中</div>';
+                } else if($product->status_no === 1007) {
+                    return '<div style="color:yellow">模型审核中</div>';
+                } else if($product->status_no === 1008) {
+                    return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info">下载修改意见</div>';
+                } else if($product->status_no === 1009) {
+                    return '<div style="color:green">模型审核已通过</div>';
+                } else if($product->status_no === 1010) {
+                    return '<div style="color:black">模型已入库</div>';
+                }
+
+                return '细节问题'.$product->status_no;
+            })
+            ->addColumn('uploadbtn', function ($product) {
+
+
+                return '<div class="btn btn-info uploadbtn">上传</div>';
+            })
+            ->addColumn('product_no', function ($product) {
+                if(is_null($product->product_no)) {
+                    return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
+                }
+
+                return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+            })
+            ->addColumn('cycle', function ($product) {
+                if(is_null($product->cycle)) {
+                    return '未确定';
+                }
+
+                return $product->cycle;
+            })
+            ->addColumn('resource', function ($product) {
+                $resource = ($product->images . '张图片 +');
+                if($product->cad_id) {
+                    $resource .= '有cad ';
+                } else {
+                    $resource .= '无cad ';
+                }
+
+
+                return $resource;
+            }) 
+            // ->addColumn('style', function ($product) {
+
+            //     return "$product->style_name";
+            // })
+            // ->addColumn('actions', function ($product) {
+
+            //     return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
+            // })
+            // ->addColumn('download', function($product) {
+            //     return '<div data-proid="'.$product->id.'" class="btn btn-info">下载资料包</div>';
+            // })
+            ->addColumn('orders', function($product) {
+                return '<div data-proid="'.$product->id.'" class="btn btn-info cancelbtn">是</div>';
             })
 
             ->make(true);
@@ -481,24 +562,121 @@ class ProductController extends Controller
         ], 'msg' => '操作失败'];
     }
 
-    public function order(ProductRequest $request, ProductRepository $productRes)
+    public function order(ProductRequest $request, UProductRepository $uproductRes)
     {
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $productRes->findDataById($productid);
+            $product = $this->product->findDataById($productid);
             if($product)
             {
                 if($product->status_no==1005)
                 {
-                    // $this->product->updateStatus($product->id,1005);
+                    // $this->product->updateStatus($product->id,1006);
+                    $ret = $this->product->order($product->id);
                     // add 接单操作
+                    // $ret = $uproductRes->create([
+                    //     'product_id' => $product->id,
+                    //     'user_id' => access()->id()
+                    // ]);
 
-                    return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
+                    if($ret) {
+                        return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
+                    } else {
+                        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+                    }
+
+                    
+                } else {
+                    return ['code' => -1, 'data'=>[], 'msg' => '订单不存在'];
                 }
             }
         }
 
         return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+    }
+
+    public function cancelorder(ProductRequest $request, UProductRepository $uproductRes)
+    {
+        $productid = $request->get('productid');
+        if($productid)
+        {
+            $product = $this->product->findOrderDataById($productid);
+            if($product)
+            {
+                if($product->status_no==1006)
+                {
+                    // $this->product->updateStatus($product->id,1006);
+                    $ret = $this->product->cancelorder($product->id);
+                    // add 接单操作
+                    // $ret = $uproductRes->create([
+                    //     'product_id' => $product->id,
+                    //     'user_id' => access()->id()
+                    // ]);
+
+                    if($ret) {
+                        return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
+                    } else {
+                        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+                    }
+
+                    
+                } else {
+                    return ['code' => -1, 'data'=>[], 'msg' => '订单不存在'];
+                }
+            }
+        }
+
+        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+    }
+
+
+    public function download( ProductRequest $request,UImageRepository $imageRes, ProductsViewRepository $productViewRes, ProductRepository $productRes)
+    {
+        $productid = $request->get('productid');
+        if($productid)
+        {
+
+            $product = $productViewRes->findDataById($productid);
+
+            if($product) {
+
+                if(isset($product->zip_path)){
+                    return ['code' => 0, 'data'=>'/'.$product->zip_path, 'msg' => '操作成功'];
+                }
+
+                $images = $imageRes->findAllDataByProductId($productid);
+                $allfiles = array();
+                foreach ($images as $key => $image) {
+                    # code...
+                    $allfiles[] = "uploads/materials/".$image->path;
+                }
+
+                if(isset($product->cad_path))
+                {
+                    $allfiles[] = "uploads/materials/".$product->cad_path;
+                }
+
+                if(isset($product->file_path))
+                {
+                    $allfiles[] = "uploads/materials/".$product->file_path;
+                }
+
+
+                $zipper = new Zipper;
+
+                $filename="uploads/zip/" . date('YmdHis',time()).'.zip';
+                $zipper->make($filename)->add($allfiles)->close();
+
+                $productRes->updateZipPath($product->id,$filename);
+
+                return ['code' => 0, 'data'=>'/'.$filename, 'msg' => '操作成功'];
+            } else {
+                return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+            }
+
+        } else {
+            return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+        }
     }
 }

@@ -17,6 +17,11 @@ class ProducerController extends Controller
         return view('frontend.mlm.producer.index');
     }
 
+    public function demandlist()
+    {
+        return view('frontend.mlm.producer.demandlist');
+    }
+
     public function modelingTutorial()
     {
         return view('frontend.mlm.producer.tutorial.modeling');

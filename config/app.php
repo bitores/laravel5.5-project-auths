@@ -211,6 +211,8 @@ return [
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
 
         HTMLMin\HTMLMin\HTMLMinServiceProvider::class,
+
+        Chumper\Zipper\ZipperServiceProvider::class,
     ],
 
     /*
@@ -278,6 +280,8 @@ return [
         'RyanPassword' => App\Foundation\Auth\Passwords\Facade\RyanPassword::class,
 
         'HTMLMin' => HTMLMin\HTMLMin\Facades\HTMLMin::class,
+
+        'Zipper' => Chumper\Zipper\Zipper::class,
     ],
 
 ];

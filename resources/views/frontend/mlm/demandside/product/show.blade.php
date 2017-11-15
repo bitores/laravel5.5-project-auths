@@ -132,6 +132,12 @@
                             <div class="col-xs-6">
                                 <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="postbtn">发布任务</div>
                             </div>
+
+                            @elseif(1006==$product->status_no)
+                            <!-- 审核中 -->
+                            <div class="col-xs-12">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="orderdownload">接单并下载资料包</div>
+                            </div>
                             @endif
                         </div>
                     </div><!--form-group-->

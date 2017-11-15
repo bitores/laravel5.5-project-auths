@@ -13,15 +13,15 @@ class CategoryARepository extends BaseRepository
 
     public function create(array $data)
     {
-        $brand = self::MODEL;
+        $model = self::MODEL;
 
 
-        $brand = new $brand;
+        $instance = new $model;
 
-        $brand->name = $data['name'];
-        $brand->save();
+        $instance->name = $data['name'];
+        $instance->save();
 
-        return $brand;
+        return $instance;
     }
 
 

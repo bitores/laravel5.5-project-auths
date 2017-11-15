@@ -13,16 +13,16 @@ class CategoryBRepository extends BaseRepository
 
     public function create(array $data)
     {
-        $brand = self::MODEL;
+        $model = self::MODEL;
 
 
-        $brand = new $brand;
+        $instance = new $model;
 
-        $brand->name = $data['name'];
-        $brand->category_a_id = $data['category_a_id'];
-        $brand->save();
+        $instance->name = $data['name'];
+        $instance->category_a_id = $data['category_a_id'];
+        $instance->save();
 
-        return $brand;
+        return $instance;
     }
 
     public function findAllData()

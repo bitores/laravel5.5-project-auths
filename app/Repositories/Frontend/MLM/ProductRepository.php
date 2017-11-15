@@ -61,6 +61,56 @@ class ProductRepository extends BaseRepository
             ->orderBy('products.updated_at','desc');
     }
 
+    public function getForProducerDataTable()
+    {
+        return $this->query()->where('user_id', access()->id())->where('status_no', 1005)
+        // ->leftjoin('product_styles','products.style_id','=','product_styles.id')
+            ->select([
+                'products.id',
+                'products.product_no',
+                'products.style_id',
+                // 'products.brand_id',
+                // 'products.a_id',
+                // 'products.b_id',
+                'products.images',
+                'products.cad_id',
+                // 'products.user_id',
+                'products.file_id',
+                // 'products.model_id',
+                // 'products.status_no',
+                'products.cycle',
+                'products.fee',
+                // 'product_styles.name as style_name'
+                // 'products.introduction',
+            ])
+            ->orderBy('products.updated_at','desc');
+    }
+
+    public function getForProducerSelfDataTable()
+    {
+        return $this->query()->where('user_id', access()->id())->where('status_no', 1006)->where('producer_id', access()->id())
+        // ->leftjoin('product_styles','products.style_id','=','product_styles.id')
+            ->select([
+                'products.id',
+                'products.product_no',
+                'products.style_id',
+                // 'products.brand_id',
+                // 'products.a_id',
+                // 'products.b_id',
+                'products.images',
+                'products.cad_id',
+                // 'products.user_id',
+                'products.file_id',
+                // 'products.model_id',
+                'products.status_no',
+                'products.cycle',
+                'products.fee',
+                // 'product_styles.name as style_name'
+                // 'products.introduction',
+            ])
+            ->orderBy('products.updated_at','desc');
+    }
+
 
     public function save($product, array $data, $status)
     {
@@ -116,6 +166,7 @@ class ProductRepository extends BaseRepository
         }
 
         $product->status_no = $status;
+        $product->zip_path = null;
         $product->save();
     }
 
@@ -165,6 +216,15 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
+    public function updateZipPath($proid, $path)
+    {
+        $product = $this->find($proid);
+        $product->zip_path = $path;
+        $product->save();
+
+        return $product;
+    }
+
     public function delProduct($proid)
     {
         $product = $this->findDataById($proid);
@@ -178,6 +238,33 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
+    public function order($proid)
+    {
+        $product = $this->findDataById($proid);
+        if($product) {
+            $product->status_no = 1006;
+            $product->producer_id = access()->id();
+            $product->save();
+        }
+        
+
+        return $product;
+    }
+
+    public function cancelorder($proid)
+    {
+        $product = $this->findOrderDataById($proid);
+        if($product) {
+            $product->status_no = 1005;
+            $product->producer_id = null;
+            $product->save();
+        }
+        
+
+        return $product;
+    }
+    
+
     public function findAll()
     {
         return $this->query()->where('user_id', access()->id())->get();
@@ -189,4 +276,9 @@ class ProductRepository extends BaseRepository
         return $this->query()->where('user_id', access()->id())->where('id',$id)->first();
     }
 
+    public function findOrderDataById($id)
+    {   
+
+        return $this->query()->where('producer_id', access()->id())->where('id',$id)->first();
+    }
 }

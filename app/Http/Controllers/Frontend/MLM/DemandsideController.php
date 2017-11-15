@@ -16,6 +16,8 @@ use Spipu\Html2Pdf\Html2Pdf;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 
+
+
 /**
  * Class DashboardController.
  */
@@ -144,4 +146,7 @@ class DemandsideController extends Controller
         $html2pdf->writeHTML($content);
         $html2pdf->output("修改意见文档.pdf");
     }
+
+
+    
 }

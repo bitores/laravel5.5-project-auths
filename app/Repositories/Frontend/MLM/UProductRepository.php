@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Frontend\MLM;
 
-use App\Models\MLM\Style;
+use App\Models\MLM\UProduct;
 use App\Repositories\BaseRepository;
 /**
  * Class UserSessionRepository.
  */
-class StyleRepository extends BaseRepository
+class UProductRepository extends BaseRepository
 {
-    const MODEL = Style::class;
+    const MODEL = UProduct::class;
 
     /**
      * @param User $user
@@ -20,12 +20,18 @@ class StyleRepository extends BaseRepository
     {
         $model = self::MODEL;
 
-
         $instance = new $model;
 
-        $instance->name = $data['name'];
+        $instance->product_id = $data['product_id'];
+        $instance->user_id = $data['user_id'];
         $instance->save();
 
         return $instance;
+    }
+
+
+    public function findDataById($userid)
+    {
+        return $this->query()->where('user_id', $userid)->get();
     }
 }

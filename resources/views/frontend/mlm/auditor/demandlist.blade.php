@@ -103,13 +103,11 @@
             });
 
 
-            $("#products-table").on('click', '.nopass', function(){
+        $("#products-table").on('click', '.nopass', function(){
             ue.proid = $(this).attr('data-proid');
             console.log(ue.proid);
             $("#alert-editor").show();
-            
-
-
+           
         });
 
         $("#save-content").on('click', function(){
@@ -128,14 +126,13 @@
                 },
                 success: function(res) {
                     if(0 === res.code){
-                        swal("OK", "操作成功", "success");
                         swal({
 		                    title: "OK",
 							text: "操作成功,点击跳转",
 							type: "success",
 							confirmButtonColor: "#DD6B55",
 							confirmButtonText: "确认",
-							closeOnConfirm: false
+							closeOnConfirm: true
 		                }, function(){
 		                    location.reload();
 		                });
@@ -164,60 +161,89 @@
 	            type: "input",
 	            inputType: "text",
 	            showCancelButton: true,
-	            closeOnConfirm: true
+	            closeOnConfirm: false
 	        }, function (cycle) {
 	            console.log(cycle);
-
-	            $.ajax({
-	                url: "/auditor/product/pass",
-	                type:'POST',
-	                data:{
-	                    'productid':proid,
-	                    'cycle': cycle
-	                },
-	                success: function(res) {
-	                    if(0 === res.code){
-	                        swal("OK", "操作成功", "success");
-	                    } else {
-	                        swal("OMG", "操作失败", "error");
-	                    }
-	                    location.reload();
-	                },
-	                error: function(res) {
-	                    // swal.close()
-	                    swal("OMG", "操作失败", "error");
-	                    location.reload();
-	                }
-	            });
-
+	            var reg = new RegExp("^[0-9]*$");
+	            if(false === cycle) {
+	            	return 0;
+	            } 
+	            if(reg.test(cycle)) {
+	            	$.ajax({
+		                url: "/auditor/product/pass",
+		                type:'POST',
+		                data:{
+		                    'productid':proid,
+		                    'cycle': cycle
+		                },
+		                success: function(res) {
+		                    if(0 === res.code){
+		                        swal("OK", "操作成功", "success");
+		                    } else {
+		                        swal("OMG", "操作失败", "error");
+		                    }
+		                    location.reload();
+		                },
+		                error: function(res) {
+		                    // swal.close()
+		                    swal("OMG", "操作失败", "error");
+		                    location.reload();
+		                }
+		            });
+	            } else {
+	            	swal("OMG", "请输入数字", "error");
+	            }
+	           
 	        });
-
-
-            
-
 
         });
 
 
+        $("#products-table").on('click', '.download', function(){
+            var proid = $(this).attr('data-proid');
+            console.log(proid);
+
+            swal({
+	            title: "确认下次产品资料包",
+	            text: "点击确认下载",
+	            type: "warning",
+	            cancelButtonText:'取消',
+	            confirmButtonText:'确认',
+	            showCancelButton: true,
+	            closeOnConfirm: false
+	        }, function (cycle) {
+	            console.log(cycle);
+	            if(false === cycle) {
+	            	return 0;
+	            } 
+	            	$.ajax({
+		                url: "/product/download",
+		                type:'POST',
+		                data:{
+		                    'productid':proid
+		                },
+		                success: function(res) {
+		                    if(0 === res.code){
+		                    	location.href = res.data;
+		                        swal("OK", "操作成功", "success");
+		                    } else {
+		                        swal("OMG", "操作失败", "error");
+		                    }
+		                    // location.reload();
+		                },
+		                error: function(res) {
+		                    // swal.close()
+		                    swal("OMG", "操作失败", "error");
+		                    // location.reload();
+		                }
+		            });
+	           
+	        });
+
+        });
 
 
     });
-
-    	
-
-
-
-    
-                    
-    function doprint(){
-    //  bdhtml=window.document.body.innerHTML;   
-        // sprnstr="<!--startprint-->";   
-        // eprnstr="<!--endprint-->";   
-        // prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17);   
-        // prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));   
-        // window.document.body.innerHTML=;  
-        // window.print();
-    }
 </script>
                     
 @endsection

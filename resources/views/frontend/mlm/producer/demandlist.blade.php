@@ -20,20 +20,21 @@
 				                    <thead>
 				                        <tr>
 
-				                        	<th>任务完成状态</th>
-				                            <th>任务名称</th>
-				                            <th>预览任务相关资料</th>
-				                            <th>建模时间</th>
+				                            <th>模型名称</th>
+				                            <th>任务相关资料</th>
 				                            <th>建模费用</th>
-				                            <th>上传模型</th>
-				                            <th>项目状态</th>
-				                            <th>是否取消接单</th>
+				                            <!-- <th>模型风格</th> -->
+				                            <th>模型制作周期</th>
+				                            <!-- <th>是否审核通过</th> -->
+				                            <!-- <th>下载资料包</th> -->
+				                            <th>是否接单</th>
 
 				                        </tr>
 				                    </thead>
 				                </table>
 				            </div><!--table-responsive-->
 				        </div><!-- /.box-body -->
+
 	        		</div>
 	        		
 	        	</div>	        	
@@ -56,7 +57,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route("frontend.mlm.producer.product.tasks") }}',
+                    url: '{{ route("frontend.mlm.demandside.product.tasks") }}',
                     type: 'post',
                     error: function (xhr, err) {
                         if (err === 'parsererror')
@@ -64,26 +65,24 @@
                     }
                 },
                 columns: [
-                	{data: 'product_finish', name:''},
                     {data: 'product_no', name: ''},
                     {data: 'resource', name: ''},
-                    {data: 'cycle', name: ''},
                     {data: 'fee', name: ''},
-                    {data: 'uploadbtn', name: ''},
-                    {data: 'product_status', name: ''},
+                    // {data: 'style', name: ''},
+                    {data: 'cycle', name: ''},
                     {data:'orders', name:''},
                     // {data: 'download', name: ''},
                 ],
                 // order: [[1, "asc"]]
             });
 
-            $("#products-table").on('click', '.cancelbtn', function(){
+            $("#products-table").on('click', '.orderbtn', function(){
 	            var proid = $(this).attr('data-proid');
 	            console.log(proid);
 
 	            swal({
-		            title: "取消接单",
-		            text: "点击确认进行取消接单",
+		            title: "接单",
+		            text: "点击确认进行接单",
 		            type: "warning",
 		            showCancelButton: true,
 		            closeOnConfirm: true,
@@ -94,7 +93,7 @@
 		            console.log(cycle);
 		            if(true === cycle) {
 		            	$.ajax({
-				            url: "/producer/product/cancelorder",
+				            url: "/producer/product/order",
 				            type:'POST',
 				            data:{
 				                'productid':proid

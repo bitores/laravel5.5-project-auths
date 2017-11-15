@@ -89,14 +89,14 @@
                 </a>
                 <ul class="treeview-menu" style="display: none;">
                     <li class="">
-                        <a href="{{ route('frontend.user.demandside.index') }}">
+                        <a href="{{ route('frontend.mlm.demandside.index') }}">
                             <i class="fa fa-circle-o"></i>
                             <span>AA</span>
                         </a>
                     </li>
 
                     <li class="">
-                        <a href="{{ route('frontend.user.demandside.index') }}">
+                        <a href="{{ route('frontend.mlm.demandside.index') }}">
                             <i class="fa fa-circle-o"></i>
                             <span>BB</span>
                         </a>

@@ -63,11 +63,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('product/{productid}/edit', 'DemandsideController@edit')->name('demandside.product.edit');
         Route::get('product/{productid}/show', 'DemandsideController@show')->name('demandside.product.show');
         Route::get('product/{productid}/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
+        Route::post('product/download', 'ProductController@download')->name('demandside.product.download');
 
            
         
         // 制作方业务
         Route::get('producer', 'ProducerController@index')->name('producer.index');
+        Route::get('producer/demandlist', 'ProducerController@demandlist')->name('producer.demandlist');
         Route::get('producer/tutorial/modeling', 'ProducerController@modelingTutorial')->name('producer.tutorial.modeling');
         Route::get('producer/tutorial/review', 'ProducerController@reviewTutorial')->name('producer.tutorial.review');
 
@@ -96,12 +98,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('auditor/products', 'ProductController@demandsidproducts')->name('demandside.product.list'); 
         Route::post('auditor/product/nopass', 'ProductController@nopass')->name('demandside.product.nopass'); 
         Route::post('auditor/product/pass', 'ProductController@pass')->name('demandside.product.pass'); 
+
+         Route::post('auditor/model/nopass', 'ProductController@nopass')->name('producer.product.nopass'); 
+        Route::post('auditor/model/pass', 'ProductController@pass')->name('producer.product.pass'); 
+
         Route::post('demandside/product/del', 'ProductController@del')->name('demandside.product.del'); 
         Route::post('demandside/product/posttask', 'ProductController@postTask')->name('demandside.product.posttask'); 
         Route::post('demandside/product/canceltask', 'ProductController@cancelTask')->name('demandside.product.canceltask'); 
         Route::post('demandside/product/review', 'ProductController@reviewComments')->name('demandside.product.review'); 
 
-        Route::post('producer/products', 'ProductController@productspass')->name('demandside.product.pass');
+        Route::post('producer/products', 'ProductController@tasks')->name('demandside.product.tasks');
         Route::post('producer/product/order', 'ProductController@order')->name('producer.product.order'); 
+        Route::post('producer/product/cancelorder', 'ProductController@cancelorder')->name('producer.product.cancelorder'); 
+
+        Route::post('producer/tasks', 'ProductController@minetasks')->name('producer.product.tasks');
     });
 });

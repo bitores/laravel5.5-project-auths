@@ -20,14 +20,14 @@ class ProductReviewRepository extends BaseRepository
     {
         $brand = self::MODEL;
 
-        $brand = new $brand;
+        $instance = new $brand;
 
-        $brand->type = $data['type'];
-        $brand->comments = $data['comments'];
-        $brand->product_id = $data['product_id'];
-        $brand->save();
+        $instance->type = $data['type'];
+        $instance->comments = $data['comments'];
+        $instance->product_id = $data['product_id'];
+        $instance->save();
 
-        return $brand;
+        return $instance;
     }
 
 

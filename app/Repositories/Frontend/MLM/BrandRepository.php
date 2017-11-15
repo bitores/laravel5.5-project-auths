@@ -18,15 +18,15 @@ class BrandRepository extends BaseRepository
      */
     public function create(array $data)
     {
-        $brand = self::MODEL;
+        $model = self::MODEL;
 
-        $brand = new $brand;
+        $instance = new $model;
 
-        $brand->name = $data['name'];
-        $brand->user_id = $data['user_id'];
-        $brand->save();
+        $instance->name = $data['name'];
+        $instance->user_id = $data['user_id'];
+        $instance->save();
 
-        return $brand;
+        return $instance;
     }
 
 
