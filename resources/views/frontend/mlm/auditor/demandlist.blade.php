@@ -13,12 +13,28 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="alert-editor">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h4 class="modal-title">
+                  <sdivan class="close" data-dismiss="modal">&times;</sdivan>
+                   需求修改意见
+               </h4>
+           </div>
+           <div  id="editor" class="modal-body editor"></div>
+           <div class="modal-footer">
+               <div id="save-content" class="btn btn-info pull-right save-content">提交</div>
+           </div>
+       </div>
+   </div>
+
+</div>
+
 	<div class="panel panel-default">
 	    <div class="panel-heading">需求审核任务列表</div>
-        <div id="alert-editor" class="alert-editor" hidden="">
-            <div id="editor" class="editor"></div>
-            <div id="save-content" class="btn btn-info pull-right save-content">提交修改意见</div>
-        </div>
+ 
+	   
 
 	    <div class="panel-body">
 	        <div class="row">
@@ -69,7 +85,8 @@
 
             var ue = UE.getEditor('editor',{    
             toolbars: toolbars,
-            autoWidth: true
+            autoWidth: true,
+            initialFrameWidth: '100%'
             });
             ue.ready(function() {
                 ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
@@ -160,6 +177,8 @@
 	            text: "如果你确定，请输入开发周期",
 	            type: "input",
 	            inputType: "text",
+	            cancelButtonText:'取消',
+	            confirmButtonText:'确认',
 	            showCancelButton: true,
 	            closeOnConfirm: false
 	        }, function (cycle) {

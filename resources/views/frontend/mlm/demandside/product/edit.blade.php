@@ -201,6 +201,8 @@ var webupload_pickList=[
 <script src="/js/libs/webuploader/webuploadRun.js"></script>
 <script src="/js/libs/webuploader/webuploadImageRun.js"></script>
 <script>
+new bindWebupload('#fileupload1',$('#filelist1'),'上传CAD压缩包','CAD');
+new bindWebupload('#fileupload2',$('#filelist2'),'上传其它资料压缩包','OTHER');
 $("#delbtn").on('click', function(){
     // $(this).hide();
     var proid = $(this).attr('data-proid');

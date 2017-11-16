@@ -111,11 +111,6 @@
                             <div class="col-xs-6">
                                 <div id="submitBtn" class="btn btn-block btn-info">提交审核</div>
                             </div>
-                            @elseif(1001==$product->status_no)
-                            <!-- 审核中 -->
-                            <div class="col-xs-12">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="download">下载资料包</div>
-                            </div>
                             @elseif(1002==$product->status_no)
                             <!-- 审核未通过 -->
                             <div class="col-xs-6">
@@ -133,10 +128,20 @@
                                 <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="postbtn">发布任务</div>
                             </div>
 
-                            @elseif(1006==$product->status_no)
+                            @elseif(1005==$product->status_no)
                             <!-- 审核中 -->
                             <div class="col-xs-12">
                                 <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="orderdownload">接单并下载资料包</div>
+                            </div>
+                            @elseif(1008==$product->status_no)
+                            <!-- 模型审核未通过 -->
+                            <div class="col-xs-12">
+                                <a href="{{route('frontend.mlm.producer.product.assessment', $product->id)}}" class="btn btn-block btn-info">查看审核结果</a>
+                            </div>
+                            @else
+                            <!-- 审核中 -->
+                            <div class="col-xs-12">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="download">下载资料包</div>
                             </div>
                             @endif
                         </div>
@@ -307,5 +312,87 @@ $("#submitBtn").on('click', function(){
         console.log('download');
     });
 });
+@if(1005==$product->status_no)
+$("#orderdownload").on('click',function(){
+    var proid = $(this).attr('data-proid');
+    console.log(proid);
+
+    swal({
+        title: "接单",
+        text: "点击确认进行接单",
+        type: "warning",
+        showCancelButton: true,
+        closeOnConfirm: true,
+        cancelButtonText:'取消',
+        confirmButtonText:'确认',
+        closeOnConfirm: true
+    }, function (cycle) {
+        console.log(cycle);
+        if(true === cycle) {
+            $.ajax({
+                url: "/producer/product/order",
+                type:'POST',
+                data:{
+                    'productid':proid
+                },
+                success: function(res) {
+                    if(0 === res.code){
+                        swal("OK", "接单成功成功", "success");
+
+                        swal({
+                            title: "接单成功",
+                            text: "点击确认下载",
+                            type: "warning",
+                            cancelButtonText:'取消',
+                            confirmButtonText:'确认',
+                            showCancelButton: true,
+                            closeOnConfirm: false
+                        }, function (cycle) {
+                            console.log(cycle);
+                            if(false === cycle) {
+                                return 0;
+                            } 
+                                $.ajax({
+                                    url: "/product/download",
+                                    type:'POST',
+                                    data:{
+                                        'productid':proid
+                                    },
+                                    success: function(res) {
+                                        if(0 === res.code){
+                                            location.href = res.data;
+                                            swal("OK", "操作成功", "success");
+                                        } else {
+                                            swal("OMG", "操作失败", "error");
+                                        }
+                                        // location.reload();
+                                    },
+                                    error: function(res) {
+                                        // swal.close()
+                                        swal("OMG", "操作失败", "error");
+                                        // location.reload();
+                                    }
+                                });
+                           
+                        });
+
+
+
+                    } else {
+                        swal("OMG", "操作失败：" + res.msg, "error");
+                    }
+                },
+                error: function(res) {
+                    // swal.close()
+                    swal("OMG", "操作失败:", "error");
+                }
+            });
+        }
+        
+
+        
+    });
+});
+@endif
 </script>
 @endsection

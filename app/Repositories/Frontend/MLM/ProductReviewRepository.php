@@ -35,4 +35,17 @@ class ProductReviewRepository extends BaseRepository
     {
         return $this->query()->where('product_id', $product_id)->orderBy('updated_at','desc')->first();
     }
+
+    public function findByProductId()
+    {
+        return $this->query()->where('product_id', $product_id)->orderBy('updated_at','desc')->first();
+    }
+
+    // 获取 指定产品 的 最后一次修改意见
+    public function findLastByProductId($productid)
+    {
+        return $this->query()->where('product_id', $productid)->orderBy('updated_at','desc')->first();
+    }
+
+    
 }

@@ -181,7 +181,8 @@ var webupload_pickList=[
 <script src="/js/libs/webuploader/webuploadRun.js"></script>
 <script src="/js/libs/webuploader/webuploadImageRun.js"></script>
 <script>
-
+new bindWebupload('#fileupload1',$('#filelist1'),'上传CAD压缩包','CAD');
+new bindWebupload('#fileupload2',$('#filelist2'),'上传其它资料压缩包','OTHER');
 $("#categoryA").change(function(){
     $("#categoryB").val(-1);
     $("#categoryB option[value!=-1]").hide();

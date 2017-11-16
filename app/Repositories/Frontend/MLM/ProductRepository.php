@@ -113,7 +113,7 @@ class ProductRepository extends BaseRepository
 
     public function getForProducerSelfDataTable()
     {
-        return $this->query()->where('user_id', access()->id())->where('status_no', 1006)->where('producer_id', access()->id())
+        return $this->query()->where('user_id', access()->id())->where('status_no','>=',1006)->where('producer_id', access()->id())
         // ->leftjoin('product_styles','products.style_id','=','product_styles.id')
             ->select([
                 'products.id',
@@ -203,13 +203,13 @@ class ProductRepository extends BaseRepository
      */
     public function create($userid, array $data, $status)
     {
-        $product = self::MODEL;
+        $model = self::MODEL;
 
-        $product = new $product;
-        $product->user_id = $userid;
+        $instance = new $model;
+        $instance->user_id = $userid;
         
-        $this->save($product, $data, $status);
-        return $product;
+        $this->save($instance, $data, $status);
+        return $instance;
     }
 
     public function update($proid, array $data, $status)
@@ -276,6 +276,19 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
+    public function model($proid,  $modelid)
+    {
+        $product = $this->findDataById($proid);
+        if($product) {
+            $product->status_no = 1007;
+            $product->model_id = $modelid;
+            $product->save();
+        }
+        
+
+        return $product;
+    }
+
     public function cancelorder($proid)
     {
         $product = $this->findOrderDataById($proid);
@@ -305,5 +318,23 @@ class ProductRepository extends BaseRepository
     {   
 
         return $this->query()->where('producer_id', access()->id())->where('id',$id)->first();
+    }
+
+    //  获取 指定需求方 的 所有产品
+    public function getAllByUserId($userid)
+    {
+        return $this->query()->where('user_id',$userid)->get();
+    }
+
+    // 获取 指定需求方 指定产品 的信息
+    public function findByUserIdAndProductId($userid, $id)
+    {
+        return $this->query()->where('user_id', $userid)->where('id',$id)->first();
+    }
+
+    // 获取 指定制作方 指定产品 的信息
+    public function findByProducerIdAndProductId($producerid, $id)
+    {
+        return $this->query()->where('producer_id', $producerid)->where('id',$id)->first();
     }
 }

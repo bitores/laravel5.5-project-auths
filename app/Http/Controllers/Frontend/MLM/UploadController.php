@@ -7,6 +7,7 @@ use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Repositories\Frontend\MLM\UFileRepository;
 use App\Repositories\Frontend\MLM\UCadRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
+use App\Repositories\Frontend\MLM\UModelRepository;
 
 class UploadController extends Controller
 {
@@ -17,17 +18,19 @@ class UploadController extends Controller
     protected $ucad;
     protected $ufile;
     protected $uimage;
+    protected $umode;
 
     /**
      * ProfileController constructor.
      *
      * @param UserRepository $user
      */
-    public function __construct(UCadRepository $ucad, UImageRepository $uimage, UFileRepository $ufile)
+    public function __construct(UCadRepository $ucad, UImageRepository $uimage, UFileRepository $ufile, UModelRepository $umodel)
     {
        $this->ucad = $ucad;
        $this->uimage = $uimage;
        $this->ufile = $ufile;
+       $this->umodel = $umodel;
     }
 
 	public function index() 
@@ -186,6 +189,11 @@ class UploadController extends Controller
 	            	'user_id' => access()->id()
 	            ]);
 
+            } elseif('MODEL' === $datatype) {
+                $file = $this->umodel->create([
+                    'path' => $currentPath,
+                    'user_id' => access()->id()
+                ]);
             }
 
             if($file) {

@@ -25,6 +25,7 @@ class CategoryARepository extends BaseRepository
     }
 
 
+    // getAll
     public function findAllData()
     {
         return $this->query()->get();

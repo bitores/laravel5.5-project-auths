@@ -23,7 +23,7 @@ var bindWebupload = function(uploadBtn, filelist, innerHTML, filetTpe){
         chunked: true,
         chunkSize: 2*1024*1024,
         chunkRetry:2,
-        // duplicate: true,
+        duplicate: true,
         // 选择文件的按钮。可选。
         // 内部根据当前运行是创建，可能是input元素，也可能是flash.
 
@@ -120,5 +120,5 @@ var bindWebupload = function(uploadBtn, filelist, innerHTML, filetTpe){
 
 };
 
-new bindWebupload('#fileupload1',$('#filelist1'),'上传CAD压缩包','CAD');
-new bindWebupload('#fileupload2',$('#filelist2'),'上传其它资料压缩包','OTHER');
+// new bindWebupload('#fileupload1',$('#filelist1'),'上传CAD压缩包','CAD');
+// new bindWebupload('#fileupload2',$('#filelist2'),'上传其它资料压缩包','OTHER');

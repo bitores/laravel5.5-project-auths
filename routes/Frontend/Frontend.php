@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('product/{productid}/show', 'DemandsideController@show')->name('demandside.product.show');
         Route::get('product/{productid}/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
         Route::post('product/download', 'ProductController@download')->name('demandside.product.download');
+        Route::post('product/downloadmodel', 'ProductController@downloadmodel')->name('proceder.product.download');
 
            
         
@@ -74,7 +75,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('producer/tutorial/review', 'ProducerController@reviewTutorial')->name('producer.tutorial.review');
 
         Route::get('producer/product/show', 'ProducerController@show')->name('producer.product.show');
-        Route::get('producer/product/assessment', 'ProducerController@assessment')->name('producer.product.assessment');
+        Route::get('producer/product/{productid}/assessment', 'ProducerController@assessment')->name('producer.product.assessment');
 
 
         // 审核方业务
@@ -107,11 +108,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('demandside/product/posttask', 'ProductController@postTask')->name('demandside.product.posttask'); 
         Route::post('demandside/product/canceltask', 'ProductController@cancelTask')->name('demandside.product.canceltask'); 
         Route::post('demandside/product/review', 'ProductController@reviewComments')->name('demandside.product.review'); 
+        Route::post('producer/model/review', 'ProductController@modelreviewComments')->name('producer.model.review'); 
 
         Route::post('producer/products', 'ProductController@tasks')->name('demandside.product.tasks');
         Route::post('producer/product/order', 'ProductController@order')->name('producer.product.order'); 
         Route::post('producer/product/cancelorder', 'ProductController@cancelorder')->name('producer.product.cancelorder'); 
-
+        Route::post('producer/product/model', 'ProductController@model')->name('producer.product.model');
         Route::post('producer/tasks', 'ProductController@minetasks')->name('producer.product.tasks');
     });
 });

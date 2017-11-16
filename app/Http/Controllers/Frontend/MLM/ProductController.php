@@ -12,7 +12,10 @@ use App\Repositories\Frontend\MLM\ProductReviewRepository;
 use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\StyleRepository;
+use App\Repositories\Frontend\MLM\UModelRepository;
 use App\Repositories\Frontend\MLM\ProductsViewRepository;
+
+
 
 use \Chumper\Zipper\Zipper;
 
@@ -287,7 +290,7 @@ class ProductController extends Controller
             })
             ->addColumn('actions', function ($product) {
 
-                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
+                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
                 return '<div data-proid="'.$product->id.'" class="btn btn-info download">下载资料包</div>';
@@ -334,7 +337,7 @@ class ProductController extends Controller
             })
             ->addColumn('actions', function ($product) {
 
-                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
+                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
                 return '<div data-proid="'.$product->id.'" class="btn btn-info download">资料包</div><div data-proid="'.$product->id.'" class="btn btn-info downloadmodel">模型</div>';
@@ -411,7 +414,7 @@ class ProductController extends Controller
                 } else if($product->status_no === 1007) {
                     return '<div style="color:yellow">模型审核中</div>';
                 } else if($product->status_no === 1008) {
-                    return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info">下载修改意见</div>';
+                    return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1009) {
                     return '<div style="color:green">模型审核已通过</div>';
                 } else if($product->status_no === 1010) {
@@ -422,8 +425,10 @@ class ProductController extends Controller
             })
             ->addColumn('uploadbtn', function ($product) {
 
-
-                return '<div class="btn btn-info uploadbtn">上传</div>';
+                if($product->status_no == 1006) {
+                    return '<div class="btn btn-info uploadbtn" data-proid="'.$product->id.'" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#upload-dialog">上传</div>';
+                }
+                return '';
             })
             ->addColumn('product_no', function ($product) {
                 if(is_null($product->product_no)) {
@@ -462,6 +467,13 @@ class ProductController extends Controller
             //     return '<div data-proid="'.$product->id.'" class="btn btn-info">下载资料包</div>';
             // })
             ->addColumn('orders', function($product) {
+                $pass = strtotime($product->updated_at);
+                $now = time();
+
+                $diff = $now - $pass;
+                if($product->status_no == 1006 || $diff>1){
+                    return '';
+                }
                 return '<div data-proid="'.$product->id.'" class="btn btn-info cancelbtn">是</div>';
             })
 
@@ -657,6 +669,32 @@ class ProductController extends Controller
         ], 'msg' => '操作失败'];
     }
 
+    public function modelreviewComments(ProductRequest $request, ProductReviewRepository $productReviewRes)
+    {
+        $productid = $request->get('productid');
+        if($productid)
+        {
+            $product = $this->product->findDataById($productid);
+            if($product)
+            {
+                    $productReview = $productReviewRes->findDataById($productid);
+
+                    if($productReview)
+                    {
+                        return ['code' => 0, 'data'=>[
+                            'comments'=>$productReview->comments
+                        ], 'msg' => '操作成功'];
+                    }
+
+                    
+            }
+        }
+
+        return ['code' => -1, 'data'=>[
+            'comments'=>'暂无内容'
+        ], 'msg' => '操作失败'];
+    }
+
     public function order(ProductRequest $request, UProductRepository $uproductRes)
     {
         $productid = $request->get('productid');
@@ -690,6 +728,45 @@ class ProductController extends Controller
 
         return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
     }
+
+    // 提交模型审核 
+    public function model(ProductRequest $request, UModelRepository $umodelRes)
+    {
+        $productid = $request->get('productid');
+        $modelid = $request->get('modelid');
+        if($productid && $modelid)
+        {
+            $product = $this->product->findDataById($productid);
+            $model = $umodelRes->find($modelid);
+            if($product && $model)
+            {
+                if($product->status_no==1006)
+                {
+                    // $this->product->updateStatus($product->id,1006);
+                    $ret = $this->product->model($product->id, $model->id);
+                    // add 接单操作
+                    // $ret = $uproductRes->create([
+                    //     'product_id' => $product->id,
+                    //     'model_id' => $request->get('modelid')
+                    // ]);
+
+                    if($ret) {
+                        return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
+                    } else {
+                        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+                    }
+
+                    
+                } else {
+                    return ['code' => -2, 'data'=>[], 'msg' => '操作失败'];
+                }
+            }
+        }
+
+        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+    }
+
+    
 
     public function cancelorder(ProductRequest $request, UProductRepository $uproductRes)
     {
@@ -773,5 +850,25 @@ class ProductController extends Controller
         } else {
             return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
         }
+    }
+
+    public function downloadmodel( ProductRequest $request, ProductsViewRepository $productViewRes)
+    {
+        $productid = $request->get('productid');
+        if($productid)
+        {
+
+            $product = $productViewRes->find($productid);
+
+            if($product) {
+
+                if(isset($product->model_path)){
+
+                    return ['code' => 0, 'data'=>'/uploads/materials/'.$product->model_path, 'msg' => '操作成功'];
+                }
+            }
+        }
+
+        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
     }
 }

@@ -13,13 +13,30 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="alert-editor">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h4 class="modal-title">
+                  <sdivan class="close" data-dismiss="modal">&times;</sdivan>
+                   模型修改意见
+               </h4>
+           </div>
+           <div  id="editor" class="modal-body editor"></div>
+           <div class="modal-footer">
+               <div id="save-content" class="btn btn-info pull-right save-content">提交</div>
+           </div>
+       </div>
+   </div>
+
+</div>
 	<div class="panel panel-default">
 	    <div class="panel-heading">模型审核任务列表</div>
-        <div id="alert-editor" class="alert-editor" hidden="">
+<!--         <div id="alert-editor" class="alert-editor" hidden="">
             <div id="editor" class="editor"></div>
             <div id="save-content" class="btn btn-info pull-right save-content">提交修改意见</div>
         </div>
-
+ -->
 	    <div class="panel-body">
 	        <div class="row">
 	        	<div class="col-md-12">
@@ -69,7 +86,8 @@
 
             var ue = UE.getEditor('editor',{    
             toolbars: toolbars,
-            autoWidth: true
+            autoWidth: true,
+            initialFrameWidth: '100%'
             });
             ue.ready(function() {
                 ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
@@ -156,25 +174,21 @@
             console.log(proid);
 
             swal({
-	            title: "确认产品",
-	            text: "如果你确定，请输入开发周期",
-	            type: "input",
-	            inputType: "text",
+	            title: "模型通过审核",
+	            text: "点击确认提交",
+	            type: "warning",
+	            cancelButtonText:'取消',
+	            confirmButtonText:'确认',
 	            showCancelButton: true,
 	            closeOnConfirm: false
 	        }, function (cycle) {
 	            console.log(cycle);
-	            var reg = new RegExp("^[0-9]*$");
-	            if(false === cycle) {
-	            	return 0;
-	            } 
-	            if(reg.test(cycle)) {
+	            if(true == cycle) {
 	            	$.ajax({
 		                url: "/auditor/model/pass",
 		                type:'POST',
 		                data:{
-		                    'productid':proid,
-		                    'cycle': cycle
+		                    'productid':proid
 		                },
 		                success: function(res) {
 		                    if(0 === res.code){
@@ -190,8 +204,6 @@
 		                    location.reload();
 		                }
 		            });
-	            } else {
-	            	swal("OMG", "请输入数字", "error");
 	            }
 	           
 	        });
@@ -204,7 +216,7 @@
             console.log(proid);
 
             swal({
-	            title: "确认下次产品资料包",
+	            title: "确认下载产品资料包",
 	            text: "点击确认下载",
 	            type: "warning",
 	            cancelButtonText:'取消',
@@ -242,7 +254,48 @@
 
         });
 
+        $("#products-table").on('click', '.downloadmodel', function(){
+            var proid = $(this).attr('data-proid');
+            console.log(proid);
 
+            swal({
+	            title: "确认下载模型",
+	            text: "点击确认下载",
+	            type: "warning",
+	            cancelButtonText:'取消',
+	            confirmButtonText:'确认',
+	            showCancelButton: true,
+	            closeOnConfirm: false
+	        }, function (cycle) {
+	            console.log(cycle);
+	            if(false === cycle) {
+	            	return 0;
+	            } 
+            	$.ajax({
+	                url: "/product/downloadmodel",
+	                type:'POST',
+	                data:{
+	                    'productid':proid
+	                },
+	                success: function(res) {
+	                    if(0 === res.code){
+	                    	location.href = res.data;
+	                        swal("OK", "操作成功", "success");
+	                    } else {
+	                        swal("OMG", "操作失败", "error");
+	                    }
+	                    // location.reload();
+	                },
+	                error: function(res) {
+	                    // swal.close()
+	                    swal("OMG", "操作失败", "error");
+	                    // location.reload();
+	                }
+	            });
+	           
+	        });
+
+        });
     });
 </script>
                     

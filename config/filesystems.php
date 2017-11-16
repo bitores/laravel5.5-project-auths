@@ -58,6 +58,20 @@ return [
             'visibility' => 'public',
         ],
 
+        'qiniu' => [
+            'driver'  => 'qiniu',
+            'domains' => [
+                'default'   => 'meshcdn.dim3d.xyz', //你的七牛域名
+                'https'     => 'dn-yourdomain.qbox.me',         //你的HTTPS域名
+                'custom'    => 'static.abc.com',                //Useless 没啥用，请直接使用上面的 default 项
+             ],
+            'access_key'=> 'ERq5doHsmHMVSU6wZuNWgNfyLUmuhPMQOU1m_uGc',  //AccessKey
+            'secret_key'=> 'dKPs0ZMWgFQRjsZ9jb8GVfLWXd9S0HajxPr8jrqS',  //SecretKey
+            'bucket'    => 'mesh',  //Bucket名字
+            'notify_url'=> '',  //持久化处理回调地址
+            'access'    => 'public'  //空间访问控制 public 或 private
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),
