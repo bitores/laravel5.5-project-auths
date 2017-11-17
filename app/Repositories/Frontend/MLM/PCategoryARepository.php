@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Frontend\MLM;
 
-use App\Models\MLM\CategoryA;
+use App\Models\MLM\PCategoryA;
 use App\Repositories\BaseRepository;
 /**
  * Class UserSessionRepository.
  */
-class CategoryARepository extends BaseRepository
+class PCategoryARepository extends BaseRepository
 {
-    const MODEL = CategoryA::class;
+    const MODEL = PCategoryA::class;
 
     public function create(array $data)
     {
@@ -26,8 +26,8 @@ class CategoryARepository extends BaseRepository
 
 
     // getAll
-    public function findAllData()
-    {
-        return $this->query()->get();
-    }
+    // public function findAllData()
+    // {
+    //     return $this->query()->get();
+    // }
 }

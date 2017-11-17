@@ -104,10 +104,13 @@
 				                } else {
 				                    swal("OMG", "操作失败：" + res.msg, "error");
 				                }
+
+				                location.href="/producer";
 				            },
 				            error: function(res) {
 				                // swal.close()
 				                swal("OMG", "操作失败:", "error");
+				                location.href="/producer";
 				            }
 				        });
 		            }

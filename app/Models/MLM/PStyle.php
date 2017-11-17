@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Role.
  */
-class CategoryA extends Model
+class PStyle extends Model
 {
 
 
@@ -16,7 +16,7 @@ class CategoryA extends Model
      *
      * @var string
      */
-    protected $table = 'categories_a';
+    protected $table = 'p_styles';
 
     /**
      * The attributes that are mass assignable.

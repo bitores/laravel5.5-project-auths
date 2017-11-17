@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Frontend\MLM;
 
 use App\Http\Controllers\Controller;
-use Config;
 use Yajra\DataTables\Facades\DataTables;
+use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\ProductRepository;
 use App\Repositories\Frontend\MLM\UProductRepository;
-use App\Repositories\Frontend\MLM\ProductReviewRepository;
-use App\Repositories\Frontend\Access\User\UserRepository;
+use App\Repositories\Frontend\MLM\PReviewRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
-use App\Repositories\Frontend\MLM\StyleRepository;
+use App\Repositories\Frontend\MLM\PStyleRepository;
 use App\Repositories\Frontend\MLM\UModelRepository;
-use App\Repositories\Frontend\MLM\ProductsViewRepository;
+use App\Repositories\Frontend\MLM\VProductRepository;
 
 
 
@@ -94,7 +93,7 @@ class ProductController extends Controller
 
                 if($product)
                 {   
-                    $images = $uimageRes->findAllDataByProductId($product->id);
+                    $images = $uimageRes->getAllByProductId($product->id);
 
                     if(isset($product->product_no) 
                         && isset($product->style_id) 
@@ -179,13 +178,6 @@ class ProductController extends Controller
         }
     }
 
-    public function findData()
-    {
-        $brands = $this->brand->findDataById(access()->id());
-
-        return $brands;
-    }
-
     public function table()
     {
         return DataTables::of($this->product->getForDataTable())
@@ -232,8 +224,9 @@ class ProductController extends Controller
                     return '<div style="color:green">制作中</div>';
                 } else if($product->status_no === 1007) {
                     return '<div style="color:yellow">模型审核中</div>';
-                } else if($product->status_no === 1008) {
-                    return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info">下载修改意见</div>';
+                } 
+                else if($product->status_no === 1008) {
+                    return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1009) {
                     return '<div style="color:green">模型审核已通过</div>';
                 } else if($product->status_no === 1010) {
@@ -252,7 +245,7 @@ class ProductController extends Controller
             ->make(true);
     }
 
-    public function demandsidproducts(StyleRepository $styleRes)
+    public function demandsidproducts(PStyleRepository $styleRes)
     {
 
         // $styles = $styleRes->getAll();
@@ -299,7 +292,7 @@ class ProductController extends Controller
     }
 
 
-    public function producermodels(StyleRepository $styleRes)
+    public function producermodels(PStyleRepository $styleRes)
     {
 
         // $styles = $styleRes->getAll();
@@ -482,7 +475,7 @@ class ProductController extends Controller
 
 
 
-    public function nopass(ProductRequest $request, ProductRepository $productRes,ProductReviewRepository $productreview)
+    public function nopass(ProductRequest $request, ProductRepository $productRes,PReviewRepository $productreview)
     {
 
         $productid = $request->get('productid');
@@ -530,7 +523,7 @@ class ProductController extends Controller
         return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
     }
 
-    public function modelnopass(ProductRequest $request, ProductRepository $productRes,ProductReviewRepository $productreview)
+    public function modelnopass(ProductRequest $request, ProductRepository $productRes,PReviewRepository $productreview)
     {
 
         $productid = $request->get('productid');
@@ -584,10 +577,10 @@ class ProductController extends Controller
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $productRes->find($productid);
+            $product = $productRes->findByUserIdAndProductId(access()->id(), $productid);
             if($product)
             {
-                    $bool = $this->product->delProduct($product->id);
+                    $bool = $this->product->delProduct(access()->id(), $product->id);
                     if($bool) {
                         return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
                     } else {
@@ -607,7 +600,7 @@ class ProductController extends Controller
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $productRes->findDataById($productid);
+            $product = $productRes->findByUserIdAndProductId(access()->id(), $productid);
             if($product)
             {
                 if($product->status_no==1003)
@@ -627,7 +620,7 @@ class ProductController extends Controller
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $productRes->findDataById($productid);
+            $product = $productRes->findByUserIdAndProductId(access()->id(), $productid);
             if($product)
             {
                 if($product->status_no==1005)
@@ -643,15 +636,15 @@ class ProductController extends Controller
     }
 
 
-    public function reviewComments(ProductRequest $request, ProductReviewRepository $productReviewRes)
+    public function reviewComments(ProductRequest $request, PReviewRepository $productReviewRes)
     {
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $this->product->findDataById($productid);
+            $product = $this->product->find($productid);
             if($product)
             {
-                    $productReview = $productReviewRes->findDataById($productid);
+                    $productReview = $productReviewRes->findLastByProductId($productid);
 
                     if($productReview)
                     {
@@ -669,15 +662,15 @@ class ProductController extends Controller
         ], 'msg' => '操作失败'];
     }
 
-    public function modelreviewComments(ProductRequest $request, ProductReviewRepository $productReviewRes)
+    public function modelreviewComments(ProductRequest $request, PReviewRepository $productReviewRes)
     {
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $this->product->findDataById($productid);
+            $product = $this->product->find($productid);
             if($product)
             {
-                    $productReview = $productReviewRes->findDataById($productid);
+                    $productReview = $productReviewRes->findLastByProductId($productid);
 
                     if($productReview)
                     {
@@ -700,13 +693,13 @@ class ProductController extends Controller
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $this->product->findDataById($productid);
+            $product = $this->product->find($productid);
             if($product)
             {
                 if($product->status_no==1005)
                 {
                     // $this->product->updateStatus($product->id,1006);
-                    $ret = $this->product->order($product->id);
+                    $ret = $this->product->order(access()->id(), $product->id);
                     // add 接单操作
                     // $ret = $uproductRes->create([
                     //     'product_id' => $product->id,
@@ -736,7 +729,7 @@ class ProductController extends Controller
         $modelid = $request->get('modelid');
         if($productid && $modelid)
         {
-            $product = $this->product->findDataById($productid);
+            $product = $this->product->findByProducerIdAndProductId(access()->id(), $productid);
             $model = $umodelRes->find($modelid);
             if($product && $model)
             {
@@ -768,12 +761,12 @@ class ProductController extends Controller
 
     
 
-    public function cancelorder(ProductRequest $request, UProductRepository $uproductRes)
+    public function cancelorder(ProductRequest $request)
     {
         $productid = $request->get('productid');
         if($productid)
         {
-            $product = $this->product->findOrderDataById($productid);
+            $product = $this->product->findByProducerIdAndProductId(access()->id(), $productid);
             if($product)
             {
                 if($product->status_no==1006)
@@ -803,13 +796,13 @@ class ProductController extends Controller
     }
 
 
-    public function download( ProductRequest $request,UImageRepository $imageRes, ProductsViewRepository $productViewRes, ProductRepository $productRes)
+    public function download( ProductRequest $request,UImageRepository $imageRes, VProductRepository $productViewRes, ProductRepository $productRes)
     {
         $productid = $request->get('productid');
         if($productid)
         {
 
-            $product = $productViewRes->findDataById($productid);
+            $product = $productViewRes->find($productid);
 
             if($product) {
 
@@ -817,7 +810,7 @@ class ProductController extends Controller
                     return ['code' => 0, 'data'=>'/'.$product->zip_path, 'msg' => '操作成功'];
                 }
 
-                $images = $imageRes->findAllDataByProductId($productid);
+                $images = $imageRes->getAllByProductId($productid);
                 $allfiles = array();
                 foreach ($images as $key => $image) {
                     # code...
@@ -844,7 +837,7 @@ class ProductController extends Controller
 
                 return ['code' => 0, 'data'=>'/'.$filename, 'msg' => '操作成功'];
             } else {
-                return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+                return ['code' => -2, 'data'=>[], 'msg' => '操作失败'];
             }
 
         } else {
@@ -852,7 +845,7 @@ class ProductController extends Controller
         }
     }
 
-    public function downloadmodel( ProductRequest $request, ProductsViewRepository $productViewRes)
+    public function downloadmodel( ProductRequest $request, VProductRepository $productViewRes)
     {
         $productid = $request->get('productid');
         if($productid)

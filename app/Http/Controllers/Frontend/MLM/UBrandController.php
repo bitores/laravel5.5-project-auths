@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Frontend\MLM;
 
 use App\Http\Controllers\Controller;
-use Config;
-use App\Http\Requests\Frontend\MLM\BrandRequest;
-use App\Repositories\Frontend\MLM\BrandRepository;
+use App\Http\Requests\Frontend\MLM\UBrandRequest;
+use App\Repositories\Frontend\MLM\UBrandRepository;
 use App\Repositories\Frontend\Access\User\UserRepository;
 
 /**
  * Class AccountController.
  */
-class BrandController extends Controller
+class UBrandController extends Controller
 {
 
-    public function __construct(UserRepository $user, BrandRepository $brand)
+    public function __construct(UserRepository $user, UBrandRepository $brand)
     {
         $this->user = $user;
         $this->brand = $brand;
@@ -26,7 +25,7 @@ class BrandController extends Controller
      * @author wuyanwen(2017Äê9ÔÂ20ÈÕ)
      * @param Request $request
      */
-    public function create(BrandRequest $request)
+    public function create(UBrandRequest $request)
     {	
         
         // $this->brand->
@@ -41,12 +40,5 @@ class BrandController extends Controller
             'brd_name' => $brand->name,
             'id' => $brand->id
         ], 'msg' => 'success'];
-    }
-
-    public function findData()
-    {
-        $brands = $this->brand->findDataById(access()->id());
-
-        return $brands;
     }
 }

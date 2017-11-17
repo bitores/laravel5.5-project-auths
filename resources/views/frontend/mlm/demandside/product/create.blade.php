@@ -253,9 +253,13 @@ $("#submitBtn").on('click', function(){
         dataType: "json",
         success: function(res){
             saveBtn_handling = false;
-            $_currentProduct = res.data['product_id'];
-            console.log($_currentProduct);
-            swal("OK", "内容成功保存", "success");
+            if(0 === res.code) {
+                $_currentProduct = res.data['product_id'];
+                console.log($_currentProduct);
+                swal("OK", "内容成功保存", "success");
+                location.href = "/products";
+            }
+            
         },
         error: function(){
             saveBtn_handling = false;
@@ -311,7 +315,9 @@ $('#createBrand').on('click', function(){
         type: 'input',  
         inputType: "text",   
         showCancelButton: true,   
-        closeOnConfirm: false,   
+        closeOnConfirm: false,
+        confirmButtonText:'确认',
+        cancelButtonText:'取消',   
         animation: "slide-from-top",   
         inputPlaceholder: "品牌/厂家",
     },function(inputValue){   
@@ -327,15 +333,15 @@ $('#createBrand').on('click', function(){
                     if(0 === res.code){
                         $('#brand').append("<option value='"+res.data['id']+"' selected='selected'>"+res.data['brd_name']+"</option>")
                     }
-                    // swal.close();
                     swal("OK", "品牌创建成功", "success");
                 },
                 error: function(res) {
-                    // swal.close()
                     swal("OMG", "品牌已存在", "error");
                 }
             });
             
+        } else {
+            swal("OMG", "品牌名不能为空", "error");
         }
     });
 });

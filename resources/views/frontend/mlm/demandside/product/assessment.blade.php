@@ -1,11 +1,11 @@
 @extends('frontend.layouts.app')
 
-@section('title', app_name() . ' | 审核结果')
+@section('title', app_name() . ' | 需求审核结果')
 
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">审核结果 <div class="btn pull-right" id="downloadPdf">下载文档</div> </div>
+    <div class="panel-heading">需求审核结果 <div class="btn pull-right" id="downloadPdf">下载文档</div> </div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-12" id="pdfContainer">

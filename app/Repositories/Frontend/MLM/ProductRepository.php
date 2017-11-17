@@ -39,48 +39,34 @@ class ProductRepository extends BaseRepository
 
     public function getForAuditorDataTable()
     {
-        return $this->query()->where('user_id', access()->id())->where('status_no', 1001)->leftjoin('product_styles','products.style_id','=','product_styles.id')
+        return $this->query()->where('status_no', 1001)->leftjoin('p_styles','products.style_id','=','p_styles.id')
             ->select([
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                // 'products.brand_id',
-                // 'products.a_id',
-                // 'products.b_id',
                 'products.images',
                 'products.cad_id',
-                // 'products.user_id',
                 'products.file_id',
-                // 'products.model_id',
-                // 'products.status_no',
                 'products.cycle',
                 'products.fee',
-                'product_styles.name as style_name'
-                // 'products.introduction',
+                'p_styles.name as style_name'
             ])
             ->orderBy('products.updated_at','desc');
     }
 
     public function getProducerModelsDataTable()
     {
-        return $this->query()->where('user_id', access()->id())->where('status_no', 1007)->leftjoin('product_styles','products.style_id','=','product_styles.id')
+        return $this->query()->where('status_no', 1007)->leftjoin('p_styles','products.style_id','=','p_styles.id')
             ->select([
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                // 'products.brand_id',
-                // 'products.a_id',
-                // 'products.b_id',
                 'products.images',
                 'products.cad_id',
-                // 'products.user_id',
                 'products.file_id',
-                // 'products.model_id',
-                // 'products.status_no',
                 'products.cycle',
                 'products.fee',
-                'product_styles.name as style_name'
-                // 'products.introduction',
+                'p_styles.name as style_name'
             ])
             ->orderBy('products.updated_at','desc');
     }
@@ -88,50 +74,33 @@ class ProductRepository extends BaseRepository
 
     public function getForProducerDataTable()
     {
-        return $this->query()->where('user_id', access()->id())->where('status_no', 1005)
-        // ->leftjoin('product_styles','products.style_id','=','product_styles.id')
+        return $this->query()->where('status_no', 1005)
             ->select([
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                // 'products.brand_id',
-                // 'products.a_id',
-                // 'products.b_id',
                 'products.images',
                 'products.cad_id',
-                // 'products.user_id',
                 'products.file_id',
-                // 'products.model_id',
-                // 'products.status_no',
                 'products.cycle',
                 'products.fee',
-                // 'product_styles.name as style_name'
-                // 'products.introduction',
             ])
             ->orderBy('products.updated_at','desc');
     }
 
     public function getForProducerSelfDataTable()
     {
-        return $this->query()->where('user_id', access()->id())->where('status_no','>=',1006)->where('producer_id', access()->id())
-        // ->leftjoin('product_styles','products.style_id','=','product_styles.id')
+        return $this->query()->where('status_no','>=',1006)->where('producer_id', access()->id())
             ->select([
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                // 'products.brand_id',
-                // 'products.a_id',
-                // 'products.b_id',
                 'products.images',
                 'products.cad_id',
-                // 'products.user_id',
                 'products.file_id',
-                // 'products.model_id',
                 'products.status_no',
                 'products.cycle',
                 'products.fee',
-                // 'product_styles.name as style_name'
-                // 'products.introduction',
             ])
             ->orderBy('products.updated_at','desc');
     }
@@ -250,9 +219,9 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
-    public function delProduct($proid)
+    public function delProduct($userid, $proid)
     {
-        $product = $this->findDataById($proid);
+        $product = $this->findByUserIdAndProductId($userid, $proid);
         if($product) {
             $product->status_no = 1004;
             // $product->deleted_at = time();
@@ -263,12 +232,13 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
-    public function order($proid)
+    // 下订单
+    public function order($userid ,$proid)
     {
-        $product = $this->findDataById($proid);
+        $product = $this->find($proid);
         if($product) {
             $product->status_no = 1006;
-            $product->producer_id = access()->id();
+            $product->producer_id = $userid;
             $product->save();
         }
         
@@ -276,9 +246,10 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
+    // 制作方 绑定 模型id
     public function model($proid,  $modelid)
     {
-        $product = $this->findDataById($proid);
+        $product = $this->find($proid);
         if($product) {
             $product->status_no = 1007;
             $product->model_id = $modelid;
@@ -289,9 +260,10 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
-    public function cancelorder($proid)
+    // 制作方 取消订单
+    public function cancelorder($userid, $proid)
     {
-        $product = $this->findOrderDataById($proid);
+        $product = $this->findByProducerIdAndProductId($userid, $proid);
         if($product) {
             $product->status_no = 1005;
             $product->producer_id = null;
@@ -300,24 +272,6 @@ class ProductRepository extends BaseRepository
         
 
         return $product;
-    }
-    
-
-    public function findAll()
-    {
-        return $this->query()->where('user_id', access()->id())->get();
-    }
-
-    public function findDataById($id)
-    {   
-
-        return $this->query()->where('user_id', access()->id())->where('id',$id)->first();
-    }
-
-    public function findOrderDataById($id)
-    {   
-
-        return $this->query()->where('producer_id', access()->id())->where('id',$id)->first();
     }
 
     //  获取 指定需求方 的 所有产品

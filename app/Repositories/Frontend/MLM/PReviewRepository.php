@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Frontend\MLM;
 
-use App\Models\MLM\ProductReview;
+use App\Models\MLM\PReview;
 use App\Repositories\BaseRepository;
 /**
  * Class UserSessionRepository.
  */
-class ProductReviewRepository extends BaseRepository
+class PReviewRepository extends BaseRepository
 {
-    const MODEL = ProductReview::class;
+    const MODEL = PReview::class;
 
     /**
      * @param User $user
@@ -31,15 +31,15 @@ class ProductReviewRepository extends BaseRepository
     }
 
 
-    public function findDataById($product_id)
-    {
-        return $this->query()->where('product_id', $product_id)->orderBy('updated_at','desc')->first();
-    }
+    // public function findDataById($product_id)
+    // {
+    //     return $this->query()->where('product_id', $product_id)->orderBy('updated_at','desc')->first();
+    // }
 
-    public function findByProductId()
-    {
-        return $this->query()->where('product_id', $product_id)->orderBy('updated_at','desc')->first();
-    }
+    // public function findByProductId()
+    // {
+    //     return $this->query()->where('product_id', $product_id)->orderBy('updated_at','desc')->first();
+    // }
 
     // 获取 指定产品 的 最后一次修改意见
     public function findLastByProductId($productid)

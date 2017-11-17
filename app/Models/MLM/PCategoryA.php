@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Role.
  */
-class ProductsView extends Model
+class PCategoryA extends Model
 {
 
 
@@ -16,12 +16,12 @@ class ProductsView extends Model
      *
      * @var string
      */
-    protected $table = 'products_view';
+    protected $table = 'p_category_a';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['product_no','brand_name','style_name','ca_name','cb_name','cad_path','file_path','status_no','model_id','fee','introduction'];
+    protected $fillable = ['name'];
 }

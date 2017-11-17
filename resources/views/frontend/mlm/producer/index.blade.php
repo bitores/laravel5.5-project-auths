@@ -241,7 +241,7 @@
 				            success: function(res) {
 				                if(0 === res.code){
 				                    swal("OK", "操作成功", "success");
-
+				                    location.reload();
 				                } else {
 				                    swal("OMG", "操作失败：" + res.msg, "error");
 				                }

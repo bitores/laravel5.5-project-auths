@@ -50,6 +50,9 @@ class PermissionTableController extends Controller
             // ->addColumn('display_name', function ($permission) {
             //     return $permission->display_name;
             // })
+            ->addColumn('actions', function ($permission) {
+                return $permission->action_buttons;
+            })
             ->make(true);
     }
 }

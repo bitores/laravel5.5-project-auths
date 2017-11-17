@@ -26,4 +26,9 @@ class AuditorController extends Controller
     {
         return view('frontend.mlm.auditor.modellist');
     }
+
+
+    //---------------API
+
+    
 }

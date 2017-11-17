@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Frontend\MLM;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Frontend\MLM\ProductReviewRepository;
+use App\Repositories\Frontend\MLM\PReviewRepository;
 
 /**
  * Class DashboardController.
@@ -40,9 +40,9 @@ class ProducerController extends Controller
         ]);
     }
 
-    public function assessment(ProductReviewRepository $productReview, $productid)
+    public function assessment(PReviewRepository $productReview, $productid)
     {
-        $review = $productReview->findDataById($productid);
+        $review = $productReview->findLastByProductId($productid);
         if($review) {
             return view('frontend.mlm.producer.product.assessment',[
                 'content' => $review->comments

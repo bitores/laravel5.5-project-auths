@@ -141,7 +141,7 @@
                             @else
                             <!-- 审核中 -->
                             <div class="col-xs-12">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="download">下载资料包</div>
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
                             </div>
                             @endif
                         </div>
@@ -181,12 +181,12 @@ $("#postbtn").on('click', function(){
                 } else {
                     swal("OMG", "操作失败", "error");
                 }
-                // location.href="/products";
+                location.href="/products";
             },
             error: function(res) {
                 // swal.close()
                 swal("OMG", "操作失败", "error");
-                // location.href="/products";
+                location.href="/products";
             }
         });
         
@@ -206,29 +206,29 @@ $("#delbtn").on('click', function(){
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "确认",
       closeOnConfirm: true
-    }, function(){
-
-        $.ajax({
-            url: "/demandside/product/del",
-            type:'POST',
-            data:{
-                'productid':proid
-            },
-            success: function(res) {
-                if(0 === res.code){
-                    swal("OK", "操作成功", "success");
-                } else {
+    }, function(confirm){
+        if(true == confirm) {
+            $.ajax({
+                url: "/demandside/product/del",
+                type:'POST',
+                data:{
+                    'productid':proid
+                },
+                success: function(res) {
+                    if(0 === res.code){
+                        swal("OK", "操作成功", "success");
+                    } else {
+                        swal("OMG", "操作失败", "error");
+                    }
+                    location.href="/products";
+                },
+                error: function(res) {
+                    // swal.close()
                     swal("OMG", "操作失败", "error");
+                    location.href="/products";
                 }
-                location.href="/products";
-            },
-            error: function(res) {
-                // swal.close()
-                swal("OMG", "操作失败", "error");
-                location.href="/products";
-            }
-        });
-        
+            });
+        }        
     });   
 
 });
@@ -276,7 +276,6 @@ $("#submitBtn").on('click', function(){
          url: "{{route('frontend.mlm.demandside.product.oncesubmit')}}",
          data: {
             'current_pro': "{{$product->id}}",
-
         },
         dataType: "json",
         success: function(res){
@@ -284,10 +283,6 @@ $("#submitBtn").on('click', function(){
             if(0 == res.code) {
                 $_currentProduct = res.data['product_id'];
                 console.log($_currentProduct);
-                // swal("OK", "已提交审核", "success").then(function(){
-                //     localtion.href="/products";
-                // });
-
                 swal({
                     title: "OK",
                       text: "已提交审核,点击跳转",
@@ -307,11 +302,47 @@ $("#submitBtn").on('click', function(){
             saveBtn_handling = false;
         }
      });
+});
 
-    $("#download").on('click', function(){
-        console.log('download');
+
+$("#download").on('click', function(){
+    var proid = $(this).attr('data-proid');
+    swal({
+        title: "确认下载产品资料包",
+        text: "点击确认下载",
+        type: "warning",
+        cancelButtonText:'取消',
+        confirmButtonText:'确认',
+        showCancelButton: true,
+        closeOnConfirm: false
+    }, function (cycle) {
+        console.log(cycle);
+        if(false === cycle) {
+            return 0;
+        } 
+        $.ajax({
+            url: "/product/download",
+            type:'POST',
+            data:{
+                'productid':proid
+            },
+            success: function(res) {
+                if(0 === res.code){
+                    location.href = res.data;
+                    swal("OK", "操作成功", "success");
+                } else {
+                    swal("OMG", "操作失败", "error");
+                }
+            },
+            error: function(res) {
+                swal("OMG", "操作失败", "error");
+            }
+        });
     });
 });
+
+
+
 @if(1005==$product->status_no)
 $("#orderdownload").on('click',function(){
     var proid = $(this).attr('data-proid');

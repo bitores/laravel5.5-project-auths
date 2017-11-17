@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Rule;
 /**
  * Class UpdateProfileRequest.
  */
-class BrandRequest extends Request
+class UBrandRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
