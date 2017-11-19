@@ -7,7 +7,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\ProductRepository;
-use App\Repositories\Frontend\MLM\UProductRepository;
+// use App\Repositories\Frontend\MLM\UOrderRepository;
 use App\Repositories\Frontend\MLM\PReviewRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\PStyleRepository;
@@ -688,7 +688,7 @@ class ProductController extends Controller
         ], 'msg' => '操作失败'];
     }
 
-    public function order(ProductRequest $request, UProductRepository $uproductRes)
+    public function order(ProductRequest $request)
     {
         $productid = $request->get('productid');
         if($productid)
@@ -701,10 +701,7 @@ class ProductController extends Controller
                     // $this->product->updateStatus($product->id,1006);
                     $ret = $this->product->order(access()->id(), $product->id);
                     // add 接单操作
-                    // $ret = $uproductRes->create([
-                    //     'product_id' => $product->id,
-                    //     'user_id' => access()->id()
-                    // ]);
+
 
                     if($ret) {
                         return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];

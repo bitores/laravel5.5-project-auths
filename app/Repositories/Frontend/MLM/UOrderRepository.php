@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Frontend\MLM;
 
-use App\Models\MLM\UProduct;
+use App\Models\MLM\UOrder;
 use App\Repositories\BaseRepository;
 /**
  * Class UserSessionRepository.
  */
-class UProductRepository extends BaseRepository
+class UOrderRepository extends BaseRepository
 {
-    const MODEL = UProduct::class;
+    const MODEL = UOrder::class;
 
     /**
      * @param User $user

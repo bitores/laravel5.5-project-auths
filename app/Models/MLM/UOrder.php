@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Role.
  */
-class UProduct extends Model
+class UOrder extends Model
 {
 
 
@@ -16,7 +16,7 @@ class UProduct extends Model
      *
      * @var string
      */
-    protected $table = 'u_products';
+    protected $table = 'u_orders';
 
     /**
      * The attributes that are mass assignable.
