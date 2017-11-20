@@ -128,7 +128,7 @@
 		            console.log(cycle);
 		            if(true === cycle) {
 		            	$.ajax({
-				            url: "/producer/product/cancelorder",
+				            url: '{{ route("frontend.mlm.producer.product.cancelorder") }}',
 				            type:'POST',
 				            data:{
 				                'productid':proid
@@ -232,7 +232,7 @@
 		            console.log(cycle);
 		            if(true === cycle) {
 		            	$.ajax({
-				            url: "/producer/product/model",
+				            url: '{{ route("frontend.mlm.producer.product.model") }}',
 				            type:'POST',
 				            data:{
 				                'productid':$cur_uploadmodel,

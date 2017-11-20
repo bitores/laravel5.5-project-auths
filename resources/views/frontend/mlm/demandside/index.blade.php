@@ -137,7 +137,7 @@
 		            if(true === cycle) {
 
 		            	$.ajax({
-				            url: "/demandside/product/canceltask",
+				            url: "{{route('frontend.mlm.demandside.product.canceltask')}}",
 				            type:'POST',
 				            data:{
 				                'productid':proid

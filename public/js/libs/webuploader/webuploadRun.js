@@ -19,7 +19,7 @@ var bindWebupload = function(uploadBtn, filelist, innerHTML, filetTpe){
         swf:'/js/Uploader.swf',
 
         // 文件接收服务端。
-        server: '/demandside/product/upload',
+        server: '/mlmfiles/upload',
         chunked: true,
         chunkSize: 2*1024*1024,
         chunkRetry:2,

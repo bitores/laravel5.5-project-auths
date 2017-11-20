@@ -32,7 +32,7 @@
 </div>
 
 	<div class="panel panel-default">
-	    <div class="panel-heading">需求审核任务列表</div>
+	    <div class="panel-heading">需求审核任务列表<a href="{{route('frontend.mlm.auditor.modellist')}}" class="btn pull-right">模型审核列表</a></div>
  
 	   
 
@@ -100,7 +100,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route("frontend.mlm.demandside.product.list") }}',
+                    url: '{{ route("frontend.mlm.auditor.product.list") }}',
                     type: 'post',
                     error: function (xhr, err) {
                         if (err === 'parsererror')
@@ -135,7 +135,7 @@
             // return;
             $("#alert-editor").hide();
             $.ajax({
-                url: "/auditor/product/nopass",
+                url: '{{ route("frontend.mlm.auditor.product.nopass") }}',
                 type:'POST',
                 data:{
                     'productid':ue.proid,
@@ -189,7 +189,7 @@
 	            } 
 	            if(reg.test(cycle)) {
 	            	$.ajax({
-		                url: "/auditor/product/pass",
+		                url: '{{ route("frontend.mlm.auditor.product.pass") }}',
 		                type:'POST',
 		                data:{
 		                    'productid':proid,

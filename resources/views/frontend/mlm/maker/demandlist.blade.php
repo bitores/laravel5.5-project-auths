@@ -57,7 +57,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route("frontend.mlm.demandside.product.tasks") }}',
+                    url: '{{ route("frontend.mlm.producer.product.alltasks") }}',
                     type: 'post',
                     error: function (xhr, err) {
                         if (err === 'parsererror')
@@ -93,7 +93,7 @@
 		            console.log(cycle);
 		            if(true === cycle) {
 		            	$.ajax({
-				            url: "/producer/product/order",
+				            url: '{{ route("frontend.mlm.producer.product.order") }}',
 				            type:'POST',
 				            data:{
 				                'productid':proid

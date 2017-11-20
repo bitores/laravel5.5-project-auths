@@ -31,7 +31,7 @@
 
 </div>
 	<div class="panel panel-default">
-	    <div class="panel-heading">模型审核任务列表</div>
+	    <div class="panel-heading">模型审核任务列表<a href="{{route('frontend.mlm.auditor.demandlist')}}" class="btn pull-right">需求审核列表</a></div>
 <!--         <div id="alert-editor" class="alert-editor" hidden="">
             <div id="editor" class="editor"></div>
             <div id="save-content" class="btn btn-info pull-right save-content">提交修改意见</div>
@@ -101,7 +101,7 @@
                 serverSide: true,
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route("frontend.mlm.producer.model.list") }}',
+                    url: '{{ route("frontend.mlm.auditor.model.list") }}',
                     type: 'post',
                     error: function (xhr, err) {
                         if (err === 'parsererror')
@@ -136,7 +136,7 @@
             // return;
             $("#alert-editor").hide();
             $.ajax({
-                url: "/auditor/model/nopass",
+                url: '{{ route("frontend.mlm.auditor.model.nopass") }}',
                 type:'POST',
                 data:{
                     'productid':ue.proid,
@@ -185,7 +185,7 @@
 	            console.log(cycle);
 	            if(true == cycle) {
 	            	$.ajax({
-		                url: "/auditor/model/pass",
+		                url: '{{ route("frontend.mlm.auditor.model.pass") }}',
 		                type:'POST',
 		                data:{
 		                    'productid':proid

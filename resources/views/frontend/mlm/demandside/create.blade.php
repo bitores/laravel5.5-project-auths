@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', app_name() . ' | 编辑产品')
+@section('title', app_name() . ' | 新建产品')
 
 @section('after-styles')
     <link href="/css/libs/webuploader/webuploader.css" rel="stylesheet">
@@ -9,11 +9,11 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">编辑产品  <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div></div>
+    <div class="panel-heading">新建产品</div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-7">
-        		<div class="form-group">
+                <div class="form-group">
                     <div class="col-md-12">
                         <label>产品图片</label>
                         <div id="uploader">
@@ -37,25 +37,22 @@
                 </div>
 
                 <div class="form-group">
-                        <div class="col-md-12">
-                            <label>CAD资料</label>
-                            <div class="btn btn-block btn-default fileupload1" id="fileupload1">上传</div>
-                            <span class="filelist1" id="filelist1" style="word-break: break-all;" file_id="{{$product->cad_id}}">
-                                {{$product->cad_id?'已上传':'未上传'}}
-                            </span>
-                        </div>
+                    <div class="col-md-12">
+                        <label>CAD资料</label>
+                        <div class="btn btn-block btn-default fileupload1" id="fileupload1">上传</div>
+                        <span class="filelist1" id="filelist1" style="word-break: break-all;"></span>
                     </div>
+                </div>
 
 
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>其它资料</label>
-                            <div class="btn btn-block btn-default fileupload2" id="fileupload2">上传</div>
-                            <span class="filelist2" id="filelist2" style="word-break: break-all;" file_id="{{$product->file_id}}">
-                                {{$product->file_id?'已上传':'未上传'}}
-                            </span>
-                        </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>其它资料</label>
+                        <div class="btn btn-block btn-default fileupload2" id="fileupload2">上传</div>
+                        <span class="filelist2" id="filelist2" style="word-break: break-all;"></span>
                     </div>
+                </div>
+
         	</div>
         	<div class="col-md-4">
     			 {{ Form::open(['route' => 'frontend.auth.register.mobile.post', 'class' => 'form-horizontal']) }}
@@ -66,12 +63,9 @@
                             <div class="col-md-12" style="padding-left: 0;padding-right: 0">
                                 <div class="col-xs-8" style="padding-left: 0;padding-right: 0">
                                     <select class="form-control select2 col-md-12" id="brand">
+                                        <option selected="selected" disabled="disable" value="-1">请选择</option>
                                         @foreach($brands as $brand)
-                                        @if($product->brand_id==$brand->id)
-                                        <option value="{{$brand->id}}" selected>{{$brand->name}}</option>
-                                        @else
                                         <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                        @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -85,7 +79,7 @@
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>产品型号/名字</label>
-                    		{{ Form::text('pType', $product->product_no, ['class' => 'form-control', 'maxlength' => '50', 'id'=>'product_no', 'required' => 'required', 'placeholder' => '产品型号/名字']) }}
+                    		{{ Form::text('pType', null, ['class' => 'form-control', 'maxlength' => '50', 'id'=>'product_no', 'required' => 'required', 'placeholder' => '产品型号/名字']) }}
                     	</div>
                     </div><!--form-group-->
 
@@ -97,11 +91,7 @@
                                     <select class="form-control select2 col-md-6" id="categoryA">
                                         <option selected="selected" disabled="disable" value="-1">请选择</option>
                                         @foreach($categories_a as $a)
-                                        @if($product->a_id==$a->id)
-                                        <option value="{{$a->id}}" selected>{{$a->name}}</option>
-                                        @else
                                         <option value="{{$a->id}}">{{$a->name}}</option>
-                                        @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -109,13 +99,7 @@
                                     <select class="form-control select2 col-md-6" id="categoryB">
                                         <option selected="selected" disabled="disable" value="-1">请选择</option>
                                         @foreach($categories_b as $b)
-                                        @if($product->b_id==$b->id)
-                                        <option value="{{$b->id}}" class="categorya-{{$b->category_a_id}}" selected>{{$b->name}}</option>
-                                        @elseif($product->a_id==$b->category_a_id)
-                                        <option value="{{$b->id}}" class="categorya-{{$b->category_a_id}}">{{$b->name}}</option>
-                                        @else
-                                        <option value="{{$b->id}}" class="categorya-{{$b->category_a_id}}" hidden>{{$b->name}}</option>
-                                        @endif
+                                        <option value="{{$b->id}}" class="categorya-{{$b->category_a_id}}" style="display: none;">{{$b->name}}</option>
                                         @endforeach
 
                                     </select>
@@ -131,11 +115,7 @@
                             <select class="form-control select2 col-md-12" style="width: 100%;" id="style">
                                 <option selected="selected" disabled="disable" value="-1">请选择</option>
                                 @foreach($styles as $style)
-                                @if($product->style_id==$style->id)
-                                <option value="{{$style->id}}" selected>{{$style->name}}</option>
-                                @else
                                 <option value="{{$style->id}}">{{$style->name}}</option>
-                                @endif
                                 @endforeach
 
                             </select>
@@ -145,14 +125,14 @@
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>建模费用</label>
-                    		{{ Form::text('mobile', $product->fee, ['class' => 'form-control', 'id'=>'fee', 'maxlength' => '10', 'required' => 'required', 'placeholder' => '建模费用(单位：元)']) }}
+                    		{{ Form::text('mobile', null, ['class' => 'form-control', 'id'=>'fee', 'maxlength' => '10', 'required' => 'required', 'placeholder' => '建模费用(单位：元)']) }}
                     	</div>
                     </div><!--form-group-->
 
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>产品简介</label>
-                    		{{ Form::textarea('mobile', $product->introduction, ['class' => 'form-control',  'id'=>'introduction', 'maxlength' => '100', 'required' => 'required', 'placeholder' => '产品简介（不超过100字）', 'style'=>'height:100px;']) }}
+                    		{{ Form::textarea('mobile', null, ['class' => 'form-control',  'id'=>'introduction', 'maxlength' => '100', 'required' => 'required', 'placeholder' => '产品简介（不超过100字）', 'style'=>'height:100px;']) }}
                     	</div>
                     </div><!--form-group-->
 
@@ -172,7 +152,7 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                                <div id="submitBtn" class="btn btn-block btn-success">提交审核</div>
+                            <div id="submitBtn" class="btn btn-block btn-success">提交审核</div>
                         </div>
                     </div><!--form-group-->
 
@@ -203,45 +183,6 @@ var webupload_pickList=[
 <script>
 new bindWebupload('#fileupload1',$('#filelist1'),'上传CAD压缩包','CAD');
 new bindWebupload('#fileupload2',$('#filelist2'),'上传其它资料压缩包','OTHER');
-$("#delbtn").on('click', function(){
-    // $(this).hide();
-    var proid = $(this).attr('data-proid');
-
-    swal({
-        title: "删除此产品",
-      text: "点击确认删除产品，或点击取消删除",
-      type: "warning",
-      showCancelButton:true,
-      cancelButtonText:'取消',
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "确认",
-      closeOnConfirm: true
-    }, function(){
-
-        $.ajax({
-            url: "/demandside/product/del",
-            type:'POST',
-            data:{
-                'productid':proid
-            },
-            success: function(res) {
-                if(0 === res.code){
-                    swal("OK", "操作成功", "success");
-                } else {
-                    swal("OMG", "操作失败", "error");
-                }
-                location.href="/products";
-            },
-            error: function(res) {
-                // swal.close()
-                swal("OMG", "操作失败", "error");
-                location.href="/products";
-            }
-        });
-        
-    });   
-
-});
 $("#categoryA").change(function(){
     $("#categoryB").val(-1);
     $("#categoryB option[value!=-1]").hide();
@@ -253,6 +194,7 @@ var $_currentProduct=null, saveBtn_handling = false;
 $("#submitBtn").on('click', function(){
     // 本地验证 信息的完整性
     var $lis = $('#uploader .state-complete');
+    var numReg = /^\d+(\.\d+)?$/;
 
     if($("#brand").val()==null){
         return swal("OMG", "品牌厂家未选择", "error"); 
@@ -276,6 +218,8 @@ $("#submitBtn").on('click', function(){
 
     if($("#fee").val()==""){
         return swal("OMG", "费用未填写", "error"); 
+    } else if( !numReg.test($("#fee").val()) ){
+        return swal("OMG", "费用中有非法字符", "error"); 
     }
 
     if($("#introduction").val()==""){
@@ -297,7 +241,7 @@ $("#submitBtn").on('click', function(){
          type: "POST",
          url: "{{route('frontend.mlm.demandside.product.submit')}}",
          data: {
-            'current_pro': "{{$product->id}}",
+            'current_pro': $_currentProduct,
             'product_no':$("#product_no").val(),
             'style_id':$("#style").val(),
             'a_id':$("#categoryA").val(),
@@ -312,25 +256,11 @@ $("#submitBtn").on('click', function(){
         dataType: "json",
         success: function(res){
             saveBtn_handling = false;
-            if(0 == res.code) {
+            if(0 === res.code) {
                 $_currentProduct = res.data['product_id'];
                 console.log($_currentProduct);
-                // swal("OK", "已提交审核", "success").then(function(){
-                //     localtion.href="/products";
-                // });
-
-                swal({
-                    title: "OK",
-                      text: "已提交审核,点击跳转",
-                      type: "success",
-                      confirmButtonColor: "#DD6B55",
-                      confirmButtonText: "确认",
-                      closeOnConfirm: false
-                }, function(){
-                    location.href="/products";
-                });
-            } else {
-                swal("OMG", "信息不完整", "error");
+                swal("OK", "内容成功保存", "success");
+                location.href = "/products";
             }
             
         },
@@ -341,21 +271,29 @@ $("#submitBtn").on('click', function(){
 });
 
 $("#saveBtn").on('click', function(){
+    var numReg = /^\d+(\.\d+)?$/;
+    if($("#fee").val()!="" && !numReg.test($("#fee").val()) ){
+        return swal("OMG", "费用中有非法字符", "error"); 
+    }
+
     if(saveBtn_handling==false){
         saveBtn_handling = true;
 
         var $lis = $('#uploader .state-complete');
+        
 
         var ret = [];
         $lis.each(function(index, item){
             ret[index] = $(item).attr('file_id');
         });
 
+        
+
         $.ajax({
              type: "POST",
              url: "{{route('frontend.mlm.demandside.product.save')}}",
              data: {
-                'current_pro': "{{$product->id}}",
+                'current_pro': $_currentProduct,
                 'product_no':$("#product_no").val(),
                 'style_id':$("#style").val(),
                 'a_id':$("#categoryA").val(),
@@ -379,6 +317,7 @@ $("#saveBtn").on('click', function(){
             }
          });
     }
+    
 });
 
 $('#createBrand').on('click', function(){
@@ -387,14 +326,16 @@ $('#createBrand').on('click', function(){
         type: 'input',  
         inputType: "text",   
         showCancelButton: true,   
-        closeOnConfirm: false,   
+        closeOnConfirm: false,
+        confirmButtonText:'确认',
+        cancelButtonText:'取消',   
         animation: "slide-from-top",   
         inputPlaceholder: "品牌/厂家",
-    },function(inputValue){  
-
+    },function(inputValue){   
+            
         if (inputValue) {
             $.ajax({
-                url: "/demandside/brand/create",
+                url: "{{route('frontend.mlm.demandside.brand.create')}}",
                 type:'POST',
                 data:{
                     'brd_name':inputValue
@@ -403,19 +344,19 @@ $('#createBrand').on('click', function(){
                     if(0 === res.code){
                         $('#brand').append("<option value='"+res.data['id']+"' selected='selected'>"+res.data['brd_name']+"</option>")
                     }
-                    // swal.close();
                     swal("OK", "品牌创建成功", "success");
                 },
                 error: function(res) {
-                    // swal.close()
                     swal("OMG", "品牌已存在", "error");
                 }
             });
             
-        } 
-            
+        } else {
+            swal("OMG", "品牌名不能为空", "error");
+        }
     });
 });
+
 </script>
 
 @endsection

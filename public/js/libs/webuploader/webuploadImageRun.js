@@ -93,7 +93,7 @@
             swf: '/js/Uploader.swf',
             chunked: true,
             chunkSize: 5 * 1024 * 1024,
-            server: '/demandside/product/upload',
+            server: '/mlmfiles/upload',
             // runtimeOrder: 'flash',
             // 限制可接受的文件格式
             accept: {
@@ -556,8 +556,7 @@
         };
 
         //需要编辑的图片列表
-        var picList = ['https://dim3d.xyz/uploads/materials/20171026/150899935276c708cf0155e8de.jpg','https://dim3d.xyz/uploads/materials/20171026/150899935276c708cf0155e8de.jpg' ]
-            picList = [];
+        var picList = [];
         $.each(webupload_pickList, function(index,item){
             getFileObject(item.path, item.id, function (fileObject, params) {
                 var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'),fileObject);

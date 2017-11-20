@@ -6,7 +6,19 @@
         <div class="col-xs-12">
 
             <div class="panel panel-default">
-                <div class="panel-heading">{{ trans('navs.frontend.dashboard') }}</div>
+                <div class="panel-heading">{{ trans('navs.frontend.dashboard') }} 
+                    @role('demandside')
+                    <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a>
+                    @endauth
+                    @role('auditorside')
+                    <a href="{{route('frontend.mlm.auditor.modellist')}}" class="btn pull-right">模型审核列表</a>
+                    <a href="{{route('frontend.mlm.auditor.demandlist')}}" class="btn pull-right">需求审核列表</a>
+                    @endauth
+                    @role('producerside')
+                    <a href="{{route('frontend.mlm.producer.demandlist')}}" class="btn pull-right">需求池</a>
+                    <a href="{{route('frontend.mlm.producer.index')}}" class="btn pull-right">我接的订单</a>
+                    @endauth
+                </div>
 
                 <div class="panel-body">
 

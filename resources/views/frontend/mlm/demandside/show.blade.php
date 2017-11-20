@@ -5,7 +5,11 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">产品信息 <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div></div>
+    <div class="panel-heading">产品信息 
+        @role('demandside')
+        <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div>
+        @endauth
+    </div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-7">
@@ -170,7 +174,7 @@ $("#postbtn").on('click', function(){
     }, function(){
 
         $.ajax({
-            url: "/demandside/product/posttask",
+            url: "{{route('frontend.mlm.demandside.product.posttask')}}",
             type:'POST',
             data:{
                 'productid':proid
@@ -193,6 +197,8 @@ $("#postbtn").on('click', function(){
     });   
 
 });
+
+@role('demandside')
 $("#delbtn").on('click', function(){
     // $(this).hide();
     var proid = $(this).attr('data-proid');
@@ -209,7 +215,7 @@ $("#delbtn").on('click', function(){
     }, function(confirm){
         if(true == confirm) {
             $.ajax({
-                url: "/demandside/product/del",
+                url: "{{route('frontend.mlm.demandside.product.del')}}",
                 type:'POST',
                 data:{
                     'productid':proid
@@ -232,6 +238,8 @@ $("#delbtn").on('click', function(){
     });   
 
 });
+@endauth
+
 
 
 $("#submitBtn").on('click', function(){
@@ -361,7 +369,7 @@ $("#orderdownload").on('click',function(){
         console.log(cycle);
         if(true === cycle) {
             $.ajax({
-                url: "/producer/product/order",
+                url: "{{route('frontend.mlm.producer.product.order')}}",
                 type:'POST',
                 data:{
                     'productid':proid
@@ -419,8 +427,6 @@ $("#orderdownload").on('click',function(){
                 }
             });
         }
-        
-
         
     });
 });

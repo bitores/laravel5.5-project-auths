@@ -56,22 +56,33 @@ Route::group(['middleware' => 'auth'], function () {
         ], function () {
 
             // 需求方业务
+
+
+            //  需求方产品
             Route::get('products', 'DemandsideController@index')->name('demandside.index');
-            Route::get('readme', 'DemandsideController@readme')->name('demandside.readme');
+            // 需求方 新建产品
             Route::get('product/create', 'DemandsideController@create')->name('demandside.product.create');
+            // 需求方 编辑产品
             Route::get('product/{productid}/edit', 'DemandsideController@edit')->name('demandside.product.edit');
-
-
-            Route::post('demandside/product/del', 'ProductController@del')->name('demandside.product.del'); 
-            Route::post('demandside/product/posttask', 'ProductController@postTask')->name('demandside.product.posttask'); 
-            Route::post('demandside/product/canceltask', 'ProductController@cancelTask')->name('demandside.product.canceltask');
-
-            Route::post('demandside/products', 'ProductController@table')->name('demandside.products.get');
-            Route::post('demandside/brand/create', 'UBrandController@create')->name('demandside.brand.create');
-            Route::post('demandside/product/save', 'ProductController@save')->name('demandside.product.save');
-            Route::post('demandside/product/submit', 'ProductController@submit')->name('demandside.product.submit');
-            Route::post('demandside/product/oncesubmit', 'ProductController@oncesubmit')->name('demandside.product.oncesubmit');
+            // 品牌创建
+            Route::post('brand/create', 'UBrandController@create')->name('demandside.brand.create');
+            // 产品 删除
+            Route::post('product/del', 'DemandsideController@del')->name('demandside.product.del');
+            // 产品 发布
+            Route::post('product/posttask', 'DemandsideController@postTask')->name('demandside.product.posttask');
+            // 产品 取消
+            Route::post('product/canceltask', 'DemandsideController@cancelTask')->name('demandside.product.canceltask');
+            // 所有产品
+            Route::post('products', 'DemandsideController@table')->name('demandside.products.get');
+            // 产品信息保存
+            Route::post('product/save', 'DemandsideController@save')->name('demandside.product.save');
+            // 产品提交审核
+            Route::post('product/submit', 'DemandsideController@submit')->name('demandside.product.submit');
+            // 产品创建并提交审核
+            Route::post('product/oncesubmit', 'DemandsideController@oncesubmit')->name('demandside.product.oncesubmit');
         });
+
+        
 
 
         // 审核方权限设置
@@ -81,20 +92,28 @@ Route::group(['middleware' => 'auth'], function () {
 
             // 审核方业务
             Route::get('auditor', 'AuditorController@index')->name('auditor.index');
+            // 审核 需求列表
             Route::get('auditor/demandlist', 'AuditorController@demands')->name('auditor.demandlist');
+            // 审核 模型列表
             Route::get('auditor/modellist', 'AuditorController@models')->name('auditor.modellist');
 
             // 审核需求
-            Route::post('auditor/products', 'ProductController@demandsidproducts')->name('demandside.product.list'); 
-            Route::post('auditor/product/nopass', 'ProductController@nopass')->name('demandside.product.nopass'); 
-            Route::post('auditor/product/pass', 'ProductController@pass')->name('demandside.product.pass');
+
+            // 获取 需求信息
+            Route::post('auditor/products', 'AuditorController@demandsidproducts')->name('auditor.product.list'); 
+            // 需求信息 不通过
+            Route::post('auditor/product/nopass', 'AuditorController@nopass')->name('auditor.product.nopass'); 
+            // 需求信息 通过
+            Route::post('auditor/product/pass', 'AuditorController@pass')->name('auditor.product.pass');
 
             // 审核模型
-            Route::post('auditor/models', 'ProductController@producermodels')->name('producer.model.list'); 
-            Route::post('auditor/model/nopass', 'ProductController@modelnopass')->name('producer.model.nopass'); 
-            Route::post('auditor/model/pass', 'ProductController@modelpass')->name('producer.model.pass');
 
-            
+            // 获取 模型信息
+            Route::post('auditor/models', 'AuditorController@producermodels')->name('auditor.model.list'); 
+            // 模型信息 不通过
+            Route::post('auditor/model/nopass', 'AuditorController@modelnopass')->name('auditor.model.nopass'); 
+            // 模型信息 通过
+            Route::post('auditor/model/pass', 'AuditorController@modelpass')->name('auditor.model.pass');
         });
 
         // 制作方权限设置
@@ -103,38 +122,53 @@ Route::group(['middleware' => 'auth'], function () {
         ], function () {
 
             // 制作方业务
-            Route::get('producer', 'ProducerController@index')->name('producer.index');
-            Route::get('producer/demandlist', 'ProducerController@demandlist')->name('producer.demandlist');
-            Route::get('producer/tutorial/modeling', 'ProducerController@modelingTutorial')->name('producer.tutorial.modeling');
-            Route::get('producer/tutorial/review', 'ProducerController@reviewTutorial')->name('producer.tutorial.review');
+            Route::get('producer', 'MakerController@index')->name('producer.index');
+            // 需求池中 产品
+            Route::get('producer/demandlist', 'MakerController@demandlist')->name('producer.demandlist');
+            // 获取  所有 需求池中 产品
+            Route::post('producer/products', 'MakerController@tasks')->name('producer.product.alltasks');
+            // 接受 订单
+            Route::post('producer/product/order', 'MakerController@order')->name('producer.product.order'); 
+            // 取消 订单
+            Route::post('producer/product/cancelorder', 'MakerController@cancelorder')->name('producer.product.cancelorder'); 
 
-            Route::get('producer/product/show', 'ProducerController@show')->name('producer.product.show');
-            
-           
-            Route::post('producer/products', 'ProductController@tasks')->name('demandside.product.tasks');
-            Route::post('producer/product/order', 'ProductController@order')->name('producer.product.order'); 
-            Route::post('producer/product/cancelorder', 'ProductController@cancelorder')->name('producer.product.cancelorder'); 
-
-            Route::post('producer/product/model', 'ProductController@model')->name('producer.product.model');
-            Route::post('producer/tasks', 'ProductController@minetasks')->name('producer.product.tasks');
-            Route::post('demandside/product/upload', 'UploadController@index')->name('demandside.product.upload'); 
+            // 模型
+            Route::post('producer/product/model', 'MakerController@model')->name('producer.product.model');
+            // 获取所有任务
+            Route::post('producer/tasks', 'MakerController@minetasks')->name('producer.product.tasks');
+             
         });
 
 
+        // 建模教程
+        Route::get('tutorial/modeling', 'MakerController@modelingTutorial')->name('producer.tutorial.modeling');
+        // 审核教程
+        Route::get('tutorial/review', 'MakerController@reviewTutorial')->name('producer.tutorial.review'); 
+
+        // 需求 文档说明
+        Route::get('readme', 'DemandsideController@readme')->name('demandside.readme');
+
+        // 产品 信息展示页
         Route::get('product/{productid}/show', 'DemandsideController@show')->name('demandside.product.show');
+        // 产品 需求审核 结果
         Route::get('product/{productid}/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
+        // 产品 模型审核 结果
         Route::get('producer/product/{productid}/assessment', 'ProducerController@assessment')->name('producer.product.assessment');
 
-        
+        // 下载 需求资料包
         Route::post('product/download', 'ProductController@download')->name('demandside.product.download');
+        // 下载 模型包
         Route::post('product/downloadmodel', 'ProductController@downloadmodel')->name('proceder.product.download');
-
 
         //---------api
         
-        // 获取修改意见内容
+        // 获取 需求 修改意见内容
         Route::post('demandside/product/review', 'ProductController@reviewComments')->name('demandside.product.review'); 
+        // 获取 模型 修改意见内容
         Route::post('producer/model/review', 'ProductController@modelreviewComments')->name('producer.model.review');
+
+        // 图片，模型等文件 上传
+        Route::post('mlmfiles/upload', 'UploadController@index')->name('mlmfiles.upload');
         
     });
 });
