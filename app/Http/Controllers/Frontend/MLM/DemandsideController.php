@@ -369,7 +369,7 @@ class DemandsideController extends Controller
                 }  else if($product->status_no === 1008) {
                     return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1009) {
-                    return '<div style="color:green">模型审核已通过</div>';
+                    return '<div style="color:green">模型审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info downloadmodel">下载模型</div>';
                 } else if($product->status_no === 1010) {
                     return '<div style="color:black">模型已入库</div>';
                 }

@@ -33,13 +33,13 @@ class LoginController extends Controller
         $password = $request->input('password');
 
         // 验证用户名登录方式
-        $usernameLogin = $this->guard()->attempt(
-            ['user_name' => $username, 'password' => $password], $request->filled('remember')
-        );
+        // $usernameLogin = $this->guard()->attempt(
+        //     ['user_name' => $username, 'password' => $password], $request->filled('remember')
+        // );
 
-        if ($usernameLogin) {
-            return true;
-        }
+        // if ($usernameLogin) {
+        //     return true;
+        // }
 
         // 验证手机号登录方式
         $mobileLogin = $this->guard()->attempt(

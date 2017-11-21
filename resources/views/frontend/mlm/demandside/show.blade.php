@@ -5,10 +5,12 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">产品信息 
+    <div class="panel-heading">产品信息 <div class="btn pull-right" onclick="history.back()">返回</div>
         @role('demandside')
+        <!-- <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a> -->
         <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div>
         @endauth
+
     </div>
     <div class="panel-body">
         <div class="row">
@@ -108,12 +110,17 @@
                     <div class="form-group">
                         <div class="col-md-12" style="padding: 20px 0">
                             @if(1000==$product->status_no)
-                            <!-- 未提交审核 -->
+                            <!-- 未提交 -->
                             <div class="col-xs-6">
                                 <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
                             </div>
                             <div class="col-xs-6">
                                 <div id="submitBtn" class="btn btn-block btn-info">提交审核</div>
+                            </div>
+                            @elseif(1001==$product->status_no)
+                            <!-- 需求审核中 -->
+                            <div class="col-xs-12">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
                             </div>
                             @elseif(1002==$product->status_no)
                             <!-- 审核未通过 -->
@@ -134,19 +141,37 @@
 
                             @elseif(1005==$product->status_no)
                             <!-- 审核中 -->
+                            @role('producerside')
                             <div class="col-xs-12">
                                 <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="orderdownload">接单并下载资料包</div>
                             </div>
-                            @elseif(1008==$product->status_no)
-                            <!-- 模型审核未通过 -->
-                            <div class="col-xs-12">
-                                <a href="{{route('frontend.mlm.producer.product.assessment', $product->id)}}" class="btn btn-block btn-info">查看审核结果</a>
-                            </div>
-                            @else
-                            <!-- 审核中 -->
+                            @endauth
+                            @role('demandside')
                             <div class="col-xs-12">
                                 <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
                             </div>
+                            @endauth
+
+                            @elseif(1006==$product->status_no)
+                            <!-- 模型审核未通过 -->
+                            <div class="col-xs-12">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
+                            </div>
+
+                            @elseif($product->status_no>1006)
+                            <!-- 模型审核未通过 -->
+                            <div class="col-xs-6">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info downloadmodel" id="downloadmodel">下载模型</div>
+                            </div>
+                                @if(1008==$product->status_no)
+                                <!-- 模型审核未通过 -->
+                                <div class="col-xs-12">
+                                    <a href="{{route('frontend.mlm.producer.product.assessment', $product->id)}}" class="btn btn-block btn-info">查看审核结果</a>
+                                </div>
+                                @endif
                             @endif
                         </div>
                     </div><!--form-group-->
@@ -349,7 +374,50 @@ $("#download").on('click', function(){
     });
 });
 
+@if($product->status_no > 1006)
+$("#downloadmodel").on('click', function(){
+    var proid = $(this).attr('data-proid');
+    
+    swal({
+        title: "确认下载模型",
+        text: "点击确认下载",
+        type: "warning",
+        cancelButtonText:'取消',
+        confirmButtonText:'确认',
+        showCancelButton: true,
+        closeOnConfirm: false
+    }, function (cycle) {
+        console.log(cycle);
+        if(false === cycle) {
+            return 0;
+        } 
+        $.ajax({
+            url: "/product/downloadmodel",
+            type:'POST',
+            data:{
+                'productid':proid
+            },
+            success: function(res) {
+                if(0 === res.code){
+                    location.href = res.data;
+                    swal("OK", "操作成功", "success");
+                } else {
+                    swal("OMG", "操作失败", "error");
+                }
+                // location.reload();
+            },
+            error: function(res) {
+                // swal.close()
+                swal("OMG", "操作失败", "error");
+                // location.reload();
+            }
+        });
+       
+    });
 
+
+});
+@endif
 
 @if(1005==$product->status_no)
 $("#orderdownload").on('click',function(){

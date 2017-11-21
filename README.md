@@ -142,6 +142,15 @@ Route::group(['middleware' => 'access.routeNeedsPermission:view-backend', functi
      });
 });
 ```
+同样的，允许多个角色的组
+
+```
+Route::group([
+    'middleware' => 'access.routeNeedsRole:A;B;C', // 
+], function () {
+  
+});
+```
 
 下面的中间件处理boilerplate：
 
@@ -190,6 +199,7 @@ Access::canMultiple($permissions, $needsAll);
 Access默认使用当前登录用户，你还可以：
 
 ```
+$user = access()->user()
 $user->hasRole($role);
 $user->hasRoles($roles, $needsAll);
 $user->can($permission);
@@ -198,6 +208,24 @@ $user->hasPermission($permission); //Wrapper function for can()
 $user->hasPermissions($permissions, $needsAll); //Wrapper function for canMultiple()
 
 ```
+
+access() 的定义及使用
+
+```
+function access()
+{
+    return app('access');
+}
+
+access()->loginUsingId($user->id);
+access()->id()
+access()->user()
+access()->logout()
+access()->allow('view-backend')
+access()->login($this->user->create($request->only( 'email', 'password')));
+```
+
+
 
 #### **Blade扩展**
 

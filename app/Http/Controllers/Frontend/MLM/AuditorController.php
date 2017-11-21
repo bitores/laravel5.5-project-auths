@@ -133,7 +133,7 @@ class AuditorController extends Controller
                 return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
-                return '<div data-proid="'.$product->id.'" class="btn btn-info download">资料包</div><div data-proid="'.$product->id.'" class="btn btn-info downloadmodel">模型</div>';
+                return '<div data-proid="'.$product->id.'" class="btn btn-info icon-circle-arrow-down download">下载资料包</div><div data-proid="'.$product->id.'" class="btn btn-info icon-circle-arrow-down downloadmodel">下载模型</div>';
             })
             ->make(true);
     }

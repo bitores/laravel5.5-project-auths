@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">需求审核结果 <div class="btn pull-right" id="downloadPdf">下载文档</div> </div>
+    <div class="panel-heading">需求审核结果 <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a><div class="btn pull-right" id="downloadPdf">下载文档</div> </div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-12" id="pdfContainer">

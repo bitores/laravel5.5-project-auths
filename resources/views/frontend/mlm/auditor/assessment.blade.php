@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">审核结果 <div class="btn pull-right" id="downloadPdf">下载文档</div> </div>
+    <div class="panel-heading">审核结果 <a href="{{route('frontend.mlm.auditor.modellist')}}" class="btn pull-right">模型审核列表</a><a href="{{route('frontend.mlm.auditor.demandlist')}}" class="btn pull-right">需求审核列表</a><div class="btn pull-right" id="downloadPdf">下载文档</div> </div>
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12" id="pdfContainer">

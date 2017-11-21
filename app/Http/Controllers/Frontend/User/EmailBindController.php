@@ -32,9 +32,15 @@ class EmailBindController extends Controller
     {
         $user = $this->user->findByConfirmationToken($token);
         if($user) {
+            $binduser = $this->user->findByEmail($user->bindemail);
+            if($binduser) {
+                return redirect()->route('frontend.user.account')->withFlashSuccess('邮箱绑定失败：邮箱被占用');
+            }
+
             $user->email = $user->bindemail;
             $user->save();
             return redirect()->route('frontend.user.account')->withFlashSuccess('邮箱绑定成功');
+            
         } else {
             return redirect()->route('frontend.user.account')->withFlashSuccess('邮箱绑定失败');
         }

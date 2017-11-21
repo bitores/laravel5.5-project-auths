@@ -9,7 +9,7 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">新建产品</div>
+    <div class="panel-heading">新建产品<a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a></div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-7">

@@ -106,6 +106,12 @@ if (! function_exists('homeRoute')) {
         if (access()->allow('view-backend')) {
             return 'admin.dashboard';
         } elseif (auth()->check()) {
+
+
+            if(access()->hasRole('User'))
+            {
+                return 'frontend.user.userdashboard';
+            }
             return 'frontend.user.dashboard';
         }
 

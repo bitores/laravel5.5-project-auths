@@ -34,7 +34,7 @@
    </div>
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading">需求池</div>
+    <div class="panel-heading">我的订单<a href="{{route('frontend.mlm.producer.demandlist')}}" class="btn pull-right">需求池</a></div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-12">

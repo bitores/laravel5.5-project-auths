@@ -119,6 +119,50 @@
 		        });
         	});
 
+
+        	$("#products-table").on('click', '.downloadmodel', function(){
+	            var proid = $(this).attr('data-proid');
+	            console.log(proid);
+
+	            swal({
+		            title: "确认下载模型",
+		            text: "点击确认下载",
+		            type: "warning",
+		            cancelButtonText:'取消',
+		            confirmButtonText:'确认',
+		            showCancelButton: true,
+		            closeOnConfirm: false
+		        }, function (cycle) {
+		            console.log(cycle);
+		            if(false === cycle) {
+		            	return 0;
+		            } 
+	            	$.ajax({
+		                url: "/product/downloadmodel",
+		                type:'POST',
+		                data:{
+		                    'productid':proid
+		                },
+		                success: function(res) {
+		                    if(0 === res.code){
+		                    	location.href = res.data;
+		                        swal("OK", "操作成功", "success");
+		                    } else {
+		                        swal("OMG", "操作失败", "error");
+		                    }
+		                    // location.reload();
+		                },
+		                error: function(res) {
+		                    // swal.close()
+		                    swal("OMG", "操作失败", "error");
+		                    // location.reload();
+		                }
+		            });
+		           
+		        });
+
+	        });
+
         	$("#products-table").on('click', '.cancelbtn', function(){
 	            var proid = $(this).attr('data-proid');
 	            console.log(proid);
