@@ -7,8 +7,8 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\ProductRepository;
-use App\Repositories\Frontend\MLM\UOrderRepository;
-use App\Repositories\Frontend\MLM\PReviewRepository;
+use App\Repositories\Frontend\MLM\HisOrderRepository;
+use App\Repositories\Frontend\MLM\HisReviewRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\PStyleRepository;
 use App\Repositories\Frontend\MLM\UModelRepository;
@@ -48,7 +48,7 @@ class MakerController extends Controller
         return view('frontend.mlm.maker.tutorial.review');
     }
 
-    public function assessment(PReviewRepository $productReview, $productid)
+    public function assessment(HisReviewRepository $productReview, $productid)
     {
         $review = $productReview->findLastByProductId($productid);
         if($review) {
@@ -133,7 +133,7 @@ class MakerController extends Controller
                 if($product->status_no === 1006) {
                     return '<div style="color:green">制作中</div>';
                 } else if($product->status_no === 1007) {
-                    return '<div style="color:yellow">模型审核中</div>';
+                    return '<div style="color:blue">模型审核中</div>';
                 } else if($product->status_no === 1008) {
                     return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1009) {
@@ -192,16 +192,16 @@ class MakerController extends Controller
                 $now = time();
 
                 $diff = $now - $pass;
-                if($product->status_no == 1006 || $diff>1){
-                    return '';
+                if($product->status_no == 1006){
+                    return '<div data-proid="'.$product->id.'" class="btn btn-info cancelbtn">是</div>';
                 }
-                return '<div data-proid="'.$product->id.'" class="btn btn-info cancelbtn">是</div>';
+                return '-';// '<div data-proid="'.$product->id.'" class="btn btn-info cancelbtn">是</div>';
             })
 
             ->make(true);
     }
 
-    public function order(ProductRequest $request)
+    public function order(ProductRequest $request, HisOrderRepository $order)
     {
         $productid = $request->get('productid');
         if($productid)
@@ -214,7 +214,7 @@ class MakerController extends Controller
                     // $this->product->updateStatus($product->id,1006);
                     $ret = $this->product->order(access()->id(), $product->id);
                     // add 接单操作
-
+                    $order->accept(access()->id(), $product->id);
 
                     if($ret) {
                         return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
@@ -245,21 +245,13 @@ class MakerController extends Controller
             {
                 if($product->status_no==1006)
                 {
-                    // $this->product->updateStatus($product->id,1006);
                     $ret = $this->product->model($product->id, $model->id);
-                    // add 接单操作
-                    // $ret = $uproductRes->create([
-                    //     'product_id' => $product->id,
-                    //     'model_id' => $request->get('modelid')
-                    // ]);
 
                     if($ret) {
                         return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
                     } else {
                         return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
                     }
-
-                    
                 } else {
                     return ['code' => -2, 'data'=>[], 'msg' => '操作失败'];
                 }
@@ -271,7 +263,7 @@ class MakerController extends Controller
 
     
 
-    public function cancelorder(ProductRequest $request)
+    public function cancelorder(ProductRequest $request, HisOrderRepository $order)
     {
         $productid = $request->get('productid');
         if($productid)
@@ -281,13 +273,9 @@ class MakerController extends Controller
             {
                 if($product->status_no==1006)
                 {
-                    // $this->product->updateStatus($product->id,1006);
-                    $ret = $this->product->cancelorder($product->id);
-                    // add 接单操作
-                    // $ret = $uproductRes->create([
-                    //     'product_id' => $product->id,
-                    //     'user_id' => access()->id()
-                    // ]);
+                    $ret = $this->product->cancelorder(access()->id(), $product->id);
+                    // cancel 取消订单操作
+                    $order->cancel(access()->id(), $product->id);
 
                     if($ret) {
                         return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];

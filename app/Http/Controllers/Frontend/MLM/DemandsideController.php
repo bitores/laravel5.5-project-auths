@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Frontend\MLM;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Frontend\Access\User\UserRepository;
+use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\UBrandRepository;
 use App\Repositories\Frontend\MLM\PCategoryARepository;
 use App\Repositories\Frontend\MLM\PCategoryBRepository;
-use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\ProductRepository;
-use App\Repositories\Frontend\MLM\UOrderRepository;
-use App\Repositories\Frontend\MLM\PReviewRepository;
+use App\Repositories\Frontend\MLM\HisReviewRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\PStyleRepository;
 use App\Repositories\Frontend\MLM\UModelRepository;
@@ -95,7 +94,7 @@ class DemandsideController extends Controller
         
     }
 
-    public function assessment(PReviewRepository $productReview, $productid)
+    public function assessment(HisReviewRepository $productReview, $productid)
     {
         $review = $productReview->findLastByProductId($productid);
         if($review) {
@@ -121,15 +120,14 @@ class DemandsideController extends Controller
         {
             $product = $productRes->findByUserIdAndProductId(access()->id(), $productid);
             if($product)
-            {
+            { 
+                if($product->status_no < 1006)
+                {
                     $bool = $this->product->delProduct(access()->id(), $product->id);
                     if($bool) {
                         return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
-                    } else {
-                        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
                     }
-
-                    
+                }
             }
         }
 
@@ -262,6 +260,38 @@ class DemandsideController extends Controller
             }
     }
 
+
+    public function batsubmit(ProductRepository $productRes)
+    {
+        $products = $productRes->getAllByUserIdAndStatus(access()->id(), 1000);
+
+        $total = count($products);// 等提交审核的产品数
+        $submit = 0;    // 本次批量成功提交的产品数
+
+        foreach ($products as $product) {
+            # code...
+            if(isset($product->product_no) 
+                && isset($product->style_id) 
+                && isset($product->a_id) 
+                && isset($product->b_id) 
+                && isset($product->brand_id) 
+                && ($product->image_count>0)
+                && isset($product->fee) 
+                && isset($product->introduction)){
+
+                $this->product->updateStatus($product->id, 1001);
+
+                $submit++;
+            }
+
+        }
+
+        return ['code' => 0, 'data'=>[
+            'total' => $total,
+            'updated' => $submit
+        ], 'msg' => 'success'];
+    }
+
     public function submit(ProductRequest $request, UImageRepository $uimageRes)
     {
 
@@ -353,19 +383,19 @@ class DemandsideController extends Controller
 
                 if($product->status_no === 1000)
                 {
-                    return '<div style="color:gray">未提交审核</div>';
+                    return '<div style="color:gray">未提交</div>';
                 } else if($product->status_no === 1001) {
-                    return '<div style="color:yellow">审核中</div>';
+                    return '<div style="color:blue">需求审核中</div>';
                 } else if($product->status_no === 1002) {
-                    return '<div style="color:red">审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
+                    return '<div style="color:red">需求审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1003) {
-                    return '<div style="color:green">审核已通过</div>';
+                    return '<div style="color:green">需求审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info postbtn">发布</div>';
                 } else if($product->status_no === 1005) {
-                    return '<div style="color:yellow">等待接单</div>';
+                    return '<div style="color:blue">等待接单</div>';
                 } else if($product->status_no === 1006) {
                     return '<div style="color:green">制作中</div>';
                 } else if($product->status_no === 1007) {
-                    return '<div style="color:yellow">模型审核中</div>';
+                    return '<div style="color:blue">模型审核中</div>';
                 }  else if($product->status_no === 1008) {
                     return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1009) {

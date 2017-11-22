@@ -85,7 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('product/posttask', 'DemandsideController@postTask')->name('demandside.product.posttask');
             // 产品 取消
             Route::post('product/canceltask', 'DemandsideController@cancelTask')->name('demandside.product.canceltask');
-            // 所有产品
+
             Route::post('products', 'DemandsideController@table')->name('demandside.products.get');
             // 产品信息保存
             Route::post('product/save', 'DemandsideController@save')->name('demandside.product.save');
@@ -93,6 +93,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('product/submit', 'DemandsideController@submit')->name('demandside.product.submit');
             // 产品创建并提交审核
             Route::post('product/oncesubmit', 'DemandsideController@oncesubmit')->name('demandside.product.oncesubmit');
+            // 产品 批量提交审核
+            Route::post('product/batsubmit', 'DemandsideController@batsubmit')->name('demandside.product.batsubmit');
+            // 所有产品
         });
 
         

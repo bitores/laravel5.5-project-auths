@@ -29,12 +29,6 @@ class UModelRepository extends BaseRepository
         return $instance;
     }
 
-
-    // public function findDataById($userid)
-    // {
-    //     return $this->query()->where('user_id', $userid)->get();
-    // }
-
     // 获取 指定用户 上传的 所有模型
     public function getAllByUserId($userid)
     {

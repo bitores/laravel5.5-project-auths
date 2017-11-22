@@ -7,8 +7,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\ProductRepository;
-use App\Repositories\Frontend\MLM\UOrderRepository;
-use App\Repositories\Frontend\MLM\PReviewRepository;
+use App\Repositories\Frontend\MLM\HisReviewRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\PStyleRepository;
 use App\Repositories\Frontend\MLM\UModelRepository;
@@ -66,7 +65,7 @@ class AuditorController extends Controller
                 return $product->cycle;
             })
             ->addColumn('resource', function ($product) {
-                $resource = ($product->images . '张图片 +');
+                $resource = ($product->image_count . '张图片 +');
                 if($product->cad_id) {
                     $resource .= '有cad ';
                 } else {
@@ -83,7 +82,9 @@ class AuditorController extends Controller
             })
             ->addColumn('actions', function ($product) {
 
-                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
+                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">'
+                .($product->review_demand_count==0?'不通过':('打回'.$product->review_demand_count.'次')).
+                '</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
                 return '<div data-proid="'.$product->id.'" class="btn btn-info download">下载资料包</div>';
@@ -130,7 +131,9 @@ class AuditorController extends Controller
             })
             ->addColumn('actions', function ($product) {
 
-                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">不通过</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
+                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">'
+                .($product->review_model_count==0?'不通过':('打回'.$product->review_model_count.'次')).
+                '</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
                 return '<div data-proid="'.$product->id.'" class="btn btn-info icon-circle-arrow-down download">下载资料包</div><div data-proid="'.$product->id.'" class="btn btn-info icon-circle-arrow-down downloadmodel">下载模型</div>';
@@ -140,7 +143,7 @@ class AuditorController extends Controller
 
 
     
-    public function nopass(ProductRequest $request, ProductRepository $productRes,PReviewRepository $productreview)
+    public function nopass(ProductRequest $request, ProductRepository $productRes,HisReviewRepository $productreview)
     {
 
         $productid = $request->get('productid');
@@ -151,12 +154,14 @@ class AuditorController extends Controller
             {
                 if($product->status_no==1001)
                 {
-                    $this->product->updateStatus($product->id,1002);
-                    $productreview->create([
+                    
+                    $review = $productreview->create([
                         'type'=>1,
                         'comments'=>$request->get('content'),
                         'product_id'=>$product->id
                     ]);
+
+                    $this->product->updateDemandReviewID($product->id,1002, $review->id);
 
                     return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
                 }
@@ -188,7 +193,7 @@ class AuditorController extends Controller
         return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
     }
 
-    public function modelnopass(ProductRequest $request, ProductRepository $productRes,PReviewRepository $productreview)
+    public function modelnopass(ProductRequest $request, ProductRepository $productRes,HisReviewRepository $productreview)
     {
 
         $productid = $request->get('productid');
@@ -199,12 +204,15 @@ class AuditorController extends Controller
             {
                 if($product->status_no==1007)
                 {
-                    $this->product->updateStatus($product->id,1008);
-                    $productreview->create([
+                    // $this->product->updateStatus($product->id,1008);
+                    $review = $productreview->create([
                         'type'=>2,
                         'comments'=>$request->get('content'),
                         'product_id'=>$product->id
                     ]);
+
+
+                    $this->product->updateModelReviewID($product->id,1008, $review->id);
 
                     return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
                 }

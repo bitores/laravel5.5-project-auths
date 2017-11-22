@@ -40,18 +40,6 @@ class UImageRepository extends BaseRepository
     }
 
 
-    // public function findDataById($userid)
-    // {
-    //     return $this->query()->where('user_id', $userid)->get();
-    // }
-
-
-    // public function findAllDataByProductId($productid)
-    // {
-    //     return $this->query()->where('product_id',$productid)->get();
-    // }
-
-
     // 获取 指定用户 所有图片
     public function getAllByUserId($userid)
     {

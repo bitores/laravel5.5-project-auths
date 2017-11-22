@@ -29,12 +29,6 @@ class UBrandRepository extends BaseRepository
         return $instance;
     }
 
-
-    // public function findDataById($userid)
-    // {
-    //     return $this->query()->where('user_id', $userid)->get();
-    // }
-
     // 获取 指定用户 所有品牌
     public function getAllByUserId($userid)
     {

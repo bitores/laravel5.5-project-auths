@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Role.
  */
-class PReview extends Model
+class HisReview extends Model
 {
 
 
@@ -16,7 +16,7 @@ class PReview extends Model
      *
      * @var string
      */
-    protected $table = 'p_review';
+    protected $table = 'his_reviews';
 
     /**
      * The attributes that are mass assignable.

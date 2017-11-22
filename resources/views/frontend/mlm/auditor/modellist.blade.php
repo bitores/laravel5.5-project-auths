@@ -156,8 +156,8 @@
 		                });
 
                     } else {
-                     swal("OMG", "操作失败", "error");
-                     location.reload();
+                     	swal("OMG", "操作失败", "error");
+                     	location.reload();
                     }
                     
                 },

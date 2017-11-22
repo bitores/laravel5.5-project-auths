@@ -3,6 +3,7 @@
 namespace App\Repositories\Frontend\MLM;
 
 use App\Models\MLM\Product;
+use App\Models\MLM\HisProduct;
 use App\Repositories\BaseRepository;
 
 /**
@@ -11,6 +12,7 @@ use App\Repositories\BaseRepository;
 class ProductRepository extends BaseRepository
 {
     const MODEL = Product::class;
+    const HISMODEL = HisProduct::class;
 
     /**
      * @return mixed
@@ -44,7 +46,7 @@ class ProductRepository extends BaseRepository
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                'products.images',
+                'products.image_count',
                 'products.cad_id',
                 'products.file_id',
                 'products.cycle',
@@ -61,7 +63,7 @@ class ProductRepository extends BaseRepository
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                'products.images',
+                'products.image_count',
                 'products.cad_id',
                 'products.file_id',
                 'products.cycle',
@@ -79,7 +81,7 @@ class ProductRepository extends BaseRepository
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                'products.images',
+                'products.image_count',
                 'products.cad_id',
                 'products.file_id',
                 'products.cycle',
@@ -95,7 +97,7 @@ class ProductRepository extends BaseRepository
                 'products.id',
                 'products.product_no',
                 'products.style_id',
-                'products.images',
+                'products.image_count',
                 'products.cad_id',
                 'products.file_id',
                 'products.status_no',
@@ -108,6 +110,17 @@ class ProductRepository extends BaseRepository
 
     public function save($product, array $data, $status)
     {
+        // $product->product_no = isset($data['product_no']) ?: null;
+        // $product->style_id = isset($data['style_id']) ?: null;
+        // $product->a_id = isset($data['a_id']) ?: null;
+        // $product->b_id = isset($data['b_id']) ?: null;
+        // $product->brand_id = isset($data['brand_id']) ?: null;
+        // $product->cad_id = isset($data['cad_id']) ?: null;
+        // $product->file_id = isset($data['file_id']) ?: null;
+        // $product->fee = isset($data['fee']) ?: null;
+        // $product->introduction = isset($data['introduction']) ?: null;
+
+
         if(isset($data['product_no']))
         {
             $product->product_no = $data['product_no'];
@@ -156,12 +169,43 @@ class ProductRepository extends BaseRepository
         if(isset($data['images']))
         {
             $images = explode(',',$data['images']);
-            $product->images = count($images);
+            $product->image_count = count($images);
         }
 
         $product->status_no = $status;
         $product->zip_path = null;
         $product->save();
+
+        return $product;
+    }
+
+    public function saveHistory($product)
+    {
+        $mode = self::HISMODEL;
+
+        $instance = new $mode;
+        $instance->product_id = $product->id;
+        $instance->user_id = $product->user_id;
+        $instance->product_no = $product->product_no;
+        $instance->brand_id = $product->brand_id;
+        $instance->a_id = $product->a_id;
+        $instance->b_id = $product->b_id;
+        $instance->style_id = $product->style_id;
+        $instance->fee = $product->fee;
+        $instance->introduction = $product->introduction;
+        $instance->cad_id = $product->cad_id;
+        $instance->file_id = $product->file_id;
+        $instance->model_id = $product->model_id;
+        $instance->image_count = $product->image_count;
+
+        $instance->review_demand_id = $product->review_demand_id;
+        $instance->review_model_id = $product->review_model_id;
+        $instance->review_demand_count = $product->review_demand_count;
+        $instance->review_model_count = $product->review_model_count;
+
+        $instance->save();
+
+        return $instance;
     }
 
 
@@ -177,7 +221,10 @@ class ProductRepository extends BaseRepository
         $instance = new $model;
         $instance->user_id = $userid;
         
-        $this->save($instance, $data, $status);
+        $product = $this->save($instance, $data, $status);
+
+        $this->saveHistory($product);
+       
         return $instance;
     }
 
@@ -189,6 +236,7 @@ class ProductRepository extends BaseRepository
             $this->save($product, $data, $status);
         }
         
+        $this->saveHistory($product);
         return $product;    
     }
 
@@ -198,6 +246,32 @@ class ProductRepository extends BaseRepository
         $product->status_no = $status;
         $product->save();
 
+        $this->saveHistory($product);
+        return $product;
+    }
+
+    public function updateDemandReviewID($proid, $status, $demandid)
+    {
+        $product = $this->find($proid);
+        $product->status_no = $status;
+        $product->review_demand_id = $demandid;
+        $product->review_demand_count++; // 记录打回次数
+        $product->save();
+
+        $this->saveHistory($product);
+        return $product;
+    }
+
+
+    public function updateModelReviewID($proid, $status, $modelid)
+    {
+        $product = $this->find($proid);
+        $product->status_no = $status;
+        $product->review_model_id = $modelid;
+        $product->review_model_count++; // 记录打回次数
+        $product->save();
+
+        $this->saveHistory($product);
         return $product;
     }
 
@@ -207,6 +281,7 @@ class ProductRepository extends BaseRepository
         $product->cycle = $cycle;
         $product->save();
 
+        $this->saveHistory($product);
         return $product;
     }
 
@@ -216,6 +291,7 @@ class ProductRepository extends BaseRepository
         $product->zip_path = $path;
         $product->save();
 
+        $this->saveHistory($product);
         return $product;
     }
 
@@ -228,7 +304,7 @@ class ProductRepository extends BaseRepository
             $product->save();
         }
         
-
+        $this->saveHistory($product);
         return $product;
     }
 
@@ -242,7 +318,7 @@ class ProductRepository extends BaseRepository
             $product->save();
         }
         
-
+        $this->saveHistory($product);
         return $product;
     }
 
@@ -256,7 +332,7 @@ class ProductRepository extends BaseRepository
             $product->save();
         }
         
-
+        $this->saveHistory($product);
         return $product;
     }
 
@@ -270,7 +346,7 @@ class ProductRepository extends BaseRepository
             $product->save();
         }
         
-
+        $this->saveHistory($product);
         return $product;
     }
 
@@ -278,6 +354,12 @@ class ProductRepository extends BaseRepository
     public function getAllByUserId($userid)
     {
         return $this->query()->where('user_id',$userid)->get();
+    }
+
+    //  获取 指定需求方 指定状态 的 所有产品
+    public function getAllByUserIdAndStatus($userid, $status)
+    {
+        return $this->query()->where('user_id',$userid)->where('status_no', $status)->get();
     }
 
     // 获取 指定需求方 指定产品 的信息

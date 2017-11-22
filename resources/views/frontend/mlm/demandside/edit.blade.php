@@ -9,7 +9,11 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">编辑产品  <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div></div>
+    <div class="panel-heading">编辑产品  
+    @if($product->status_no < 1006)
+    <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div>
+    @endif
+    </div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-7">

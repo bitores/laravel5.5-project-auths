@@ -158,7 +158,6 @@
                      swal("OMG", "操作失败", "error");
                      location.reload();
                     }
-                    
                 },
                 error: function(res) {
                     // swal.close()

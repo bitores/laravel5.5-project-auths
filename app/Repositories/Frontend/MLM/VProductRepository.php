@@ -11,17 +11,6 @@ class VProductRepository extends BaseRepository
 {
     const MODEL = VProduct::class;
 
-    // public function findAll()
-    // {
-    //     return $this->query()->where('user_id', access()->id())->get();
-    // }
-
-    // public function findDataById($id)
-    // {   
-
-    //     return $this->query()->where('user_id', access()->id())->where('id',$id)->first();
-    // }
-
     // 获取 指定需求方 所有产品
     public function getAllByUserId($userid)
     {

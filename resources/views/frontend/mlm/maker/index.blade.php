@@ -136,13 +136,16 @@
 				            success: function(res) {
 				                if(0 === res.code){
 				                    swal("OK", "操作成功", "success");
+				                    location.reload();
 				                } else {
 				                    swal("OMG", "操作失败：" + res.msg, "error");
+				                    location.reload();
 				                }
 				            },
 				            error: function(res) {
 				                // swal.close()
 				                swal("OMG", "操作失败:", "error");
+				                location.reload();
 				            }
 				        });
 		            }
@@ -244,11 +247,13 @@
 				                    location.reload();
 				                } else {
 				                    swal("OMG", "操作失败：" + res.msg, "error");
+				                    location.reload();
 				                }
 				            },
 				            error: function(res) {
 				                // swal.close()
 				                swal("OMG", "操作失败:", "error");
+				                location.reload();
 				            }
 				        });
 		            }

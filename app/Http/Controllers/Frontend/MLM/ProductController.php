@@ -7,15 +7,12 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Repositories\Frontend\Access\User\UserRepository;
 use App\Http\Requests\Frontend\MLM\ProductRequest;
 use App\Repositories\Frontend\MLM\ProductRepository;
-use App\Repositories\Frontend\MLM\UOrderRepository;
-use App\Repositories\Frontend\MLM\PReviewRepository;
+use App\Repositories\Frontend\MLM\HisOrderRepository;
+use App\Repositories\Frontend\MLM\HisReviewRepository;
 use App\Repositories\Frontend\MLM\UImageRepository;
 use App\Repositories\Frontend\MLM\PStyleRepository;
 use App\Repositories\Frontend\MLM\UModelRepository;
 use App\Repositories\Frontend\MLM\VProductRepository;
-
-
-
 use \Chumper\Zipper\Zipper;
 
 /**
@@ -31,7 +28,7 @@ class ProductController extends Controller
     } 
 
 
-    public function reviewComments(ProductRequest $request, PReviewRepository $productReviewRes)
+    public function reviewComments(ProductRequest $request, HisReviewRepository $productReviewRes)
     {
         $productid = $request->get('productid');
         if($productid)
@@ -57,7 +54,7 @@ class ProductController extends Controller
         ], 'msg' => '操作失败'];
     }
 
-    public function modelreviewComments(ProductRequest $request, PReviewRepository $productReviewRes)
+    public function modelreviewComments(ProductRequest $request, HisReviewRepository $productReviewRes)
     {
         $productid = $request->get('productid');
         if($productid)

@@ -101,16 +101,18 @@
 				            success: function(res) {
 				                if(0 === res.code){
 				                    swal("OK", "操作成功", "success");
+									location.href="/producer";
 				                } else {
 				                    swal("OMG", "操作失败：" + res.msg, "error");
+				                    location.reload();
 				                }
 
-				                location.href="/producer";
+				                
 				            },
 				            error: function(res) {
 				                // swal.close()
 				                swal("OMG", "操作失败:", "error");
-				                location.href="/producer";
+				                location.reload();
 				            }
 				        });
 		            }

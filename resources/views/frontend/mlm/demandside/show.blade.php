@@ -7,8 +7,11 @@
 <div class="panel panel-default">
     <div class="panel-heading">产品信息 <div class="btn pull-right" onclick="history.back()">返回</div>
         @role('demandside')
-        <!-- <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a> -->
-        <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div>
+        <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a>
+        @if($product->status_no < 1006)
+            <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div>
+        @endif
+
         @endauth
 
     </div>

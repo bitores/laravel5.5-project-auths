@@ -24,10 +24,4 @@ class PCategoryBRepository extends BaseRepository
 
         return $instance;
     }
-
-    // getAll
-    // public function findAllData()
-    // {
-    //     return $this->query()->get();
-    // }
 }
