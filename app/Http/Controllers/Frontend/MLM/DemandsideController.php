@@ -39,7 +39,7 @@ class DemandsideController extends Controller
 
     public function readme()
     {
-        return view('frontend.mlm.demandside.readme');
+        return view('frontend.mlm.product.readme');
     }
 
     public function create(PCategoryARepository $categorya,PCategoryBRepository $categoryb,PStyleRepository $style)
@@ -84,7 +84,7 @@ class DemandsideController extends Controller
 
             $images = $imageRes->getAllByProductId($productid);
 
-            return view('frontend.mlm.demandside.show',[
+            return view('frontend.mlm.product.show',[
                 'product' => $product,
                 'images'=> $images
             ]);
@@ -214,6 +214,11 @@ class DemandsideController extends Controller
         if($request->get('images'))
         {
             $images = $uimageRes->updateProductId($images,$product->id);
+        }
+
+        if($request->get('face_id'))
+        {
+            $images = $uimageRes->updateCoverByImageId($request->get('face_id'));
         }
 
         
@@ -379,28 +384,39 @@ class DemandsideController extends Controller
                 // 1007 模型审核中（模型已上传，禁止上传）
                 // 1008 模型审核未通过（开放上传）
                 // 1009 模型审核已通过（禁止上传，制作已完成）
-                // 1010 模型已入库（完成制作）
+                // 1010 模型二次审核未审核
+                // 1011 模型二次审核已通过
+                // 2000 模型已入库（完成制作）
 
                 if($product->status_no === 1000)
                 {
                     return '<div style="color:gray">未提交</div>';
                 } else if($product->status_no === 1001) {
+
                     return '<div style="color:blue">需求审核中</div>';
                 } else if($product->status_no === 1002) {
+
                     return '<div style="color:red">需求审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1003) {
+
                     return '<div style="color:green">需求审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info postbtn">发布</div>';
                 } else if($product->status_no === 1005) {
+
                     return '<div style="color:blue">等待接单</div>';
                 } else if($product->status_no === 1006) {
+
                     return '<div style="color:green">制作中</div>';
                 } else if($product->status_no === 1007) {
+
                     return '<div style="color:blue">模型审核中</div>';
                 }  else if($product->status_no === 1008) {
+
                     return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1009) {
+
                     return '<div style="color:green">模型审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info downloadmodel">下载模型</div>';
                 } else if($product->status_no === 1010) {
+                    
                     return '<div style="color:black">模型已入库</div>';
                 }
             })

@@ -36,9 +36,17 @@ class UImageRepository extends BaseRepository
 
     public function updateProductId(array $images,$productid)
     {
-        return $this->query()->whereIn('id', $images)->update(['product_id'=>$productid]);
+        return $this->query()->whereIn('id', $images)->update([
+            'product_id'=>$productid,
+            'is_cover' => 0
+        ]);
     }
 
+    public function updateCoverByImageId($coverid)
+    {
+        // 
+        return $this->query()->where('id', $coverid)->update(['is_cover'=>1]);
+    }
 
     // 获取 指定用户 所有图片
     public function getAllByUserId($userid)

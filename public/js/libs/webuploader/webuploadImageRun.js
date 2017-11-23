@@ -162,13 +162,15 @@
             var $li = $( '<li id="' + file.id + '">' +
                     '<p class="imgWrap"></p>'+
                     '<p class="progress"><span></span></p>' +
-                    '<div class="file-panel"><span class="cancel">删除</span></div>'+
+                    '<div class="file-panel"><span class="cancel">删除</span></div><div style="color:white;position:absolute;left:0;top:0;right:0;bottom:0;width:100%;height:100%;z-index:299;line-height:114px;cursor:pointer;background:rgba(0,0,0,0.2)">点击设置封面</div>'+
                     '</li>' );
                 $li.appendTo( $queue );
             if(params) {
-                $li.attr('file_id', params);
+                $li.attr('file_id', params.id);
                 $li.attr('class', "state-complete");
                 // 设置为封面
+                if(params.is_cover === "1")
+                $li.append('<span class="success"></span>');
             }
             var $btns =  $li.find('file-panel'),
                 $prgress_parent = $li.find('p.progress'),
@@ -558,7 +560,7 @@
         //需要编辑的图片列表
         var picList = [];
         $.each(webupload_pickList, function(index,item){
-            getFileObject(item.path, item.id, function (fileObject, params) {
+            getFileObject(item.path, item, function (fileObject, params) {
                 var wuFile = new WebUploader.Lib.File(WebUploader.guid('rt_'),fileObject);
                 var file = new WebUploader.File(wuFile);
 

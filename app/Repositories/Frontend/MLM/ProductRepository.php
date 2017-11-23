@@ -275,6 +275,20 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
+    public function updateModel2ReviewID($proid, $status, $modelid)
+    {
+        $product = $this->find($proid);
+        $product->status_no = $status;
+        $product->review_model2_id = $modelid;
+        $product->review_model2_count++; // 记录打回次数
+        $product->save();
+
+        $this->saveHistory($product);
+        return $product;
+    }
+
+    
+
     public function updateCycle($proid, $cycle)
     {
         $product = $this->find($proid);

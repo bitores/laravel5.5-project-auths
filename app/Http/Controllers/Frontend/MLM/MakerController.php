@@ -40,12 +40,12 @@ class MakerController extends Controller
 
     public function modelingTutorial()
     {
-        return view('frontend.mlm.maker.tutorial.modeling');
+        return view('frontend.mlm.tutorial.modeling');
     }
 
     public function reviewTutorial()
     {
-        return view('frontend.mlm.maker.tutorial.review');
+        return view('frontend.mlm.tutorial.review');
     }
 
     public function assessment(HisReviewRepository $productReview, $productid)
@@ -63,10 +63,7 @@ class MakerController extends Controller
         
     }
 
-
-
-
-    // -------------------------- API
+    //-------------------------- API ----------------
     public function tasks()
     {
 
@@ -292,9 +289,5 @@ class MakerController extends Controller
 
         return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
     }
-
-
-
-
 
 }

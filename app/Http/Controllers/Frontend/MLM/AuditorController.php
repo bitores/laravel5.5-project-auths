@@ -243,5 +243,58 @@ class AuditorController extends Controller
 
         return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
     }
+
+
+    public function model2nopass(ProductRequest $request, ProductRepository $productRes,HisReviewRepository $productreview)
+    {
+
+        $productid = $request->get('productid');
+        if($productid)
+        {
+            $product = $productRes->find($productid);
+            if($product)
+            {
+                if($product->status_no==1010)
+                {
+                    // $this->product->updateStatus($product->id,1008);
+                    $review = $productreview->create([
+                        'type'=>3,
+                        'comments'=>$request->get('content'),
+                        'product_id'=>$product->id
+                    ]);
+
+
+                    $this->product->updateModel2ReviewID($product->id,1011, $review->id);
+
+                    return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
+                }
+            }
+        }
+
+        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+    }
+
+    // 模型二次审核通过
+    public function model2pass(ProductRequest $request, ProductRepository $productRes)
+    {
+
+        $productid = $request->get('productid');
+        if($productid)
+        {
+            $product = $productRes->find($productid);
+            if($product)
+            {
+                if($product->status_no==1010)
+                {
+                    $this->product->updateStatus($product->id,1012);
+                    // $this->product->updateCycle($product->id, $request->get('cycle'));
+
+                    return ['code' => 0, 'data'=>[], 'msg' => '操作成功'];
+                }
+            }
+        }
+
+        return ['code' => -1, 'data'=>[], 'msg' => '操作失败'];
+    }
     
 }

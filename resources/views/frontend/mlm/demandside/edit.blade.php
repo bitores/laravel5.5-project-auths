@@ -195,7 +195,7 @@ var webupload_pickList=[
 // {'path':"https://dim3d.xyz/uploads/materials/20171026/150899935276c708cf0155e8de.jpg",'id':1}
 @if(isset($images))
 @foreach($images as $image)
-{'path':"/uploads/materials/{{str_replace("\\",'/',$image->path)}}",'id':"{{$image->id}}"},
+{'path':"/uploads/materials/{{str_replace("\\",'/',$image->path)}}",'id':"{{$image->id}}",'is_cover':"{{$image->is_cover}}"},
 @endforeach
 @endif
 ];
@@ -293,6 +293,11 @@ $("#submitBtn").on('click', function(){
         return swal("OMG", "产品图片没有上传", "error"); 
     }
 
+    var face_id = $('#uploader .success').parents('li').attr('file_id');
+
+    if(!!face_id===false){
+        return swal('OMG','请设置封面图','error');
+    }
 
     // 服务端验证 信息的完整性
     var ret = [];
@@ -314,7 +319,8 @@ $("#submitBtn").on('click', function(){
             'file_id':$("#filelist2").attr('file_id'),
             'fee':$("#fee").val(),
             'introduction':$("#introduction").val(),
-            'images':ret.join(',')
+            'images':ret.join(','),
+            'face_id': face_id
         },
         dataType: "json",
         success: function(res){
@@ -364,7 +370,7 @@ $("#saveBtn").on('click', function(){
             ret[index] = $(item).attr('file_id');
         });
 
-        
+        var face_id = $('#uploader .success').parents('li').attr('file_id');
 
         $.ajax({
              type: "POST",
@@ -380,7 +386,8 @@ $("#saveBtn").on('click', function(){
                 'file_id':$("#filelist2").attr('file_id'),
                 'fee':$("#fee").val(),
                 'introduction':$("#introduction").val(),
-                'images':ret.join(',')
+                'images':ret.join(','),
+                'face_id': face_id
             },
             dataType: "json",
             success: function(res){
