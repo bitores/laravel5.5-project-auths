@@ -165,7 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
         // 产品 需求审核 结果
         Route::get('product/{productid}/assessment', 'DemandsideController@assessment')->name('demandside.product.assessment');
         // 产品 模型审核 结果
-        Route::get('producer/product/{productid}/assessment', 'ProducerController@assessment')->name('producer.product.assessment');
+        Route::get('producer/product/{productid}/assessment', 'MakerController@assessment')->name('producer.product.assessment');
         // 下载 需求资料包
         Route::post('product/download', 'ProductController@download')->name('demandside.product.download');
         // 下载 模型包

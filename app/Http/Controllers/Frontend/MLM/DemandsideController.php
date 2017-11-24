@@ -396,7 +396,7 @@ class DemandsideController extends Controller
                     return '<div style="color:blue">需求审核中</div>';
                 } else if($product->status_no === 1002) {
 
-                    return '<div style="color:red">需求审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
+                    return '<div style="color:red">需求审核未通过</div> <a href="'.route("frontend.mlm.demandside.product.assessment", $product->id).'">查看</a> <div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1003) {
 
                     return '<div style="color:green">需求审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info postbtn">发布</div>';
@@ -411,7 +411,7 @@ class DemandsideController extends Controller
                     return '<div style="color:blue">模型审核中</div>';
                 }  else if($product->status_no === 1008) {
 
-                    return '<div style="color:red">模型审核未通过</div><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
+                    return '<div style="color:red">模型审核未通过</div><a href="'.route("frontend.mlm.producer.product.assessment", $product->id).'">查看</a><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
                 } else if($product->status_no === 1009) {
 
                     return '<div style="color:green">模型审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info downloadmodel">下载模型</div>';
