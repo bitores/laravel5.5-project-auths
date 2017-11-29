@@ -388,3 +388,19 @@ $ composer dumpautoload -o
 
 如果上面的办法都没有奏效，那么只能给我们[报告错误](https://github.com/rappasoft/Laravel-5-Boilerplate/issues)了。
 
+
+
+### 集成 workerman
+
+
+debug运行
+
+```
+ # php artisan ws start
+```
+
+常驻后台运行
+
+```
+ # php artisan ws start --d
+```

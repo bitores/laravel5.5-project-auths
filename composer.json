@@ -21,6 +21,8 @@
         "overtrue/laravel-ueditor": "^1.2",
         "spipu/html2pdf": "^5.0",
         "toplan/laravel-sms": "~2.6",
+        "workerman/gateway-worker-for-win": "^3.0",
+        "workerman/gatewayclient": "^3.0",
         "yajra/laravel-datatables-oracle": "^8.1"
     },
     "require-dev": {
