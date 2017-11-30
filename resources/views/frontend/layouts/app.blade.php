@@ -26,8 +26,6 @@
 
         @yield('after-styles')
         <script>
-            
-
             window.Laravel = <?php echo json_encode([
                 'csrfToken' => csrf_token(),
             ]); ?>
@@ -114,7 +112,24 @@
                     case 'login':
                         //{"type":"login","client_id":xxx,"client_name":"xxx","client_list":"[...]","time":"xxx"}
                         // say(data['client_id'], data['client_name'],  data['client_name']+' 加入了聊天室', data['time']);
-                        //  更新 
+                        
+                        $.ajax({
+                            url: "{{route('frontend.user.ws.login')}}",
+                            type:'POST',
+                            headers:{
+                                'X-CSRF-TOKEN':"{{ csrf_token() }}"
+                            },
+                            data:{
+                                'client_id':data['client_id'],
+                                'client_name':data['client_name']
+                            },
+                            success: function(res) {
+                                swal(res.msg);
+                            },
+                            error: function(res) {
+                                
+                            }
+                        });
 
                         @if(Active::checkUriPattern('im'))
                             if(data['client_list'])

@@ -12,12 +12,19 @@ Route::get('contact', 'ContactController@index')->name('contact');
 Route::post('contact/send', 'ContactController@send')->name('contact.send');
 
 
+
 /*
  * These frontend controllers require the user to be logged in
  * All route names are prefixed with 'frontend.'
  */
 Route::group(['middleware' => 'auth'], function () {
+
+    
+
+
     Route::group(['namespace' => 'User', 'as' => 'user.'], function () {
+        Route::post('wsServer/login', 'ChatController@userLoginAction')->name('ws.login');
+        
         /*
          * User Dashboard Specific
          */
@@ -181,6 +188,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('producer/model/review', 'ProductController@modelreviewComments')->name('producer.model.review');
         // 图片，模型等文件 上传
         Route::post('mlmfiles/upload', 'UploadController@index')->name('mlmfiles.upload');
+
+
+
         
     });
 });
