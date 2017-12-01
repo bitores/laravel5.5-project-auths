@@ -46,9 +46,9 @@ class AccountController extends Controller
             $file->move($avatar,$path);
 
             $this->user->changeAvatar('/img/'.$path);
-            return ['code' => 0,'msg' => '上传成功'];
+            return ['code' => 0,'msg' => 'success'];
         } else {
-            return ['code'=>-1, 'msg' => '上传失败'];
+            return ['code'=>-1, 'msg' => 'error'];
         }
     }
 }

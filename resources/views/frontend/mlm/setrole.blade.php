@@ -20,8 +20,6 @@
 
                 	{{ Form::close() }}
 
-
-
 	        		{{ Form::open(['route' => 'frontend.user.bind.role', 'class' => 'form-horizontal']) }}
 
 	        				{{ Form::input('hidden', 'roleid',6) }}

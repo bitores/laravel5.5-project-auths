@@ -127,7 +127,6 @@
                                 swal(res.msg);
                             },
                             error: function(res) {
-                                
                             }
                         });
 
@@ -166,7 +165,8 @@
                 if(!name || name=='null'){  
                     name = '游客';
                 }
-            }  
+            }
+            
             @if(Active::checkUriPattern('im'))
             // 提交对话
             function onSubmit() {
