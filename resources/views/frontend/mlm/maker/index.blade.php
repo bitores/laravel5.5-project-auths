@@ -69,215 +69,187 @@
 @endsection
 
 @section('after-scripts')
-    {{ Html::script("/js/backend/plugin/dt-1.10.15/datatables.min.js") }}
-    {{ Html::script("js/backend/plugin/datatables/dataTables-extend.js") }}
-    <script type="text/javascript">var CSRF_TOKEN = "{{ csrf_token() }}";</script>
-    <script type="text/javascript" src="/js/libs/html2pdf2/jspdf.min.js"></script>
-	<script type="text/javascript" src="/js/libs/html2pdf2/html2canvas.min.js"></script>
-	<script type="text/javascript" src="/js/libs/html2pdf2/html2pdf.js"></script>
-	<script src="/js/libs/webuploader/webuploader.nolog.js"></script>
-	<script src="/js/libs/webuploader/webuploadRun.js"></script>
-    <script>
-        $(function() {
+{{ Html::script("/js/backend/plugin/dt-1.10.15/datatables.min.js") }}
+{{ Html::script("js/backend/plugin/datatables/dataTables-extend.js") }}
+<script type="text/javascript">var CSRF_TOKEN = "{{ csrf_token() }}";</script>
+<script type="text/javascript" src="/js/libs/html2pdf2/jspdf.min.js"></script>
+<script type="text/javascript" src="/js/libs/html2pdf2/html2canvas.min.js"></script>
+<script type="text/javascript" src="/js/libs/html2pdf2/html2pdf.js"></script>
+<script src="/js/libs/webuploader/webuploader.nolog.js"></script>
+<script src="/js/libs/webuploader/webuploadRun.js"></script>
+@include('frontend.includes.dataTableSetting')
+<script>
+$(function() {
 
-        	new bindWebupload('#fileupload',$('#filelist'),'上传模型文档','MODEL');
-        	$cur_uploadmodel = -1;
-            $('#products-table').DataTable({
-                dom: 'lfrtip',
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: {
-                    url: '{{ route("frontend.mlm.producer.product.tasks") }}',
-                    type: 'post',
-                    error: function (xhr, err) {
-                        if (err === 'parsererror')
-                            location.reload();
-                    }
-                },
-                columns: [
-                	{data: 'product_finish', name:''},
-                    {data: 'product_no', name: ''},
-                    {data: 'resource', name: ''},
-                    {data: 'cycle', name: ''},
-                    {data: 'fee', name: ''},
-                    {data: 'uploadbtn', name: ''},
-                    {data: 'product_status', name: ''},
-                    {data:'orders', name:''},
-                    // {data: 'download', name: ''},
-                ],
-                // order: [[1, "asc"]]
-                oLanguage: {
-		            "sProcessing": "正在加载中......",
-		            "sLengthMenu": "每页显示 _MENU_ 条记录",
-		            "sZeroRecords": "对不起，查询不到相关数据！",
-		            "sEmptyTable": "表中无数据存在！",
-		            "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
-		            "sInfoFiltered": "数据表中共为 _MAX_ 条记录",
-		            "sSearch": "搜索",
-		            "oPaginate": {
-		                "sFirst": "首页",
-		                "sPrevious": "上一页",
-		                "sNext": "下一页",
-		                "sLast": "末页"
+	new bindWebupload('#fileupload',$('#filelist'),'上传模型文档','MODEL');
+	$cur_uploadmodel = -1;
+
+
+	$.dataTableSetting.ajax.url = '{{ route("frontend.mlm.producer.product.tasks") }}';
+	$.dataTableSetting.columns = [
+	    {data: 'product_finish', name:''},
+        {data: 'product_no', name: ''},
+        {data: 'resource', name: ''},
+        {data: 'cycle', name: ''},
+        {data: 'fee', name: ''},
+        {data: 'uploadbtn', name: ''},
+        {data: 'product_status', name: ''},
+        {data:'orders', name:''},
+	];
+
+	$('#products-table').DataTable($.dataTableSetting);
+
+    $("#products-table").on('click', '.cancelbtn', function(){
+        var proid = $(this).attr('data-proid');
+        console.log(proid);
+
+        swal({
+            title: "取消接单",
+            text: "点击确认进行取消接单",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            cancelButtonText:'取消',
+            confirmButtonText:'确认',
+            closeOnConfirm: true
+        }, function (cycle) {
+            console.log(cycle);
+            if(true === cycle) {
+            	$.ajax({
+		            url: '{{ route("frontend.mlm.producer.product.cancelorder") }}',
+		            type:'POST',
+		            data:{
+		                'productid':proid
+		            },
+		            success: function(res) {
+		                if(0 === res.code){
+		                    swal("OK", "操作成功", "success");
+		                    location.reload();
+		                } else {
+		                    swal("OMG", "操作失败：" + res.msg, "error");
+		                    location.reload();
+		                }
+		            },
+		            error: function(res) {
+		                // swal.close()
+		                swal("OMG", "操作失败:", "error");
+		                location.reload();
 		            }
-		        } //多语言配置
-
-            });
-
-
-
-            $("#products-table").on('click', '.cancelbtn', function(){
-	            var proid = $(this).attr('data-proid');
-	            console.log(proid);
-
-	            swal({
-		            title: "取消接单",
-		            text: "点击确认进行取消接单",
-		            type: "warning",
-		            showCancelButton: true,
-		            closeOnConfirm: true,
-		            cancelButtonText:'取消',
-		            confirmButtonText:'确认',
-		            closeOnConfirm: true
-		        }, function (cycle) {
-		            console.log(cycle);
-		            if(true === cycle) {
-		            	$.ajax({
-				            url: '{{ route("frontend.mlm.producer.product.cancelorder") }}',
-				            type:'POST',
-				            data:{
-				                'productid':proid
-				            },
-				            success: function(res) {
-				                if(0 === res.code){
-				                    swal("OK", "操作成功", "success");
-				                    location.reload();
-				                } else {
-				                    swal("OMG", "操作失败：" + res.msg, "error");
-				                    location.reload();
-				                }
-				            },
-				            error: function(res) {
-				                // swal.close()
-				                swal("OMG", "操作失败:", "error");
-				                location.reload();
-				            }
-				        });
-		            }
-		            
-
-		            
 		        });
-        	});
+            }
+            
 
-
-        	$("#products-table").on('click', '.download', function(){
-	            var proid = $(this).attr('data-proid');
-	            console.log(proid);
-
-	            swal({
-		            title: "下载修改意见",
-		            text: "点击确认下载修改意见文档",
-		            type: "warning",
-		            showCancelButton: true,
-		            closeOnConfirm: true,
-		            cancelButtonText:'取消',
-		            confirmButtonText:'确认',
-		            closeOnConfirm: true
-		        }, function (cycle) {
-		            console.log(cycle);
-		            if(true === cycle) {
-		            	$.ajax({
-				            url: "/producer/model/review",
-				            type:'POST',
-				            data:{
-				                'productid':proid
-				            },
-				            success: function(res) {
-				                if(0 === res.code){
-				                    swal("OK", "操作成功", "success");
-									html2pdf(res.data.comments, {
-									  margin:       1,
-									  filename:     '修改意见文档.pdf',
-									  image:        { type: 'jpeg', quality: 0.98 },
-									  html2canvas:  { dpi: 192, letterRendering: true },
-									  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-									});
-				                } else {
-				                    swal("OMG", "操作失败", "error");
-				                }
-				            },
-				            error: function(res) {
-				                // swal.close()
-				                swal("OMG", "操作失败", "error");
-				            }
-				        });
-		            }
-		            
-
-		            
-		        });
-        	});
-
-
-            $("#products-table").on('click', '.uploadbtn', function(){
-            	$cur_uploadmodel = $(this).attr('data-proid');
-	            console.log($cur_uploadmodel);
-	            $("#filelist").removeAttr('file_id');
-	            $("#filelist").empty();
-            });
-
-        	$("#save-model").on('click', function(){
-	            var model_id = $("#filelist").attr('file_id');
-
-	            if(!!model_id == false) {
-	            	swal('OMG','模型未上传','error');
-	            	return;
-	            }
-
-	            $('#upload-dialog').modal('hide')
-
-	            swal({
-		            title: "提交审核",
-		            text: "点击确认进行提交",
-		            type: "warning",
-		            showCancelButton: true,
-		            closeOnConfirm: true,
-		            cancelButtonText:'取消',
-		            confirmButtonText:'确认',
-		            closeOnConfirm: true
-		        }, function (cycle) {
-		            console.log(cycle);
-		            if(true === cycle) {
-		            	$.ajax({
-				            url: '{{ route("frontend.mlm.producer.product.model") }}',
-				            type:'POST',
-				            data:{
-				                'productid':$cur_uploadmodel,
-				                'modelid': model_id
-				            },
-				            success: function(res) {
-				                if(0 === res.code){
-				                    swal("OK", "操作成功", "success");
-				                    location.reload();
-				                } else {
-				                    swal("OMG", "操作失败：" + res.msg, "error");
-				                    location.reload();
-				                }
-				            },
-				            error: function(res) {
-				                // swal.close()
-				                swal("OMG", "操作失败:", "error");
-				                location.reload();
-				            }
-				        });
-		            }
-		            
-
-		            
-		        });
-        	});
+            
         });
-    </script>
+	});
+
+
+	$("#products-table").on('click', '.download', function(){
+        var proid = $(this).attr('data-proid');
+        console.log(proid);
+
+        swal({
+            title: "下载修改意见",
+            text: "点击确认下载修改意见文档",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            cancelButtonText:'取消',
+            confirmButtonText:'确认',
+            closeOnConfirm: true
+        }, function (cycle) {
+            console.log(cycle);
+            if(true === cycle) {
+            	$.ajax({
+		            url: "/producer/model/review",
+		            type:'POST',
+		            data:{
+		                'productid':proid
+		            },
+		            success: function(res) {
+		                if(0 === res.code){
+		                    swal("OK", "操作成功", "success");
+							html2pdf(res.data.comments, {
+							  margin:       1,
+							  filename:     '修改意见文档.pdf',
+							  image:        { type: 'jpeg', quality: 0.98 },
+							  html2canvas:  { dpi: 192, letterRendering: true },
+							  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+							});
+		                } else {
+		                    swal("OMG", "操作失败", "error");
+		                }
+		            },
+		            error: function(res) {
+		                // swal.close()
+		                swal("OMG", "操作失败", "error");
+		            }
+		        });
+            }
+            
+
+            
+        });
+	});
+
+
+    $("#products-table").on('click', '.uploadbtn', function(){
+    	$cur_uploadmodel = $(this).attr('data-proid');
+        console.log($cur_uploadmodel);
+        $("#filelist").removeAttr('file_id');
+        $("#filelist").empty();
+    });
+
+	$("#save-model").on('click', function(){
+        var model_id = $("#filelist").attr('file_id');
+
+        if(!!model_id == false) {
+        	swal('OMG','模型未上传','error');
+        	return;
+        }
+
+        $('#upload-dialog').modal('hide')
+
+        swal({
+            title: "提交审核",
+            text: "点击确认进行提交",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            cancelButtonText:'取消',
+            confirmButtonText:'确认',
+            closeOnConfirm: true
+        }, function (cycle) {
+            console.log(cycle);
+            if(true === cycle) {
+            	$.ajax({
+		            url: '{{ route("frontend.mlm.producer.product.model") }}',
+		            type:'POST',
+		            data:{
+		                'productid':$cur_uploadmodel,
+		                'modelid': model_id
+		            },
+		            success: function(res) {
+		                if(0 === res.code){
+		                    swal("OK", "操作成功", "success");
+		                    location.reload();
+		                } else {
+		                    swal("OMG", "操作失败：" + res.msg, "error");
+		                    location.reload();
+		                }
+		            },
+		            error: function(res) {
+		                // swal.close()
+		                swal("OMG", "操作失败:", "error");
+		                location.reload();
+		            }
+		        });
+            }
+            
+
+            
+        });
+	});
+});
+</script>
 @endsection

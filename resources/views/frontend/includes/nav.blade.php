@@ -12,9 +12,9 @@
         </div><!--navbar-header-->
 
         <div class="collapse navbar-collapse" id="frontend-navbar-collapse">
-            <ul class="nav navbar-nav">
+<!--             <ul class="nav navbar-nav">
                 <li>{{ link_to_route('frontend.macros', trans('navs.frontend.macros'), [], ['class' => active_class(Active::checkRoute('frontend.macros')) ]) }}</li>
-            </ul>
+            </ul> -->
 
             <ul class="nav navbar-nav navbar-right">
                 @if (config('locale.status') && count(config('locale.languages')) > 1)
@@ -29,9 +29,9 @@
                 @endif
 
 
-                @if ($logged_in_user)
+<!--                 @if ($logged_in_user)
                     <li>{{ link_to_route('frontend.im', "广场", [], ['class' => active_class(Active::checkRoute('frontend.im')) ]) }}</li>
-                @endif
+                @endif -->
 
                 @if ($logged_in_user)
                     <li>{{ link_to_route('frontend.user.dashboard', trans('navs.frontend.dashboard'), [], ['class' => active_class(Active::checkRoute('frontend.user.dashboard')) ]) }}</li>
@@ -45,8 +45,9 @@
                     @endif
                 @else
                     <li class="dropdown">
+
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {{ $logged_in_user->name }} <span class="caret"></span>
+                            <img src="{{ access()->user()->picture }}"  onerror="this.src='/img/avatars/default.jpg'" style="width: 20px;height: 20px;border-radius: 10px;" alt="User Avatar"/> {{ $logged_in_user->name }} <span class="caret"></span>
                         </a>
 
                         <ul class="dropdown-menu" role="menu">

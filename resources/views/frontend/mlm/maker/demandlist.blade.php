@@ -49,48 +49,22 @@
     <script type="text/javascript" src="/js/libs/html2pdf2/jspdf.min.js"></script>
 	<script type="text/javascript" src="/js/libs/html2pdf2/html2canvas.min.js"></script>
 	<script type="text/javascript" src="/js/libs/html2pdf2/html2pdf.js"></script>
+	@include('frontend.includes.dataTableSetting')
     <script>
         $(function() {
-            $('#products-table').DataTable({
-                dom: 'lfrtip',
-                processing: true,
-                serverSide: true,
-                autoWidth: false,
-                ajax: {
-                    url: '{{ route("frontend.mlm.producer.product.alltasks") }}',
-                    type: 'post',
-                    error: function (xhr, err) {
-                        if (err === 'parsererror')
-                            location.reload();
-                    }
-                },
-                columns: [
-                    {data: 'product_no', name: ''},
-                    {data: 'resource', name: ''},
-                    {data: 'fee', name: ''},
-                    // {data: 'style', name: ''},
-                    {data: 'cycle', name: ''},
-                    {data:'orders', name:''},
-                    // {data: 'download', name: ''},
-                ],
-                // order: [[1, "asc"]]
 
-                oLanguage: {
-		            "sProcessing": "正在加载中......",
-		            "sLengthMenu": "每页显示 _MENU_ 条记录",
-		            "sZeroRecords": "对不起，查询不到相关数据！",
-		            "sEmptyTable": "表中无数据存在！",
-		            "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
-		            "sInfoFiltered": "数据表中共为 _MAX_ 条记录",
-		            "sSearch": "搜索",
-		            "oPaginate": {
-		                "sFirst": "首页",
-		                "sPrevious": "上一页",
-		                "sNext": "下一页",
-		                "sLast": "末页"
-		            }
-		        } //多语言配置
-            });
+    	$.dataTableSetting.ajax.url = '{{ route("frontend.mlm.producer.product.alltasks") }}';
+		$.dataTableSetting.columns = [
+		    {data: 'product_no', name: ''},
+            {data: 'resource', name: ''},
+            {data: 'fee', name: ''},
+            // {data: 'style', name: ''},
+            {data: 'cycle', name: ''},
+            {data:'orders', name:''},
+            // {data: 'download', name: ''},
+		];
+
+		$('#products-table').DataTable($.dataTableSetting);
 
             $("#products-table").on('click', '.orderbtn', function(){
 	            var proid = $(this).attr('data-proid');

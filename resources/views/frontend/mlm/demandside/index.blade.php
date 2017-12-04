@@ -42,50 +42,31 @@
 
 @section('after-scripts')
 {{ Html::script("/js/backend/plugin/dt-1.10.15/datatables.min.js") }}
-{{ Html::script("js/backend/plugin/datatables/dataTables-extend.js") }}
+{{ Html::script("/js/backend/plugin/datatables/dataTables-extend.js") }}
 <script type="text/javascript" src="/js/libs/html2pdf2/jspdf.min.js"></script>
 <script type="text/javascript" src="/js/libs/html2pdf2/html2canvas.min.js"></script>
 <script type="text/javascript" src="/js/libs/html2pdf2/html2pdf.js"></script>
+@include('frontend.includes.dataTableSetting')
 <script>
 $(function() {
-    $('#products-table').DataTable({
-        dom: 'lfrtip',
-        processing: true,
-        serverSide: true,
-        autoWidth: false,
-        ajax: {
-            url: '{{ route("frontend.mlm.demandside.products.get") }}',
-            type: 'post',
-            error: function (xhr, err) {
-                if (err === 'parsererror')
-                    location.reload();
-            }
-        },
-        columns: [
-            {data: 'product_no', name: ''},
-            {data: 'cycle', name: ''},
-            {data: 'status_no', name: ''},
-            {data:'actions', name:''},
-            {data: 'fee', name: ''},
-        ],
-        // order: [[1, "asc"]]
 
-        oLanguage: {
-            "sProcessing": "正在加载中......",
-            "sLengthMenu": "每页显示 _MENU_ 条记录",
-            "sZeroRecords": "对不起，查询不到相关数据！",
-            "sEmptyTable": "表中无数据存在！",
-            "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
-            "sInfoFiltered": "数据表中共为 _MAX_ 条记录",
-            "sSearch": "搜索",
-            "oPaginate": {
-                "sFirst": "首页",
-                "sPrevious": "上一页",
-                "sNext": "下一页",
-                "sLast": "末页"
-            }
-        } //多语言配置
-    });
+	$.fn.dataTable.ext.search.push(  
+	    function( settings, data, dataIndex ) {  
+	         console.log(data);
+	        return false;  
+	    }  
+	);
+
+	$.dataTableSetting.ajax.url = '{{ route("frontend.mlm.demandside.products.get") }}';
+	$.dataTableSetting.columns = [
+        {data: 'product_no', name: ''},
+        {data: 'cycle', name: ''},
+        {data: 'status_no', name: ''},
+        {data:'actions', name:''},
+        {data: 'fee', name: ''},
+    ];
+
+    $('#products-table').DataTable($.dataTableSetting);
 
     $("#products-table").on('click', '.download', function(){
         var proid = $(this).attr('data-proid');
