@@ -50,19 +50,25 @@ class AuditorController extends Controller
         // $styles = $styleRes->getAll();
         return DataTables::of($this->product->getForAuditorDataTable())
             ->escapeColumns(['fee'])
+            ->addColumn('fee', function($product) {
+                return '￥'.$product->fee;
+            })
             ->addColumn('product_no', function ($product) {
-                if(is_null($product->product_no)) {
-                    return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
-                }
+                // if(is_null($product->product_no)) {
+                //     return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
+                // }
 
-                return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+                return '<a href="'.route("frontend.mlm.demandside.product.show", $product->id).'" style="display: inline-block;"><img src="'.($product->cover_path?("/uploads/materials/".$product->cover_path):("/img/avatars/product.png")).'" style="width:100px;height:100px;display:inline-block;margin-right:10px"><span>'.(is_null($product->product_no)?"未命名":$product->product_no).'</span></a>';
+
+
+
             })
             ->addColumn('cycle', function ($product) {
                 if(is_null($product->cycle)) {
                     return '未确定';
                 }
 
-                return $product->cycle;
+                return $product->cycle  . '天';
             })
             ->addColumn('resource', function ($product) {
                 $resource = ($product->image_count . '张图片 +');
@@ -82,12 +88,12 @@ class AuditorController extends Controller
             })
             ->addColumn('actions', function ($product) {
 
-                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">'
+                return '<div data-proid="'.$product->id.'" class="btn btn-fix nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">'
                 .($product->review_demand_count==0?'不通过':('打回'.$product->review_demand_count.'次')).
-                '</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
+                '</div> <div data-proid="'.$product->id.'" class="btn btn-fix pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
-                return '<div data-proid="'.$product->id.'" class="btn btn-info download">下载资料包</div>';
+                return '<div data-proid="'.$product->id.'" class="btn btn-fix download">资料包</div>';
             })
             ->make(true);
     }
@@ -99,19 +105,25 @@ class AuditorController extends Controller
         // $styles = $styleRes->getAll();
         return DataTables::of($this->product->getProducerModelsDataTable())
             ->escapeColumns(['fee'])
+            ->addColumn('fee', function($product) {
+                return '￥'.$product->fee;
+            })
+            
             ->addColumn('product_no', function ($product) {
-                if(is_null($product->product_no)) {
-                    return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
-                }
+                // if(is_null($product->product_no)) {
+                //     return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
+                // }
 
-                return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+                // return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+
+                return '<a href="'.route("frontend.mlm.demandside.product.show", $product->id).'" style="display: inline-block;"><img src="'.($product->cover_path?("/uploads/materials/".$product->cover_path):("/img/avatars/product.png")).'" style="width:100px;height:100px;display:inline-block;margin-right:10px"><span>'.(is_null($product->product_no)?"未命名":$product->product_no).'</span></a>';
             })
             ->addColumn('cycle', function ($product) {
                 if(is_null($product->cycle)) {
                     return '未确定';
                 }
 
-                return $product->cycle;
+                return $product->cycle  . '天';
             })
             ->addColumn('resource', function ($product) {
                 $resource = ($product->images . '张图片 +');
@@ -131,12 +143,12 @@ class AuditorController extends Controller
             })
             ->addColumn('actions', function ($product) {
 
-                return '<div data-proid="'.$product->id.'" class="btn btn-warning nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">'
+                return '<div data-proid="'.$product->id.'" class="btn btn-fix nopass" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#alert-editor">'
                 .($product->review_model_count==0?'不通过':('打回'.$product->review_model_count.'次')).
-                '</div> <div data-proid="'.$product->id.'" class="btn btn-success pass">通过</div> ';
+                '</div> <div data-proid="'.$product->id.'" class="btn btn-fix pass">通过</div> ';
             })
             ->addColumn('download', function($product) {
-                return '<div data-proid="'.$product->id.'" class="btn btn-info icon-circle-arrow-down download">下载资料包</div><div data-proid="'.$product->id.'" class="btn btn-info icon-circle-arrow-down downloadmodel">下载模型</div>';
+                return '<div data-proid="'.$product->id.'" class="btn btn-fix icon-circle-arrow-down download">资料包</div><div data-proid="'.$product->id.'" class="btn btn-fix icon-circle-arrow-down downloadmodel">模型</div>';
             })
             ->make(true);
     }

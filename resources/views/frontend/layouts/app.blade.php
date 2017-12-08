@@ -10,7 +10,7 @@
 
         <!-- Meta -->
         <meta name="description" content="@yield('meta_description', 'Laravel 5 Boilerplate')">
-        <meta name="author" content="@yield('meta_author', 'Anthony Rappa')">
+        <meta name="author" content="@yield('meta_author', 'Huang Zhengjie')">
         @yield('meta')
 
         <!-- Styles -->
@@ -36,6 +36,10 @@
             @include('includes.partials.logged-in-as')
             @include('frontend.includes.nav')
 
+            <div class="container" >
+                <a class="btn pull-right" style="color: gray;height: 60px;display: inline-block;line-height: 60px" href="#" onclick="history.back()" >返回 ></a>
+            </div>
+            
             <div class="container">
                 @include('includes.partials.messages')
                 @yield('content')

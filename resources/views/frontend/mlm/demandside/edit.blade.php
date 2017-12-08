@@ -9,10 +9,12 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">编辑产品  
+    <div class="panel-heading fix"><big>产品【{{$product->product_no}}】</big>
     @if($product->status_no < 1006)
-    <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div>
+    <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除</div>
     @endif
+    <!-- <div data-proid="{{$product->id}}" id="delbtn" class="btn">删除产品</div> -->
+    <div class="btn pull-right" id="saveBtn">保存</div>
     </div>
     <div class="panel-body">
         <div class="row">
@@ -41,25 +43,25 @@
                 </div>
 
                 <div class="form-group">
-                        <div class="col-md-12">
-                            <label>CAD资料</label>
-                            <div class="btn btn-block btn-default fileupload1" id="fileupload1">上传</div>
-                            <span class="filelist1" id="filelist1" style="word-break: break-all;" file_id="{{$product->cad_id}}">
-                                {{$product->cad_id?'已上传':'未上传'}}
-                            </span>
-                        </div>
+                    <div class="col-md-12" style="margin-top: 50px;border-bottom: 1px solid #dadada;">
+                        <label>CAD资料</label>
+                        <div class="btn fileupload1 pull-right" id="fileupload1" style="text-align: right">选择上传</div>
+                        <span class="filelist1" id="filelist1" style="word-break: break-all;" file_id="{{$product->cad_id}}">
+                            {{$product->cad_id?'已上传':'未上传'}}
+                        </span>
                     </div>
+                </div>
 
 
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>其它资料</label>
-                            <div class="btn btn-block btn-default fileupload2" id="fileupload2">上传</div>
-                            <span class="filelist2" id="filelist2" style="word-break: break-all;" file_id="{{$product->file_id}}">
-                                {{$product->file_id?'已上传':'未上传'}}
-                            </span>
-                        </div>
+                <div class="form-group">
+                    <div class="col-md-12" style="margin-top: 50px;border-bottom: 1px solid #dadada;">
+                        <label>其它资料</label>
+                        <div class="btn fileupload2 pull-right" id="fileupload2" style="text-align: right">选择上传</div>
+                        <span class="filelist2" id="filelist2" style="word-break: break-all;" file_id="{{$product->file_id}}">
+                            {{$product->file_id?'已上传':'未上传'}}
+                        </span>
                     </div>
+                </div>
         	</div>
         	<div class="col-md-4">
     			 {{ Form::open(['route' => 'frontend.auth.register.mobile.post', 'class' => 'form-horizontal']) }}
@@ -80,7 +82,7 @@
                                     </select>
                                 </div>
                                 <div class="col-xs-4">
-                                    <div class="btn btn-block btn-info" id="createBrand">新建</div>
+                                    <div class="btn btn-block btn-fix" id="createBrand">新建</div>
                                 </div>
                             </div>
                         </div>
@@ -156,27 +158,14 @@
                     <div class="form-group">
                     	<div class="col-md-12">
                             <label>产品简介</label>
-                    		{{ Form::textarea('mobile', $product->introduction, ['class' => 'form-control',  'id'=>'introduction', 'maxlength' => '100', 'required' => 'required', 'placeholder' => '产品简介（不超过100字）', 'style'=>'height:100px;']) }}
+                    		{{ Form::textarea('mobile', $product->introduction, ['class' => 'form-control',  'id'=>'introduction', 'maxlength' => '100', 'required' => 'required', 'placeholder' => '产品简介（不超过100字）', 'style'=>'height:100px;resize: none;']) }}
                     	</div>
                     </div><!--form-group-->
 
-                    <div class="form-group">
-                        <div class="col-md-12" style="padding: 0">
-                            <div class="col-xs-6">
-                                <a href="{{route('frontend.mlm.demandside.index')}}" class="btn btn-block btn-danger">取消</a>
-                            </div><!--col-md-6-->
-                            <div class="col-xs-6">
-                                <div class="btn btn-block btn-info" id="saveBtn">保存</div>
-                            </div><!--col-md-6-->
-                        </div>
-                    </div><!--form-group-->
-
-                    
-
 
                     <div class="form-group">
-                        <div class="col-md-12">
-                                <div id="submitBtn" class="btn btn-block btn-success">提交审核</div>
+                        <div class="col-md-12" style="text-align: center;">
+                            <div id="submitBtn" class="btn btn-fix">提交审核</div>
                         </div>
                     </div><!--form-group-->
 

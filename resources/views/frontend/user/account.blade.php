@@ -10,40 +10,37 @@
         <div class="col-xs-12">
 
             <div class="panel panel-default">
-                <div class="panel-heading">{{ trans('navs.frontend.user.account') }}</div>
+                <div class="panel-heading fix">
+                <div role="presentation" style="display: inline-block;">
+                    <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><big>{{ trans('navs.frontend.user.account') }}</big></a>
+                </div>
+
+                @if ($logged_in_user->canChangePassword())
+                <div role="presentation" class="pull-right">
+                    <a href="#password" aria-controls="password" role="tab" data-toggle="tab">{{ trans('navs.frontend.user.change_password') }}</a>
+                </div>
+                @endif
+
+                <div class="pull-right">
+                    <a href="#edit" aria-controls="edit" role="tab" data-toggle="tab">{{ trans('navs.frontend.user.editor') }}</a>
+                </div>
+                @if(empty($logged_in_user->email))
+                <div role="presentation" class="pull-right">
+                    <a href="#email" aria-controls="email" role="tab" data-toggle="tab">绑定邮箱</a>
+                </div>
+                @endif
+
+                @if(empty($logged_in_user->mobile))
+                <div role="presentation" class="pull-right">
+                    <a href="#phone" aria-controls="phone" role="tab" data-toggle="tab">绑定手机号</a>
+                 </div>
+                @endif
+
+                </div>
 
                 <div class="panel-body">
 
                     <div role="tabpanel">
-
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">{{ trans('navs.frontend.user.profile') }}</a>
-                            </li>
-
-                            <li role="presentation">
-                                <a href="#edit" aria-controls="edit" role="tab" data-toggle="tab">{{ trans('labels.frontend.user.profile.update_information') }}</a>
-                            </li>
-
-                            @if(empty($logged_in_user->email))
-                            <li role="presentation">
-                                <a href="#email" aria-controls="email" role="tab" data-toggle="tab">绑定邮箱</a>
-                            </li>
-                            @endif
-
-                            @if(empty($logged_in_user->mobile))
-                            <li role="presentation">
-                                <a href="#phone" aria-controls="phone" role="tab" data-toggle="tab">绑定手机号</a>
-                            </li>
-                            @endif
-
-                            @if ($logged_in_user->canChangePassword())
-                                <li role="presentation">
-                                    <a href="#password" aria-controls="password" role="tab" data-toggle="tab">{{ trans('navs.frontend.user.change_password') }}</a>
-                                </li>
-                            @endif
-                        </ul>
 
                         <div class="tab-content">
 

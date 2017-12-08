@@ -32,7 +32,7 @@
 </div>
 
 	<div class="panel panel-default">
-	    <div class="panel-heading">需求审核任务列表<a href="{{route('frontend.mlm.auditor.modellist')}}" class="btn pull-right">模型审核列表</a></div>
+	    <div class="panel-heading fix"><big>需求列表</big><a href="{{route('frontend.mlm.auditor.modellist')}}" class="btn pull-right">模型列表</a></div>
  
 	   
 
@@ -44,16 +44,16 @@
 
 	        			<div class="box-body">
 				            <div class="table-responsive">
-				                <table id="products-table" class="table table-condensed table-hover">
+				                <table id="products-table" class="table table-condensed table-hover spaing-fix">
 				                    <thead>
 				                        <tr>
 				                            <th>模型名称</th>
-				                            <th>任务相关资料</th>
-				                            <th>建模费用</th>
+				                            <th>相关资料</th>
+				                            <th>制作费用</th>
 				                            <th>模型风格</th>
-				                            <th>模型制作周期</th>
-				                            <th>是否审核通过</th>
-				                            <th>下载资料包</th>
+				                            <th>制作周期</th>
+				                            <th>审核</th>
+				                            <th>下载</th>
 				                        </tr>
 				                    </thead>
 				                </table>

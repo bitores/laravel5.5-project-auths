@@ -34,7 +34,7 @@
    </div>
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading">我的订单<a href="{{route('frontend.mlm.producer.demandlist')}}" class="btn pull-right">需求池</a></div>
+    <div class="panel-heading fix"><big>我的订单</big><a href="{{route('frontend.mlm.producer.demandlist')}}" class="btn pull-right">需求池</a></div>
     <div class="panel-body">
         <div class="row">
         	<div class="col-md-12">
@@ -42,18 +42,17 @@
         		<div class="box box-success">
         			<div class="box-body">
 			            <div class="table-responsive">
-			                <table id="products-table" class="table table-condensed table-hover">
+			                <table id="products-table" class="table table-condensed table-hover spaing-fix">
 			                    <thead>
 			                        <tr>
-
-			                        	<th>任务完成状态</th>
 			                            <th>任务名称</th>
-			                            <th>预览任务相关资料</th>
+			                            <th>相关资料</th>
 			                            <th>建模时间</th>
 			                            <th>建模费用</th>
 			                            <th>上传模型</th>
 			                            <th>项目状态</th>
-			                            <th>是否取消接单</th>
+                                        <th>完成状态</th>
+			                            <th>取消接单</th>
 
 			                        </tr>
 			                    </thead>
@@ -87,13 +86,14 @@ $(function() {
 
 	$.dataTableSetting.ajax.url = '{{ route("frontend.mlm.producer.product.tasks") }}';
 	$.dataTableSetting.columns = [
-	    {data: 'product_finish', name:''},
+	    
         {data: 'product_no', name: ''},
         {data: 'resource', name: ''},
         {data: 'cycle', name: ''},
         {data: 'fee', name: ''},
         {data: 'uploadbtn', name: ''},
         {data: 'product_status', name: ''},
+        {data: 'product_finish', name:''},
         {data:'orders', name:''},
 	];
 

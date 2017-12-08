@@ -31,7 +31,7 @@
 
 </div>
 	<div class="panel panel-default">
-	    <div class="panel-heading">模型审核任务列表<a href="{{route('frontend.mlm.auditor.demandlist')}}" class="btn pull-right">需求审核列表</a></div>
+	    <div class="panel-heading fix"><big>模型列表</big><a href="{{route('frontend.mlm.auditor.demandlist')}}" class="btn pull-right">需求列表</a></div>
 <!--         <div id="alert-editor" class="alert-editor" hidden="">
             <div id="editor" class="editor"></div>
             <div id="save-content" class="btn btn-info pull-right save-content">提交修改意见</div>
@@ -45,16 +45,16 @@
 
 	        			<div class="box-body">
 				            <div class="table-responsive">
-				                <table id="products-table" class="table table-condensed table-hover">
+				                <table id="products-table" class="table table-condensed table-hover spaing-fix">
 				                    <thead>
 				                        <tr>
 				                            <th>模型名称</th>
-				                            <th>任务相关资料</th>
+				                            <th>相关资料</th>
 				                            <th>截止时间</th>
 				                            <th>模型风格</th>
-				                            <th>模型制作周期</th>
-				                            <th>是否审核通过</th>
-				                            <th>下载模型和资料包</th>
+				                            <th>制作周期</th>
+				                            <th>审核</th>
+				                            <th>下载</th>
 				                        </tr>
 				                    </thead>
 				                </table>

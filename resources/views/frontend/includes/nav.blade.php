@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default">
+<nav class="navbar-fix navbar-default1">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#frontend-navbar-collapse">
@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
             </button>
 
-            {{ link_to_route('frontend.index', app_name(), [], ['class' => 'navbar-brand']) }}
+            {{ link_to_route('frontend.index', "共享设计师", [], ['class' => 'navbar-brand']) }}
         </div><!--navbar-header-->
 
         <div class="collapse navbar-collapse" id="frontend-navbar-collapse">
@@ -17,25 +17,14 @@
             </ul> -->
 
             <ul class="nav navbar-nav navbar-right">
-                @if (config('locale.status') && count(config('locale.languages')) > 1)
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {{ trans('menus.language-picker.language') }}
-                            <span class="caret"></span>
-                        </a>
-
-                        @include('includes.partials.lang')
-                    </li>
-                @endif
+                
 
 
 <!--                 @if ($logged_in_user)
                     <li>{{ link_to_route('frontend.im', "广场", [], ['class' => active_class(Active::checkRoute('frontend.im')) ]) }}</li>
                 @endif -->
 
-                @if ($logged_in_user)
-                    <li>{{ link_to_route('frontend.user.dashboard', trans('navs.frontend.dashboard'), [], ['class' => active_class(Active::checkRoute('frontend.user.dashboard')) ]) }}</li>
-                @endif
+                
 
                 @if (! $logged_in_user)
                     <li>{{ link_to_route('frontend.auth.login', trans('navs.frontend.login'), [], ['class' => active_class(Active::checkRoute('frontend.auth.login')) ]) }}</li>
@@ -60,7 +49,24 @@
                     </li>
                 @endif
 
+                @if ($logged_in_user)
+                    <li>{{ link_to_route('frontend.user.dashboard', trans('navs.frontend.dashboard'), [], ['class' => active_class(Active::checkRoute('frontend.user.dashboard')) ]) }}</li>
+                @endif
+
                 <li>{{ link_to_route('frontend.contact', trans('navs.frontend.contact'), [], ['class' => active_class(Active::checkRoute('frontend.contact')) ]) }}</li>
+
+                <li><a style="visibility: hidden;display: inline-block;"></a><small>{{ link_to('lang/zh', '中文 ') }}|{{ link_to('lang/en', ' EN ') }}</small></li>
+
+                <!-- @if (config('locale.status') && count(config('locale.languages')) > 1)
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            {{ trans('menus.language-picker.language') }}
+                            <span class="caret"></span>
+                        </a>
+
+                        @include('includes.partials.lang')
+                    </li>
+                @endif -->
             </ul>
         </div><!--navbar-collapse-->
     </div><!--container-->

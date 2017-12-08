@@ -1,10 +1,12 @@
 <script type="text/javascript">
 $.dataTableSetting = {
     dom: 'lfrtip',
-    processing: true,
+    processing: false,
     serverSide: true,
     autoWidth: false,
-    // searching: false,
+    searching: false,
+    bLengthChange: false,
+    bInfo: false,
     bFilter: true,
     ajax: {
         // url: '{{ route("frontend.mlm.demandside.products.get") }}',
@@ -69,8 +71,8 @@ $.dataTableSetting = {
         "sSearch": "搜索",
         "oPaginate": {
             "sFirst": "首页",
-            "sPrevious": "上一页",
-            "sNext": "下一页",
+            "sPrevious": "<",
+            "sNext": ">",
             "sLast": "末页"
         }
     } //多语言配置

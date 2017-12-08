@@ -6,7 +6,7 @@
         <div class="col-xs-12">
 
             <div class="panel panel-default">
-                <div class="panel-heading">{{ trans('navs.frontend.dashboard') }} 
+                <div class="panel-heading fix"><big>{{ trans('navs.frontend.dashboard') }}</big>
                     @role('demandside')
                     <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a>
                     @endauth

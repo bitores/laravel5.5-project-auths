@@ -8,7 +8,7 @@
 
 @section('content')
 	<div class="panel panel-default">
-	    <div class="panel-heading">产品列表 <a href="{{route('frontend.mlm.demandside.product.create')}}" class="btn pull-right">新建产品</a><div class="btn pull-right" id="allsubmit">批量提交审核</div> </div>
+	    <div class="panel-heading fix"><big>产品列表</big> <a href="{{route('frontend.mlm.demandside.product.create')}}" class="btn pull-right">新建产品</a><div class="btn pull-right" id="allsubmit">一键提交审核</div> </div>
 	    <div class="panel-body">
 	        <div class="row">
 	        	<div class="col-md-12">
@@ -16,16 +16,16 @@
 	        		<div class="box box-success">
 	        			<div class="box-body">
 				            <div class="table-responsive">
-				                <table id="products-table" class="table table-condensed table-hover">
+				                <table id="products-table" class="table table-condensed table-hover spaing-fix">
 				                    <thead>
 				                        <tr>
 
 				                            <th>模型名称</th>
-				                            <th>模型制作周期</th>
+				                            <th>制作周期</th>
+				                            <th>制作费用</th>
 				                            <th>任务状态</th>
-				                            <th>是否撤单（接单后不允许撤单）</th>
-				                            <th>模型制作费用（单位/元）</th>
-
+				                            <th>撤单</th>
+				                            
 				                        </tr>
 				                    </thead>
 				                </table>
@@ -61,9 +61,10 @@ $(function() {
 	$.dataTableSetting.columns = [
         {data: 'product_no', name: ''},
         {data: 'cycle', name: ''},
+        {data: 'fee', name: ''},
         {data: 'status_no', name: ''},
         {data:'actions', name:''},
-        {data: 'fee', name: ''},
+        
     ];
 
     $('#products-table').DataTable($.dataTableSetting);

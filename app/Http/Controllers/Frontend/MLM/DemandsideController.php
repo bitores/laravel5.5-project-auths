@@ -219,6 +219,8 @@ class DemandsideController extends Controller
         if($request->get('face_id'))
         {
             $images = $uimageRes->updateCoverByImageId($request->get('face_id'));
+            $image = $uimageRes->find($request->get('face_id'));
+            $this->product->updateCoverPath($product->id, $image->path);
         }
 
         
@@ -359,19 +361,24 @@ class DemandsideController extends Controller
     {
         return DataTables::of($this->product->getForDataTable())
             ->escapeColumns(['fee'])
-            ->addColumn('product_no', function ($product) {
-                if(is_null($product->product_no)) {
-                    return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
+            ->addColumn('fee', function($product){
+                if($product->fee) {
+                    return '￥'. $product->fee;
+                } else {
+                    return '-';
                 }
+                
+            })
+            ->addColumn('product_no', function ($product) {
 
-                return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+                return '<a href="'.route("frontend.mlm.demandside.product.show", $product->id).'" style="display: inline-block;"><img src="'.($product->cover_path?("/uploads/materials/".$product->cover_path):("/img/avatars/product.png")).'" style="width:100px;height:100px;display:inline-block;margin-right:10px"><span>'.(is_null($product->product_no)?"未命名":$product->product_no).'</span></a>';
             })
             ->addColumn('cycle', function ($product) {
                 if(is_null($product->cycle)) {
-                    return '未确定';
+                    return '-';
                 }
 
-                return $product->cycle;
+                return $product->cycle . '天';
             })
             ->addColumn('status_no', function ($product) {
                 // 1000 需求未提交（已保存/未提交）
@@ -390,42 +397,42 @@ class DemandsideController extends Controller
 
                 if($product->status_no === 1000)
                 {
-                    return '<div style="color:gray">未提交</div>';
+                    return '<div>未提交</div>';
                 } else if($product->status_no === 1001) {
 
-                    return '<div style="color:blue">需求审核中</div>';
+                    return '<div>需求审核中</div>';
                 } else if($product->status_no === 1002) {
 
-                    return '<div style="color:red">需求审核未通过</div> <a href="'.route("frontend.mlm.demandside.product.assessment", $product->id).'">查看</a> <div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
+                    return '<div>需求审核未通过</div><a href="'.route("frontend.mlm.demandside.product.assessment", $product->id).'" class="font-color">查看结果</a><div data-proid="'.$product->id.'" class="btn download font-color">下载文档</div>';
                 } else if($product->status_no === 1003) {
 
-                    return '<div style="color:green">需求审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info postbtn">发布</div>';
+                    return '<div>需求审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-fix postbtn" style="cursor:pointer">发布</div>';
                 } else if($product->status_no === 1005) {
 
-                    return '<div style="color:blue">等待接单</div>';
+                    return '<div>等待接单</div>';
                 } else if($product->status_no === 1006) {
 
-                    return '<div style="color:green">制作中</div>';
+                    return '<div>制作中</div>';
                 } else if($product->status_no === 1007) {
 
-                    return '<div style="color:blue">模型审核中</div>';
+                    return '<div>模型审核中</div>';
                 }  else if($product->status_no === 1008) {
 
-                    return '<div style="color:red">模型审核未通过</div><a href="'.route("frontend.mlm.producer.product.assessment", $product->id).'">查看</a><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
+                    return '<div>模型审核未通过</div><a href="'.route("frontend.mlm.demandside.product.assessment", $product->id).'" class="font-color">查看结果</a><div data-proid="'.$product->id.'" class="btn download font-color">下载文档</div>';
                 } else if($product->status_no === 1009) {
 
-                    return '<div style="color:green">模型审核已通过</div><div data-proid="'.$product->id.'" class="btn btn-info downloadmodel">下载模型</div>';
+                    return '<div>模型审核已通过</div><div data-proid="'.$product->id.'" class="btn downloadmodel font-color">下载模型</div>';
                 } else if($product->status_no === 1010) {
                     
-                    return '<div style="color:black">模型已入库</div>';
+                    return '<div>模型已入库</div>';
                 }
             })
             ->addColumn('actions', function ($product) {
                 if($product->status_no == 1005 )
                 {
-                    return '<div data-proid="'.$product->id.'" class="btn btn-warning cancelbtn">撤单</div>';
+                    return '<div data-proid="'.$product->id.'" class="btn btn-fix cancelbtn">撤单</div>';
                 } else {
-                    return " - ";
+                    return '<div data-proid="'.$product->id.'" class="btn btn-fix-error">撤单</div>';
                 }
                 
             })

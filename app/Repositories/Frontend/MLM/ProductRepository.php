@@ -35,6 +35,7 @@ class ProductRepository extends BaseRepository
                 'products.cycle',
                 'products.fee',
                 'products.introduction',
+                'products.cover_path',
             ])
             ->orderBy('updated_at','desc');
     }
@@ -51,6 +52,7 @@ class ProductRepository extends BaseRepository
                 'products.file_id',
                 'products.cycle',
                 'products.fee',
+                'products.cover_path',
                 'p_styles.name as style_name'
             ])
             ->orderBy('products.updated_at','desc');
@@ -68,6 +70,7 @@ class ProductRepository extends BaseRepository
                 'products.file_id',
                 'products.cycle',
                 'products.fee',
+                'products.cover_path',
                 'p_styles.name as style_name'
             ])
             ->orderBy('products.updated_at','desc');
@@ -86,6 +89,7 @@ class ProductRepository extends BaseRepository
                 'products.file_id',
                 'products.cycle',
                 'products.fee',
+                'products.cover_path',
             ])
             ->orderBy('products.updated_at','desc');
     }
@@ -103,6 +107,7 @@ class ProductRepository extends BaseRepository
                 'products.status_no',
                 'products.cycle',
                 'products.fee',
+                'products.cover_path',
             ])
             ->orderBy('products.updated_at','desc');
     }
@@ -287,7 +292,16 @@ class ProductRepository extends BaseRepository
         return $product;
     }
 
-    
+    public function updateCoverPath($proid, $path)
+    {
+
+        $product = $this->find($proid);
+        $product->cover_path = $path;
+        $product->save();
+
+        $this->saveHistory($product);
+        return $product;
+    }
 
     public function updateCycle($proid, $cycle)
     {

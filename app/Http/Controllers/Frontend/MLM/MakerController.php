@@ -69,19 +69,30 @@ class MakerController extends Controller
 
         return DataTables::of($this->product->getForProducerDataTable())
             ->escapeColumns(['fee'])
-            ->addColumn('product_no', function ($product) {
-                if(is_null($product->product_no)) {
-                    return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
+            ->addColumn('fee', function($product){
+                if($product->fee) {
+                    return '￥'. $product->fee;
+                } else {
+                    return '-';
                 }
+                
+            })
+            ->addColumn('product_no', function ($product) {
+                // if(is_null($product->product_no)) {
+                //     return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
+                // }
 
-                return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+                // return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+
+
+                return '<a href="'.route("frontend.mlm.demandside.product.show", $product->id).'" style="display: inline-block;"><img src="'.($product->cover_path?("/uploads/materials/".$product->cover_path):("/img/avatars/product.png")).'" style="width:100px;height:100px;display:inline-block;margin-right:10px"><span>'.(is_null($product->product_no)?"未命名":$product->product_no).'</span></a>';
             })
             ->addColumn('cycle', function ($product) {
                 if(is_null($product->cycle)) {
                     return '未确定';
                 }
 
-                return $product->cycle;
+                return $product->cycle  . '天';
             })
             ->addColumn('resource', function ($product) {
                 $resource = ($product->images . '张图片 +');
@@ -106,7 +117,7 @@ class MakerController extends Controller
             //     return '<div data-proid="'.$product->id.'" class="btn btn-info">下载资料包</div>';
             // })
             ->addColumn('orders', function($product) {
-                return '<div data-proid="'.$product->id.'" class="btn btn-info orderbtn">接单</div>';
+                return '<div data-proid="'.$product->id.'" class="btn btn-fix orderbtn" class="font-color">接单</div>';
             })
 
             ->make(true);
@@ -118,6 +129,14 @@ class MakerController extends Controller
 
         return DataTables::of($this->product->getForProducerSelfDataTable())
             ->escapeColumns(['fee'])
+            ->addColumn('fee', function($product){
+                if($product->fee) {
+                    return '￥'. $product->fee;
+                } else {
+                    return '-';
+                }
+                
+            })
             ->addColumn('product_finish', function ($product) {
                 if($product->status_no===1009) {
                     return '具体时间';
@@ -128,15 +147,15 @@ class MakerController extends Controller
             ->addColumn('product_status', function ($product) {
 
                 if($product->status_no === 1006) {
-                    return '<div style="color:green">制作中</div>';
+                    return '<div>制作中</div>';
                 } else if($product->status_no === 1007) {
-                    return '<div style="color:blue">模型审核中</div>';
+                    return '<div>模型审核中</div>';
                 } else if($product->status_no === 1008) {
-                    return '<div style="color:red">模型审核未通过</div><a href="'.route("frontend.mlm.producer.product.assessment", $product->id).'">查看</a><div data-proid="'.$product->id.'" class="btn btn-info download">下载修改意见</div>';
+                    return '<div>模型审核未通过</div><a href="'.route("frontend.mlm.producer.product.assessment", $product->id).'" class="font-color">查看结果</a><div data-proid="'.$product->id.'" class="btn download font-color">下载文档</div>';
                 } else if($product->status_no === 1009) {
-                    return '<div style="color:green">模型审核已通过</div>';
+                    return '<div>模型审核已通过</div>';
                 } else if($product->status_no === 1010) {
-                    return '<div style="color:black">模型已入库</div>';
+                    return '<div>模型已入库</div>';
                 }
 
                 return '细节问题'.$product->status_no;
@@ -144,23 +163,25 @@ class MakerController extends Controller
             ->addColumn('uploadbtn', function ($product) {
 
                 if($product->status_no == 1006 || $product->status_no == 1008) {
-                    return '<div class="btn btn-info uploadbtn" data-proid="'.$product->id.'" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#upload-dialog">上传</div>';
+                    return '<div class="btn btn-fix uploadbtn" data-proid="'.$product->id.'" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#upload-dialog">上传</div>';
                 }
-                return '';
+                return '已上传';
             })
             ->addColumn('product_no', function ($product) {
-                if(is_null($product->product_no)) {
-                    return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
-                }
+                // if(is_null($product->product_no)) {
+                //     return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">未命名</a>';
+                // }
 
-                return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+                // return '<a class="col-md-12" href="'.route("frontend.mlm.demandside.product.show", $product->id).'">'.$product->product_no.'</a>';
+
+                return '<a href="'.route("frontend.mlm.demandside.product.show", $product->id).'" style="display: inline-block;"><img src="'.($product->cover_path?("/uploads/materials/".$product->cover_path):("/img/avatars/product.png")).'" style="width:100px;height:100px;display:inline-block;margin-right:10px"><span>'.(is_null($product->product_no)?"未命名":$product->product_no).'</span></a>';
             })
             ->addColumn('cycle', function ($product) {
                 if(is_null($product->cycle)) {
                     return '未确定';
                 }
 
-                return $product->cycle;
+                return $product->cycle  . '天';
             })
             ->addColumn('resource', function ($product) {
                 $resource = ($product->images . '张图片 +');
@@ -189,8 +210,9 @@ class MakerController extends Controller
                 $now = time();
 
                 $diff = $now - $pass;
+
                 if($product->status_no == 1006){
-                    return '<div data-proid="'.$product->id.'" class="btn btn-info cancelbtn">是</div>';
+                    return '<div data-proid="'.$product->id.'" class="btn btn-fix cancelbtn">取消</div>';
                 }
                 return '-';// '<div data-proid="'.$product->id.'" class="btn btn-info cancelbtn">是</div>';
             })

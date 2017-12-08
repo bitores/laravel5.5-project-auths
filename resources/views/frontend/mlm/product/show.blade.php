@@ -5,11 +5,14 @@
 @section('content')
 
 <div class="panel panel-default">
-    <div class="panel-heading">产品信息 <div class="btn pull-right" onclick="history.back()">返回</div>
+    <div class="panel-heading fix"><big>产品信息</big>
         @role('demandside')
-        <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a>
+        <!-- <a href="{{route('frontend.mlm.demandside.index')}}" class="btn pull-right">所有产品</a> -->
         @if($product->status_no < 1006)
-            <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除产品</div>
+            <div data-proid="{{$product->id}}" id="delbtn" class="btn pull-right">删除</div>
+            @if(1000==$product->status_no||1002==$product->status_no||1003==$product->status_no)
+            <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn pull-right">编辑</a>
+            @endif
         @endif
 
         @endauth
@@ -19,14 +22,14 @@
         <div class="row">
         	<div class="col-md-7">
                 <div class="form-group">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="border-bottom: 1px solid #dadada;">
                         <label>产品图片</label>
                         <div class="col-md-12">
                             @if(count($images) == 0)
                             未上传
                             @else
                             @foreach($images as $image)
-                            <img style="width:150px;height: 150px" src="/uploads/materials/{{str_replace("\\",'/',$image->path)}}">
+                            <img style="width:150px;height: 150px;margin: 10px;" src="/uploads/materials/{{str_replace("\\",'/',$image->path)}}">
                             @endforeach
                             @endif
                         </div>
@@ -34,18 +37,18 @@
                 </div><!--form-group-->
 
                 <div class="form-group">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-top: 50px;border-bottom: 1px solid #dadada;">
                         <label>CAD资料</label>
-                        <div class="col-md-12">
+                        <div class="pull-right">
                             {{$product->cad_path?'已上传':'未上传'}}
                         </div>
                     </div>
                 </div><!--form-group-->
 
                 <div class="form-group">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="margin-top: 50px;border-bottom: 1px solid #dadada;">
                         <label>其它资料</label>
-                        <div class="col-md-12">
+                        <div class="pull-right">
                             {{$product->file_path?'已上传':'未上传'}}
                         </div>
                     </div>
@@ -56,52 +59,52 @@
 
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label>品牌/厂家</label>
-                            <div class="col-md-12">
+                            <label>品牌/厂家：</label>
+                            <span>
                                 {{$product->brand_name?:'-'}}
-                            </div>
+                            </span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                    	<div class="col-md-12">
-                            <label>产品型号/名字</label>
-                    		<div class="col-md-12">
+                    	<div class="col-md-12" style="margin-top: 20px;">
+                            <label>产品型号/名字：</label>
+                    		<span>
                                 {{$product->product_no?:'-'}}     
-                            </div>
+                            </span>
                     	</div>
                     </div><!--form-group-->
 
                     <div class="form-group">
-                        <div class="col-md-12">
-                            <label>品类</label>
-                            <div class="col-md-12">
+                        <div class="col-md-12" style="margin-top: 20px;">
+                            <label>品类：</label>
+                            <span>
                                 {{($product->ca_name?:'-') . ':' . ($product->cb_name?:'-')}}
-                            </div>
+                            </span>
                         </div>
                         
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-12">
-                            <label>风格类别</label>
-                            <div class="col-md-12">
+                        <div class="col-md-12" style="margin-top: 20px;">
+                            <label>风格类别：</label>
+                            <span>
                                 {{$product->style_name?:'-'}}
-                            </div>
+                            </span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                    	<div class="col-md-12">
-                            <label>建模费用</label>
-                    		<div class="col-md-12">
-                                {{$product->fee?:'-'}}
-                            </div>
+                    	<div class="col-md-12" style="margin-top: 20px;">
+                            <label>建模费用：</label>
+                    		<span>
+                                {{$product->fee?('￥'.$product->fee):'-'}}
+                            </span>
                     	</div>
                     </div><!--form-group-->
 
                     <div class="form-group">
-                    	<div class="col-md-12">
+                    	<div class="col-md-12" style="margin-top: 20px;">
                             <label>产品简介</label>
                     		<div class="col-md-12">
                                 {{$product->introduction?:'-'}}
@@ -111,69 +114,33 @@
 
 
                     <div class="form-group">
-                        <div class="col-md-12" style="padding: 20px 0">
+                        <div class="col-md-12" style="padding: 20px 15px">
+
+                            <div data-proid="{{$product->id}}" class="btn btn-fix download" id="download">资料包</div>
+
                             @if(1000==$product->status_no)
                             <!-- 未提交 -->
-                            <div class="col-xs-6">
-                                <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <div id="submitBtn" class="btn btn-block btn-info">提交审核</div>
-                            </div>
-                            @elseif(1001==$product->status_no)
-                            <!-- 需求审核中 -->
-                            <div class="col-xs-12">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
-                            </div>
+                            <div id="submitBtn" class="btn btn-fix" style="margin-left: 10px;">提交审核</div>
+                            @elseif(1001==$product->status_no || 1006==$product->status_no)
+                            <!-- 需求审核中 --><!-- 模型审核未通过 -->
                             @elseif(1002==$product->status_no)
                             <!-- 审核未通过 -->
-                            <div class="col-xs-6">
-                                <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <a href="{{route('frontend.mlm.demandside.product.assessment', $product->id)}}" class="btn btn-block btn-info">查看审核结果</a>
-                            </div>
+                            <a href="{{route('frontend.mlm.demandside.product.assessment', $product->id)}}" class="btn btn-fix" style="margin-left: 10px;">审核结果</a>
                             @elseif(1003==$product->status_no)
                             <!-- 审核通过 -->
-                            <div class="col-xs-6">
-                                <a href="{{route('frontend.mlm.demandside.product.edit', $product->id)}}" class="btn btn-block btn-danger">编辑</a>
-                            </div>
-                            <div class="col-xs-6">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="postbtn">发布任务</div>
-                            </div>
-
+                            <div data-proid="{{$product->id}}" class="btn btn-fix" id="postbtn">发布任务</div>
                             @elseif(1005==$product->status_no)
                             <!-- 审核中 -->
-                            @role('producerside')
-                            <div class="col-xs-12">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info" id="orderdownload">接单并下载资料包</div>
-                            </div>
-                            @endauth
-                            @role('demandside')
-                            <div class="col-xs-12">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
-                            </div>
-                            @endauth
-
-                            @elseif(1006==$product->status_no)
-                            <!-- 模型审核未通过 -->
-                            <div class="col-xs-12">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
-                            </div>
+                                @role('producerside')
+                                    <div data-proid="{{$product->id}}" class="btn btn-fix" id="orderdownload" style="margin-left: 10px;">接单并下载资料包</div>
+                                @endauth
 
                             @elseif($product->status_no>1006)
                             <!-- 模型审核未通过 -->
-                            <div class="col-xs-6">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info download" id="download">下载资料包</div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div data-proid="{{$product->id}}" class="btn btn-block btn-info downloadmodel" id="downloadmodel">下载模型</div>
-                            </div>
+                                <div data-proid="{{$product->id}}" class="btn btn-fix downloadmodel" style="margin-left: 10px;" id="downloadmodel">模型</div>
                                 @if(1008==$product->status_no)
                                 <!-- 模型审核未通过 -->
-                                <div class="col-xs-12">
-                                    <a href="{{route('frontend.mlm.producer.product.assessment', $product->id)}}" class="btn btn-block btn-info">查看审核结果</a>
-                                </div>
+                                <a href="{{route('frontend.mlm.producer.product.assessment', $product->id)}}" class="btn btn-fix" style="margin-left: 10px;">审核结果</a>
                                 @endif
                             @endif
                         </div>

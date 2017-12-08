@@ -31,6 +31,7 @@ return [
             'change_password' => '更改密码',
             'my_information'  => '我的信息',
             'profile'         => '个人资料',
+            'editor'         => '编辑资料',
         ],
     ],
 ];

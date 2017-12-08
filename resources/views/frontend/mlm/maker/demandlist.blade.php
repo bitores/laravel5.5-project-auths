@@ -8,7 +8,7 @@
 
 @section('content')
 	<div class="panel panel-default">
-	    <div class="panel-heading">需求池<a href="{{route('frontend.mlm.producer.index')}}" class="btn pull-right">我的订单</a></div>
+	    <div class="panel-heading fix"><big>需求池</big><a href="{{route('frontend.mlm.producer.index')}}" class="btn pull-right">我的订单</a></div>
 	    <div class="panel-body">
 	        <div class="row">
 	        	<div class="col-md-12">
@@ -16,18 +16,18 @@
 	        		<div class="box box-success">
 	        			<div class="box-body">
 				            <div class="table-responsive">
-				                <table id="products-table" class="table table-condensed table-hover">
+				                <table id="products-table" class="table table-condensed table-hover spaing-fix">
 				                    <thead>
 				                        <tr>
 
 				                            <th>模型名称</th>
-				                            <th>任务相关资料</th>
+				                            <th>相关资料</th>
 				                            <th>建模费用</th>
 				                            <!-- <th>模型风格</th> -->
-				                            <th>模型制作周期</th>
+				                            <th>制作周期</th>
 				                            <!-- <th>是否审核通过</th> -->
 				                            <!-- <th>下载资料包</th> -->
-				                            <th>是否接单</th>
+				                            <th>接单</th>
 
 				                        </tr>
 				                    </thead>

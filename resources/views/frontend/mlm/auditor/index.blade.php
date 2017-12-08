@@ -8,7 +8,7 @@
 
 @section('content')
 	<div class="panel panel-default">
-	    <div class="panel-heading">审核方</div>
+	    <div class="panel-heading fix"><big>审核方</big></div>
 	    <div class="panel-body">
 	        <div class="row">
 	        	<div class="col-md-12">
